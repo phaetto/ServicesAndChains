@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B30CB412-4B01-4739-9B54-FBB390F9C7E5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Chains</RootNamespace>
+    <AssemblyName>Chains</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy|AnyCPU'">
+    <OutputPath>bin\Deploy\</OutputPath>
+    <DefineConstants>TRACE;DEPLOY</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Integration Test|AnyCPU'">
+    <OutputPath>bin\Integration Test\</OutputPath>
+    <DefineConstants>TRACE;INTEGRATIONTEST</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractChain.cs" />
+    <Compile Include="Chain.cs" />
+    <Compile Include="ChainExtensions.cs" />
+    <Compile Include="ChainWithHistory.cs" />
+    <Compile Include="ChainWithHistoryAndParent.cs" />
+    <Compile Include="ChainWithParent.cs" />
+    <Compile Include="IAggreggatable.cs" />
+    <Compile Include="IChainableAction.cs" />
+    <Compile Include="Persistence\Exceptions\DataIntegrityViolation.cs" />
+    <Compile Include="Persistence\FilePersistentStore.cs" />
+    <Compile Include="Persistence\FilePersistentStoreWithMemorySnapshotCache.cs" />
+    <Compile Include="Persistence\IncrementallyPersistentChain.cs" />
+    <Compile Include="Persistence\IPersistentStore.cs" />
+    <Compile Include="Persistence\MemoryPersistentStore.cs" />
+    <Compile Include="Persistence\PersistentChain.cs" />
+    <Compile Include="Persistence\SerializableSpecificationWithId.cs" />
+    <Compile Include="Play\Debug\AttachDebugger.cs" />
+    <Compile Include="Play\Debug\BreakDebugger.cs" />
+    <Compile Include="Play\Debug\DebugContext.cs" />
+    <Compile Include="Play\ExecuteActionAsRemotable.cs" />
+    <Compile Include="Play\Installation\UninstallService.cs" />
+    <Compile Include="Play\Installation\GetTypesFromAssemblyReturnData.cs" />
+    <Compile Include="Play\Installation\GetTypesFromAssembly.cs" />
+    <Compile Include="Play\Installation\GetTypesFromAssemblyData.cs" />
+    <Compile Include="Play\Installation\Install.cs" />
+    <Compile Include="Play\Installation\InstallAsService.cs" />
+    <Compile Include="Play\Installation\InstallAsServiceData.cs" />
+    <Compile Include="Play\Installation\InstallData.cs" />
+    <Compile Include="Play\IRemotable.cs" />
+    <Compile Include="Play\Json.cs" />
+    <Compile Include="Play\Modules\DisableModule.cs" />
+    <Compile Include="Play\Modules\EnableModule.cs" />
+    <Compile Include="Play\Modules\IsModuleEnabled.cs" />
+    <Compile Include="Play\Modules\IOptionalModule.cs" />
+    <Compile Include="Play\Modules\IModular.cs" />
+    <Compile Include="Play\Modules\IModuleRequirement.cs" />
+    <Compile Include="Play\Modules\SupportsModule.cs" />
+    <Compile Include="Play\RemotableAction.cs" />
+    <Compile Include="Play\RemotableActionWithData.cs" />
+    <Compile Include="Play\RemotableActionWithSerializableData.cs" />
+    <Compile Include="Play\Security\IApplicationAuthorizableAction.cs" />
+    <Compile Include="Play\Security\Provider\GetAuthenticationGateOptions.cs" />
+    <Compile Include="Play\Security\Provider\IAuthenticationGate.cs" />
+    <Compile Include="Play\Security\IAuthorizableAction.cs" />
+    <Compile Include="Play\Security\Provider\LoginUrlMethod.cs" />
+    <Compile Include="Play\Security\Provider\ProviderAuthenticationGateData.cs" />
+    <Compile Include="Play\Security\Provider\Simple\SingleApiKeyRequirement.cs" />
+    <Compile Include="Play\SerializableSpecificationExtensions.cs" />
+    <Compile Include="Play\DeserializableSpecification.cs" />
+    <Compile Include="Play\ExecutableActionSpecification.cs" />
+    <Compile Include="Play\AppDomains\ExecuteOverAppDomain.cs" />
+    <Compile Include="Play\AppDomains\RemoteReplayProxy.cs" />
+    <Compile Include="Play\Installation\LoadAssembly.cs" />
+    <Compile Include="Play\Installation\AssemblyData.cs" />
+    <Compile Include="Play\Installation\InstallationContext.cs" />
+    <Compile Include="Play\Installation\LoadAssemblyBinary.cs" />
+    <Compile Include="Play\IReproducible.cs" />
+    <Compile Include="Play\ExecutionChain.cs" />
+    <Compile Include="Play\ExecuteActionFromSpecification.cs" />
+    <Compile Include="Play\ExecuteAction.cs" />
+    <Compile Include="Play\AppDomains\AppDomainExecutionChain.cs" />
+    <Compile Include="Play\ReproducibleWithData.cs" />
+    <Compile Include="Play\Reproducible.cs" />
+    <Compile Include="Play\ReproducibleWithSerializableData.cs" />
+    <Compile Include="Play\SerializableSpecification.cs" />
+    <Compile Include="Play\Web\Client.cs" />
+    <Compile Include="Play\Web\HttpListener\HttpServer.cs" />
+    <Compile Include="Play\Web\HttpListener\IHttpRequestHandler.cs" />
+    <Compile Include="Play\Web\HttpResultContextBase.cs" />
+    <Compile Include="Play\Web\HttpContextInfo.cs" />
+    <Compile Include="Play\Web\HttpRequest.cs" />
+    <Compile Include="Play\Web\HttpResultContext.cs" />
+    <Compile Include="Play\Web\IHttpContextInfo.cs" />
+    <Compile Include="Play\Web\HttpResponseResult.cs" />
+    <Compile Include="Play\Web\Server.cs" />
+    <Compile Include="Play\Web\HttpListener\StartHttpServer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

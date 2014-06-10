@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<files>
+  <file name="Services.Communication.dll" />
+  <file name="SuperSocket.Common.dll" />
+  <file name="SuperSocket.SocketBase.dll" />
+  <file name="SuperSocket.SocketEngine.dll" />
+</files>

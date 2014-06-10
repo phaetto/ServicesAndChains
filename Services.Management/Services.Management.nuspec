@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Services.Management</id>
+    <version>
+      {Version}
+    </version>
+    <authors>Alexander Mantzoukas</authors>
+    <owners>Alexander Mantzoukas</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://www.msd.am/chains/</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>
+      With service management library you can start and manage chains and contexts developed with Chains and communication services.
+      Building up on the tcp protocol support, the "worker" and "admin" concepts are been introduced (admin as the manager process for multiple workers). All the possible actions between them are defined here, like starting, installing, uninstalling, versioning and general management.
+      The responsible management component, the executioner, is also introduced. It is the part that starts modules using a given json configuration, coordinating admin, worker and update procedures.
+
+      (Check the examples at the project link)
+
+      Supports Mono.
+    </description>
+    <releaseNotes>
+      {ReleaseNotes}
+    </releaseNotes>
+    <copyright>Copyright Alexander Mantzoukas, Modern Software Design 2013</copyright>
+    <tags>Distributed Scalability Administration Process-Management Tcp Http</tags>
+    <dependencies>
+      <dependency id="Services.Communication" version="{Version}" />
+      <dependency id="Chains" version="{Version}" />
+      <dependency id="log4net" version="2.0.0" />
+      <dependency id="Newtonsoft.Json" version="4.5.11" />
+    </dependencies>
+  </metadata>
+</package>

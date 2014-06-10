@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Chains</id>
+    <version>
+      {Version}
+    </version>
+    <authors>Alexander Mantzoukas</authors>
+    <owners>Alexander Mantzoukas</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://www.msd.am/chains/</projectUrl>
+    <iconUrl>http://www.msd.am/Content/Site/Images/MSD/chains.jpg</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>
+      A library to help create small application modules that are dependency and test friendly.
+      It is the base for modules as micro-services. There are two concepts: The chains and the actions.
+      The chains act like a state machine representation of the class, holding a context, which actions can be applied. While actions are applied either the data or context returned might change.
+      Using common patterns over this methodology small components can be build that can be easily testable and injectable through each other.
+      
+      (Check the examples at the project link)
+
+      Supports Mono.
+    </description>
+    <releaseNotes>
+      {ReleaseNotes}
+    </releaseNotes>
+    <copyright>Copyright Alexander Mantzoukas, Modern Software Design 2013</copyright>
+    <tags>Type-Chaining TDD State-based Modular Micro-Services</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="4.5.11" />
+    </dependencies>
+  </metadata>
+</package>

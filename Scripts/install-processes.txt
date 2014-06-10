@@ -1,0 +1,11 @@
+
+INSTALL
+
+ (scripted)
+ - Should be able to curl/wget a resource and then run the script to install
+
+ (console app)
+ - Should have a guided installation
+
+ (UI service)
+ - Service that runs on demand from update, allows browsing a server's packages and select what to install, config, etc...

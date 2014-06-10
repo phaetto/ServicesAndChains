@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A0ED8E82-3340-46E7-845C-979B228F88C1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Services.Communication</RootNamespace>
+    <AssemblyName>Services.Communication</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy|AnyCPU'">
+    <OutputPath>bin\Deploy\</OutputPath>
+    <DefineConstants>TRACE;DEPLOY</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Integration Test|AnyCPU'">
+    <OutputPath>bin\Integration Test\</OutputPath>
+    <DefineConstants>TRACE;INTEGRATIONTEST</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SuperSocket.SocketBase, Version=1.5.1.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SuperSocket(1.5.1).Binaries\Net40\Release\SuperSocket.SocketBase.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketEngine, Version=1.5.1.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SuperSocket(1.5.1).Binaries\Net40\Release\SuperSocket.SocketEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataStructures\NameValue\AddKeyValue.cs" />
+    <Compile Include="DataStructures\NameValue\KeyValueData.cs" />
+    <Compile Include="DataStructures\NameValue\GetKeyValue.cs" />
+    <Compile Include="DataStructures\NameValue\KeyData.cs" />
+    <Compile Include="DataStructures\NameValue\HashContext.cs" />
+    <Compile Include="DataStructures\Queues\Reliable\Acknowledge.cs" />
+    <Compile Include="DataStructures\Queues\Reliable\Dequeue.cs" />
+    <Compile Include="DataStructures\Queues\Reliable\Enqueue.cs" />
+    <Compile Include="DataStructures\Queues\Reliable\QueueContext.cs" />
+    <Compile Include="DataStructures\Queues\Reliable\UnacknowledgedItem.cs" />
+    <Compile Include="DataStructures\Queues\Simple\Dequeue.cs" />
+    <Compile Include="DataStructures\Queues\Simple\Enqueue.cs" />
+    <Compile Include="DataStructures\Queues\Simple\QueueContext.cs" />
+    <Compile Include="Protocol\ClientConnectionContext.cs" />
+    <Compile Include="Protocol\SendRaw.cs" />
+    <Compile Include="Protocol\OpenConnection.cs" />
+    <Compile Include="Protocol\ProtocolServerLogic.cs" />
+    <Compile Include="Protocol\IServerProtocolStack.cs" />
+    <Compile Include="Protocol\ProtocolType.cs" />
+    <Compile Include="Protocol\IClientProtocolStack.cs" />
+    <Compile Include="Tcp\ClientConnectionContext.cs" />
+    <Compile Include="Tcp\OpenConnection.cs" />
+    <Compile Include="Tcp\RetryConnection.cs" />
+    <Compile Include="Tcp\Send.cs" />
+    <Compile Include="Tcp\TcpClientProtocolStack.cs" />
+    <Compile Include="Tcp\TcpServerProtocolStack.cs" />
+    <Compile Include="Protocol\RetryConnection.cs" />
+    <Compile Include="Protocol\Send.cs" />
+    <Compile Include="Protocol\ServerConnectionContext.cs" />
+    <Compile Include="Protocol\StartListen.cs" />
+    <Compile Include="Protocol\WaitUntilClientConnects.cs" />
+    <Compile Include="Protocol\WaitUntilServerIsDown.cs" />
+    <Compile Include="Protocol\WaitUntilServerIsUp.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tcp\Servers\TcpCommand.cs" />
+    <Compile Include="Tcp\Servers\TcpServer.cs" />
+    <Compile Include="Tcp\Servers\TcpSession.cs" />
+    <Compile Include="Web\HttpServerModule.cs" />
+    <Compile Include="Web\ServeWebRequest.cs" />
+    <Compile Include="Web\HttpClientProtocolStack.cs" />
+    <Compile Include="Web\HttpServerProtocolStack.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Chains\Chains.csproj">
+      <Project>{B30CB412-4B01-4739-9B54-FBB390F9C7E5}</Project>
+      <Name>Chains</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

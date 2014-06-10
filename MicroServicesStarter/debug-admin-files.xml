@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<update-files>
+  <file search="..\Services.Executioner\bin\debug\*.dll" to="" />
+  <file search="..\Services.Executioner\bin\debug\*.exe" to="" />
+  <file search="..\Services.Executioner\bin\debug\*.config" to="" />
+</update-files>

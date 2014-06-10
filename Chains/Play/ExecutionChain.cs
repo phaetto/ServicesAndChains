@@ -1,0 +1,190 @@
+namespace Chains.Play
+{
+    using System;
+    using System.Collections.Generic;
+    using Chains.Play.Modules;
+    using System.Linq;
+
+    public sealed class ExecutionChain : Chain<ExecutionChain>, IModular
+    {
+        [ThreadStatic]
+        private static Dictionary<string, Type> typeCache;
+
+        public List<AbstractChain> Modules { get; set; }
+
+        public dynamic CurrentContext { get; set; }
+
+        public dynamic LastExecutedAction { get; set; }
+
+        public ExecutionChain(dynamic currentContext)
+        {
+            if (currentContext == null)
+            {
+                throw new ArgumentNullException("currentContext");
+            }
+
+            CurrentContext = currentContext;
+
+            Modules = new List<AbstractChain>();
+        }
+
+        public ExecutionChain(string currentContextTypeName)
+        {
+            if (string.IsNullOrEmpty(currentContextTypeName))
+            {
+                throw new ArgumentNullException("currentContextTypeName");
+            }
+
+            CurrentContext = CreateObjectWithParameters(currentContextTypeName);
+
+            Modules = new List<AbstractChain>();
+        }
+
+        public ExecutionChain(Type currentContextType)
+        {
+            if (currentContextType == null)
+            {
+                throw new ArgumentNullException("currentContextType");
+            }
+
+            CurrentContext = CreateObjectWithParameters(currentContextType.AssemblyQualifiedName);
+
+            Modules = new List<AbstractChain>();
+        }
+
+        public static object CreateObjectWithParameters(string unqualifiedType, params object[] parameters)
+        {
+            if (string.IsNullOrEmpty(unqualifiedType))
+            {
+                throw new ArgumentNullException("unqualifiedType");
+            }
+
+            return CreateObjectWithParametersAndInjection(unqualifiedType, parameters);
+        }
+
+        public static object CreateObjectWithParametersAndInjection(string unqualifiedType, object[] parameters, object[] injectedParameters = null)
+        {
+            if (string.IsNullOrEmpty(unqualifiedType))
+            {
+                throw new ArgumentNullException("unqualifiedType");
+            }
+
+            if (parameters == null)
+            {
+                parameters = new object[0];
+            }
+
+            var type = FindType(unqualifiedType);
+
+            return CreateObjectWithParametersAndInjection(type, parameters, injectedParameters);
+        }
+
+        public static object CreateObjectWithParametersAndInjection(Type type, object[] parameters, object[] injectedParameters = null)
+        {
+            var constructors = type.GetConstructors().OrderByDescending(x => x.GetParameters().Length);
+            foreach (var ci in constructors)
+            {
+                try
+                {
+                    var ciParameters = ci.GetParameters();
+                    var totalParametersCheck = parameters.Length
+                        + (injectedParameters != null ? injectedParameters.Length : 0);
+                    if (ciParameters.Length <= totalParametersCheck)
+                    {
+                        // This is a candidate
+                        var transformedObjects = new List<object>(totalParametersCheck);
+                        for (var n = 0; n < parameters.Length; ++n)
+                        {
+                            transformedObjects.Add(Convert.ChangeType(parameters[n], ciParameters[n].ParameterType));
+                        }
+
+                        if (injectedParameters != null)
+                        {
+                            for (var m = parameters.Length; m < ciParameters.Length; ++m)
+                            {
+                                var found = false;
+                                for (var n = 0; n < injectedParameters.Length; ++n)
+                                {
+                                    if (injectedParameters[n] != null
+                                        && (ciParameters[m].ParameterType.IsInstanceOfType(injectedParameters[n])
+                                            || ciParameters[m].ParameterType.IsSubclassOf(
+                                                injectedParameters[n].GetType())))
+                                    {
+                                        transformedObjects.Add(
+                                            Convert.ChangeType(injectedParameters[n], ciParameters[m].ParameterType));
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!found)
+                                {
+                                    transformedObjects.Add(null);
+                                }
+                            }
+                        }
+
+                        for (var n = totalParametersCheck; n < ciParameters.Length; ++n)
+                        {
+                            transformedObjects.Add(null);
+                        }
+
+                        return ci.Invoke(transformedObjects.ToArray());
+                    }
+                }
+                catch (InvalidCastException)
+                {
+                    // Go to the next
+                }
+                catch (Exception exception)
+                {
+                    if (exception.InnerException != null)
+                    {
+                        throw exception.InnerException;
+                    }
+
+                    throw;
+                }
+            }
+
+            throw new Exception("No constructor could be found to create the type: " + type.AssemblyQualifiedName);
+        }
+
+        public static Type FindType(string unqualifiedType)
+        {
+            if (string.IsNullOrEmpty(unqualifiedType))
+            {
+                throw new ArgumentNullException("unqualifiedType");
+            }
+
+            if (typeCache == null)
+            {
+                typeCache = new Dictionary<string, Type>();
+            }
+
+            if (typeCache.ContainsKey(unqualifiedType))
+            {
+                return typeCache[unqualifiedType];
+            }
+
+            var type = Type.GetType(unqualifiedType, false);
+            if (type != null)
+            {
+                typeCache.Add(unqualifiedType, type);
+                return type;
+            }
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                type = assembly.GetType(unqualifiedType, false);
+                if (type != null)
+                {
+                    typeCache.Add(unqualifiedType, type);
+                    return type;
+                }
+            }
+
+            throw new Exception("Type could not be found: " + unqualifiedType);
+        }
+    }
+}

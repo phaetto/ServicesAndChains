@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<update-files>
+  <file search="*.dll" to="" />
+  <file search="*.exe" to="" />
+  <file search="*.config" to="" />
+</update-files>

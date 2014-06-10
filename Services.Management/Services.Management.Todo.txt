@@ -1,0 +1,19 @@
+﻿
+- Update server with packages
+
+- Logging (server)
+	- Graph in executioner (tcp connections as edges and services nodes)
+
+- Admin
+	- Log-server explicit host/port (or in admin)
+	- Error-server explicit host/port (or in admin)
+	
+- Scaling/Management algorithms (design)
+	- Behind queue units (persistent or not)
+    - Replication - Failover units
+    - Consensus, Paxos transactions between units
+    - Data-planer (plan -> queues -> work units)
+	- Graph services (configuration + solution)
+
+- Services ideas
+	- Configurable services with xtags UI / xConsole panel

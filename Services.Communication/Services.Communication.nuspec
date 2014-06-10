@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Services.Communication</id>
+    <version>
+      {Version}
+    </version>
+    <authors>Alexander Mantzoukas</authors>
+    <owners>Alexander Mantzoukas</owners>
+    <licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+    <projectUrl>http://www.msd.am/chains/</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>
+      Takes the chain library concept a bit further away, and adds protocol support for the objects that are using the chain concept.
+
+      You may send actions throught the wire and apply them in different application, process and/or computer domain contexts (chains). This library takes out that complexity and applies them.
+
+      (Check the examples at the project link)
+
+      Supports Mono.
+    </description>
+    <releaseNotes>
+      {ReleaseNotes}
+    </releaseNotes>
+    <copyright>Copyright Alexander Mantzoukas, Modern Software Design 2013</copyright>
+    <tags>Distributed Scalability Queues Tcp Http</tags>
+    <dependencies>
+      <dependency id="Chains" version="{Version}" />
+      <dependency id="log4net" version="2.0.0" />
+    </dependencies>
+  </metadata>
+</package>
