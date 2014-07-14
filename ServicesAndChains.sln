@@ -5,6 +5,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Scripts\debug-admin-service.bat = Scripts\debug-admin-service.bat
 		Scripts\install-admin-with-update.bat = Scripts\install-admin-with-update.bat
+		Scripts\install-admin-with-update.sh = Scripts\install-admin-with-update.sh
 		Scripts\install-processes.txt = Scripts\install-processes.txt
 		options.xml = options.xml
 		Scripts\start-admin.bat = Scripts\start-admin.bat
