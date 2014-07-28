@@ -82,15 +82,15 @@
                 Assert.IsTrue(setupResult);
                 Assert.IsTrue(appServer.Start());
 
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
+                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
                 }
 
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
+                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
                 }
 
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
+                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
                 }
             }
@@ -152,21 +152,21 @@
                     new StartListen("test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true));
             try
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
+                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
                 }
             }
-            finally 
+            finally
             {
                 servertryFinally.Close();
             }
-            
+
             servertryFinally =
                 new ServerHost("127.0.0.1", 7234).Do(
                     new StartListen("test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true));
             try
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
+                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
                 }
             }
@@ -179,7 +179,7 @@
                             new StartListen(
                                 "test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
+                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
                 }
                 server.Close();
@@ -189,7 +189,7 @@
                             new StartListen(
                                 "test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
+                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
                 }
                 server.Close();
@@ -199,7 +199,7 @@
                             new StartListen(
                                 "test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
+                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
                 }
                 server.Close();
@@ -209,7 +209,7 @@
                             new StartListen(
                                 "test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
+                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
                 }
                 server.Close();
@@ -219,7 +219,7 @@
                             new StartListen(
                                 "test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
+                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
                 }
                 server.Close();
@@ -270,8 +270,8 @@
             using (new ServerHost("127.0.0.1", 3997).Do(
                         new StartListen("test3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 3997).Do(new OpenConnection()).Do(new Send(testAction.GetInstanceSpec())))
-                {   
+                using (new Client("127.0.0.1", 3997).Do(new OpenConnection()).Do(new Send(testAction)))
+                {
                 }
             }
 
@@ -298,7 +298,7 @@
             {
                 using (
                     new Client("localhost", 3996, "/custom path/awesome service").Do(new OpenConnection(protocolType: Protocol.ProtocolType.Http))
-                                                 .Do(new Send(testAction.GetInstanceSpec())))
+                                                 .Do(new Send(testAction)))
                 {
                 }
             }
@@ -334,14 +334,14 @@
                     using (
                         new Client("localhost", 3995, "/custom-path").Do(
                             new OpenConnection(protocolType: Protocol.ProtocolType.Http))
-                                                                     .Do(new Send(testAction.GetInstanceSpec())))
+                                                                     .Do(new Send(testAction)))
                     {
                     }
 
                     using (
                         new Client("localhost", 3995, "/custom-path-2").Do(
                             new OpenConnection(protocolType: Protocol.ProtocolType.Http))
-                                                                     .Do(new Send(testAction.GetInstanceSpec())))
+                                                                     .Do(new Send(testAction)))
                     {
                     }
                 }
@@ -366,7 +366,7 @@
             }
 
             var hasCalled = false;
-            using (new ServerHost("127.0.0.1",15010).Do(
+            using (new ServerHost("127.0.0.1", 15010).Do(
                         new StartListen("test4", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 using (new Client("127.0.0.1", 15010).Do(new OpenConnection()).Do(new Send(items)))
@@ -395,7 +395,7 @@
                 {
                     using (
                         new Client("127.0.0.1", 15002).Do(new OpenConnection())
-                                                      .Do(new Send(testAction.GetInstanceSpec())))
+                                                      .Do(new Send(testAction)))
                     {
                         Assert.Fail("Execution should never reach here");
                     }
