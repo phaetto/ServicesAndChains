@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="AdministrationServerTests.cs" />
     <Compile Include="AuthorizationScenarioTest.cs" />
+    <Compile Include="Classes\ContextForTestWithEvents.cs" />
     <Compile Include="ExecutionerUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkUnitTests.cs" />
