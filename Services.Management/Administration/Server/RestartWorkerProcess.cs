@@ -1,5 +1,6 @@
 ﻿namespace Services.Management.Administration.Server
 {
+    using System.Threading;
     using Chains;
     using Chains.Play;
     using Chains.Play.Security;
@@ -9,6 +10,8 @@
         IChainableAction<AdministrationContext, AdministrationContext>,
         IAuthorizableAction, IApplicationAuthorizableAction
     {
+        private const int WaitDelayInMilliseconds = 1000;
+
         public RestartWorkerProcess(string data)
             : base(data)
         {
@@ -22,18 +25,13 @@
                 {
                     context.ReportData[Data].AdviceGiven = AdviceState.Restart;
 
-                    context.Do(
-                        new StartWorkerProcessWithDelay(
-                            new WorkerDataWithDelay
-                            {
-                                DelayInSeconds = 10,
-                                WorkerData = context.ReportData[Data].StartData
-                            }));
+                    while (context.ReportData[Data].WorkerState == WorkUnitState.Running)
+                    {
+                        Thread.Sleep(WaitDelayInMilliseconds);
+                    }
                 }
-                else
-                {
-                    context.Do(new StartWorkerProcess(context.ReportData[Data].StartData));
-                }
+
+                context.Do(new StartWorkerProcess(context.ReportData[Data].StartData));
             }
 
             return context;
