@@ -109,6 +109,14 @@
                 {
                 }
 
+                try
+                {
+                    workerExecutioner.Dispose();
+                }
+                catch
+                {
+                }
+
                 Process.GetCurrentProcess().Kill();
             }
         }
