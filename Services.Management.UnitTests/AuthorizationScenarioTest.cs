@@ -11,6 +11,7 @@
     using Services.Communication.Protocol;
     using Services.Management.Administration.Executioner;
     using Services.Management.Administration.Worker;
+    using Services.Management.UnitTests.Classes;
 
     [TestClass]
     public class AuthorizationScenarioTest
@@ -70,7 +71,7 @@
             {
                 admin.Execute();
 
-                using (var worker = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithModules))
+                using (var worker = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithModules, processExit: new NoProcessExit()))
                 {
                     worker.Execute();
 

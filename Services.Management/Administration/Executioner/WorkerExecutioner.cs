@@ -22,19 +22,31 @@ namespace Services.Management.Administration.Executioner
         public readonly StartWorkerData WorkerData;
         public readonly string Session;
         public readonly string ApiKey;
+
+        private readonly IProcessExit processExit;
         private WorkUnitContext workUnitContext;
         private object server;
 
         public object WrappedContext { get; private set; }
 
-        public WorkerExecutioner(ExecutionMode executionMode, StartWorkerData workerData, string session = null, string apiKey = null)
+        public WorkUnitContext WorkUnitContext
+        {
+            get
+            {
+                return workUnitContext;
+            }
+        }
+
+        public WorkerExecutioner(ExecutionMode executionMode, StartWorkerData workerData, string session = null, string apiKey = null, IProcessExit processExit = null)
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 
             ExecutionMode = executionMode;
             WorkerData = workerData;
             Session = session;
             ApiKey = apiKey;
+            this.processExit = processExit ?? new ProcessExit();
         }
 
         public void Execute()
@@ -87,7 +99,7 @@ namespace Services.Management.Administration.Executioner
                     }
                     case ExecutionMode.Worker:
                     {
-                        workUnitContext = new WorkUnitContext(WorkerData, Session, ApiKey).Do(new StartWorkUnit());
+                        workUnitContext = new WorkUnitContext(WorkerData, Session, ApiKey, processExit).Do(new StartWorkUnit());
 
                         if (!string.IsNullOrEmpty(WorkerData.ContextServerHost) && WorkerData.ContextServerPort > 0)
                         {
@@ -101,6 +113,8 @@ namespace Services.Management.Administration.Executioner
                         {
                             WrappedContext = server = CreateHostedContext();
                         }
+
+                        workUnitContext.Do(new ConnectHostedObject(WrappedContext));
 
                         break;
                     }
@@ -189,7 +203,6 @@ namespace Services.Management.Administration.Executioner
             try
             {
                 workUnitContext.Close();
-                workUnitContext.Dispose();
             }
             catch
             {
@@ -197,10 +210,13 @@ namespace Services.Management.Administration.Executioner
 
             try
             {
-                var disposableObject = server as IDisposable;
-                if (disposableObject != null)
+                if (server != WrappedContext)
                 {
-                    disposableObject.Dispose();
+                    var disposableObject = server as IDisposable;
+                    if (disposableObject != null)
+                    {
+                        disposableObject.Dispose();
+                    }
                 }
             }
             catch
@@ -247,6 +263,11 @@ namespace Services.Management.Administration.Executioner
             }
         }
 
+        void CurrentDomain_DomainUnload(object sender, EventArgs e)
+        {
+            Dispose();
+        }
+
         private static void CopyFiles(string SourcePath, string DestinationPath)
         {
             if (SourcePath[SourcePath.Length - 1] != Path.DirectorySeparatorChar)
@@ -288,8 +309,6 @@ namespace Services.Management.Administration.Executioner
         private object CreateHostedContext()
         {
             var contextObject = ExecutionChain.CreateObjectWithParametersAndInjection(WorkerData.ContextType, WorkerData.Parameters, new object[] { workUnitContext });
-
-            StartContextObject(contextObject);
 
             ConnectModules(
                 contextObject,
@@ -360,16 +379,6 @@ namespace Services.Management.Administration.Executioner
             if (assemblies.All(x => x.GetName().Name != Path.GetFileNameWithoutExtension(assemblyPath)))
             {
                 Assembly.LoadFile(assemblyPath);
-            }
-        }
-
-        private void StartContextObject(object contextObject)
-        {
-            var workerControl = contextObject as IWorkerEvents;
-            if (workerControl != null)
-            {
-                workUnitContext.WorkerControl = workerControl;
-                workerControl.OnStart();
             }
         }
     }

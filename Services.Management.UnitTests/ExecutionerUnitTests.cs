@@ -11,6 +11,7 @@
     using Services.Management.Administration.Executioner;
     using Services.Management.Administration.Server;
     using Services.Management.Administration.Worker;
+    using Services.Management.UnitTests.Classes;
 
     [TestClass]
     public class ExecutionerUnitTests
@@ -51,7 +52,7 @@
                                                       }
                                         };
 
-            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithModules))
+            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithModules, processExit: new NoProcessExit()))
             {
                 Exception exception = null;
 
@@ -95,7 +96,7 @@
                                                       }
             };
 
-            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithModules))
+            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithModules, processExit: new NoProcessExit()))
             {
                 Exception exception = null;
 
@@ -131,7 +132,7 @@
                 Id = "test",
             };
 
-            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithoutModules))
+            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithoutModules, processExit: new NoProcessExit()))
             {
                 executioner.Execute();
 
