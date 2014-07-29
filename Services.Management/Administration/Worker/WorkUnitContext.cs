@@ -5,22 +5,27 @@ namespace Services.Management.Administration.Worker
     using System.Threading;
     using Chains;
     using Services.Communication.Protocol;
+    using Services.Management.Administration.Executioner;
 
     public sealed class WorkUnitContext : Chain<WorkUnitContext>, IDisposable
     {
-        private bool canStop = true;
-
         public readonly StartWorkerData WorkerData;
-
         public readonly string Session;
         public readonly string ApiKey;
+
+        private readonly IProcessExit processExit;
+
+        public readonly ReportProgressData ProgressData;
+
         public DateTime TimeStarted { get; set; }
         public WorkUnitState State { get; set; }
         public ClientConnectionContext AdminServer { get; set; }
-        public ReportProgressData ProgressData { get; set; }
-        public IWorkerEvents WorkerControl { get; set; }
 
-        internal Thread reportThread { get; set; }
+        internal Thread ReportThread { get; set; }
+        internal object HostedObject { get; set; }
+        internal IWorkerEvents WorkerControl { get; set; }
+
+        private bool canStop = true;
 
         public bool CanStop
         {
@@ -34,11 +39,13 @@ namespace Services.Management.Administration.Worker
             }
         }
 
-        public WorkUnitContext(StartWorkerData workerData, string session = null, string apiKey = null)
+        public WorkUnitContext(StartWorkerData workerData, string session = null, string apiKey = null, IProcessExit processExit = null)
         {
             this.WorkerData = workerData;
             this.Session = session;
             this.ApiKey = apiKey;
+            this.processExit = processExit;
+            ProgressData = new ReportProgressData();
         }
 
         public void Stop()
@@ -51,13 +58,38 @@ namespace Services.Management.Administration.Worker
         {
             Stop();
 
-            if (reportThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
+            try
             {
-                reportThread.Abort();
+                ReportToAdmin();
+            }
+            catch
+            {
+            }
+
+            if (ReportThread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
+            {
+                ReportThread.Abort();
             }
 
             if (AdminServer != null)
                 AdminServer.Close();
+
+            try
+            {
+                var disposableObject = HostedObject as IDisposable;
+                if (disposableObject != null)
+                {
+                    disposableObject.Dispose();
+                }
+            }
+            catch
+            {
+            }
+
+            if (processExit != null)
+            {
+                processExit.Exit();
+            }
         }
 
         public void Dispose()
@@ -118,7 +150,7 @@ namespace Services.Management.Administration.Worker
 
         internal void ReportToAdminThread()
         {
-            var repotUpdateInMilliseconds = WorkerData.ReportUpdateIntervalInSeconds * 1000;
+            var reportUpdateInMilliseconds = WorkerData.ReportUpdateIntervalInSeconds * 1000;
 
             while (State == WorkUnitState.Running || !CanStop)
             {
@@ -141,7 +173,7 @@ namespace Services.Management.Administration.Worker
                     }
                 }
 
-                Thread.Sleep(repotUpdateInMilliseconds);
+                Thread.Sleep(reportUpdateInMilliseconds);
             }
 
             if (WorkerControl != null)
@@ -153,12 +185,10 @@ namespace Services.Management.Administration.Worker
                 catch (Exception ex)
                 {
                     LogException(ex);
-                    ReportToAdmin();
                 }
             }
 
             Dispose();
-            Process.GetCurrentProcess().Kill();
         }
 
         public void ReportToAdmin()
