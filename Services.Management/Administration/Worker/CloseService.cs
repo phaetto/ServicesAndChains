@@ -1,6 +1,5 @@
 namespace Services.Management.Administration.Worker
 {
-    using System.Diagnostics;
     using Chains;
     using Chains.Play;
     using Chains.Play.Security;
@@ -11,7 +10,8 @@ namespace Services.Management.Administration.Worker
     {
         public WorkUnitContext Act(WorkUnitContext context)
         {
-            Process.GetCurrentProcess().Kill();
+            context.Stop();
+
             return context;
         }
 
