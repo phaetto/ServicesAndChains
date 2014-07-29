@@ -47,6 +47,7 @@
             catch (InvalidOperationException ex)
             {
                 // When the id already exists
+                context.LogException(ex);
             }
             catch (Exception ex)
             {
@@ -57,6 +58,8 @@
                             DelayInSeconds = 10,
                             WorkerData = Data
                         }));
+
+                context.LogException(ex);
             }
 
             return context;
