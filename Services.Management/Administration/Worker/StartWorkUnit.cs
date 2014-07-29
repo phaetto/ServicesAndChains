@@ -35,14 +35,12 @@ namespace Services.Management.Administration.Worker
 
             context.AdminServer = new Client(context.WorkerData.AdminHost, context.WorkerData.AdminPort).Do(new OpenConnection());
 
-            context.ProgressData = new ReportProgressData();
-
             context.State = WorkUnitState.Running;
 
             context.TimeStarted = DateTime.UtcNow;
 
-            context.reportThread = new Thread(context.ReportToAdminThread);
-            context.reportThread.Start();
+            context.ReportThread = new Thread(context.ReportToAdminThread);
+            context.ReportThread.Start();
 
             return context;
         }
