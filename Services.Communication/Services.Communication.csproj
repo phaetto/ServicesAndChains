@@ -86,7 +86,6 @@
     <Compile Include="Tcp\ClientConnectionContext.cs" />
     <Compile Include="Tcp\OpenConnection.cs" />
     <Compile Include="Tcp\RetryConnection.cs" />
-    <Compile Include="Tcp\Send.cs" />
     <Compile Include="Tcp\TcpClientProtocolStack.cs" />
     <Compile Include="Tcp\TcpServerProtocolStack.cs" />
     <Compile Include="Protocol\RetryConnection.cs" />
