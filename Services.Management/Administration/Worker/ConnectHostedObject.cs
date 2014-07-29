@@ -1,0 +1,28 @@
+namespace Services.Management.Administration.Worker
+{
+    using Chains;
+
+    public sealed class ConnectHostedObject : IChainableAction<WorkUnitContext, WorkUnitContext>
+    {
+        private readonly object hostedObject;
+
+        public ConnectHostedObject(object hostedObject)
+        {
+            this.hostedObject = hostedObject;
+        }
+
+        public WorkUnitContext Act(WorkUnitContext context)
+        {
+            context.HostedObject = hostedObject;
+
+            context.WorkerControl = hostedObject as IWorkerEvents;
+
+            if (context.WorkerControl != null)
+            {
+                context.WorkerControl.OnStart();
+            }
+
+            return context;
+        }
+    }
+}

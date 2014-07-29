@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Administration\Executioner\ExecutionMode.cs" />
     <Compile Include="Administration\Executioner\IExecutioner.cs" />
+    <Compile Include="Administration\Executioner\IProcessExit.cs" />
+    <Compile Include="Administration\Executioner\ProcessExit.cs" />
     <Compile Include="Administration\Executioner\WorkerDataSessionAndApiKey.cs" />
     <Compile Include="Administration\Executioner\WorkerExecutioner.cs" />
     <Compile Include="Administration\Server\AdministrationData.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Administration\Update\CheckIfThisProcessIsUpdated.cs" />
     <Compile Include="Administration\Update\ApplyServiceVersionUpdateFromZip.cs" />
     <Compile Include="Administration\Update\ApplyServiceUpdateOnLastVersion.cs" />
+    <Compile Include="Administration\Update\WaitUntilServiceIsStopped.cs" />
     <Compile Include="Administration\Update\WaitUntilServiceIsUninstalled.cs" />
     <Compile Include="Administration\Update\UninstallService.cs" />
     <Compile Include="Administration\Update\FileUploadToAdminData.cs" />
@@ -104,6 +107,7 @@
     <Compile Include="Administration\Update\ApplyAdminUpdate.cs" />
     <Compile Include="Administration\Update\WatchFilesystemForAdminUpdate.cs" />
     <Compile Include="Administration\Worker\CloseService.cs" />
+    <Compile Include="Administration\Worker\ConnectHostedObject.cs" />
     <Compile Include="Administration\Worker\IWorkerEvents.cs">
       <SubType>Code</SubType>
     </Compile>
