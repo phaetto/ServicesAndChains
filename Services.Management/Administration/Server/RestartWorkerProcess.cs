@@ -19,20 +19,29 @@
 
         public AdministrationContext Act(AdministrationContext context)
         {
-            if (context.ReportData.ContainsKey(Data))
-            {
-                if (context.ReportData[Data].WorkerState == WorkUnitState.Running)
+            ThreadPool.QueueUserWorkItem(
+                x =>
                 {
-                    context.ReportData[Data].AdviceGiven = AdviceState.Restart;
-
-                    while (context.ReportData[Data].WorkerState == WorkUnitState.Running)
+                    if (context.ReportData.ContainsKey(Data))
                     {
-                        Thread.Sleep(WaitDelayInMilliseconds);
-                    }
-                }
+                        if (context.ReportData[Data].WorkerState == WorkUnitState.Running)
+                        {
+                            context.ReportData[Data].AdviceGiven = AdviceState.Restart;
 
-                context.Do(new StartWorkerProcess(context.ReportData[Data].StartData));
-            }
+                            while (context.ReportData[Data].WorkerState != WorkUnitState.Restarting)
+                            {
+                                Thread.Sleep(WaitDelayInMilliseconds);
+                            }
+
+                            while (context.ReportData[Data].WorkerState != WorkUnitState.Stopping)
+                            {
+                                Thread.Sleep(WaitDelayInMilliseconds);
+                            }
+                        }
+
+                        context.Do(new StartWorkerProcess(context.ReportData[Data].StartData));
+                    }
+                });
 
             return context;
         }
