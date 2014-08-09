@@ -55,8 +55,9 @@
                     using (var clientContextToAdmin = new Client("127.0.0.1", 12006).Do(new OpenConnection()))
                     {
                         clientContextToAdmin
+                            .Do(new WaitUntilServiceIsUp(ServiceId, 10))
                             .Do(new Send(new StopWorkerProcess(ServiceId)))
-                            .Do(new WaitUntilServiceIsStopped(ServiceId, 100));
+                            .Do(new WaitUntilServiceIsStopped(ServiceId, 10));
                     }
 
                     Assert.AreEqual(WorkUnitState.Stopping, executioner.WorkUnitContext.State);
@@ -86,8 +87,9 @@
                     using (var clientContextToAdmin = new Client("127.0.0.1", 12007).Do(new OpenConnection()))
                     {
                         clientContextToAdmin
+                            .Do(new WaitUntilServiceIsUp(ServiceId, 10))
                             .Do(new Send(new StopWorkerProcess(ServiceId)))
-                            .Do(new WaitUntilServiceIsStopped(ServiceId, 100));
+                            .Do(new WaitUntilServiceIsStopped(ServiceId, 10));
                     }
 
                     var result = executioner.WrappedContext as ContextForTestWithEvents;
@@ -120,8 +122,9 @@
                     using (var clientContextToAdmin = new Client("127.0.0.1", 12008).Do(new OpenConnection()))
                     {
                         clientContextToAdmin
+                            .Do(new WaitUntilServiceIsUp(ServiceId, 10))
                             .Do(new Send(new StopWorkerProcess(ServiceId)))
-                            .Do(new WaitUntilServiceIsStopped(ServiceId, 100));
+                            .Do(new WaitUntilServiceIsStopped(ServiceId, 10));
                     }
 
                     var result = executioner.WrappedContext as DisposableContextForTest;
