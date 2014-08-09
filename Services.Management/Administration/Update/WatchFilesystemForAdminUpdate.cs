@@ -90,7 +90,7 @@
                                    Session = workUnitContext.Session
                                }));
 
-            workUnitContext.Stop();
+            workUnitContext.Close();
         }
 
         public void Dispose()
