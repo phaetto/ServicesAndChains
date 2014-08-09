@@ -55,6 +55,7 @@
             {
                 // No form for listener - use the imput string and decode only if "application/x-www-form-urlencoded"
                 if (httpListenerContext != null
+                    && httpListenerContext.Request.ContentType != null
                     && httpListenerContext.Request.ContentType.ToLowerInvariant().StartsWith(HttpRequest.FormUrlEncodedContentType)
                     && formRequestData.Count == 0)
                 {
