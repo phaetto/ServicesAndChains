@@ -81,6 +81,7 @@
     <Compile Include="Administration\Server\GetAllRepoServices.cs" />
     <Compile Include="Administration\Server\RepoServicesData.cs" />
     <Compile Include="Administration\Server\GetReportedData.cs" />
+    <Compile Include="Administration\Server\StartServicesExtensionsWellKnownService.cs" />
     <Compile Include="Administration\Server\StartWorkerProcess.cs" />
     <Compile Include="Administration\Server\StartWorkerProcessWithDelay.cs" />
     <Compile Include="Administration\Server\StopWorkerProcess.cs" />
