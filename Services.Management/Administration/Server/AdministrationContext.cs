@@ -201,7 +201,7 @@
             }
         }
 
-        public static Dictionary<string, WorkUnitReportData> ReloadFromMemoryDbService()
+        internal static Dictionary<string, WorkUnitReportData> ReloadFromMemoryDbService()
         {
             Dictionary<string, WorkUnitReportData> previousAdminReportData = null;
 
