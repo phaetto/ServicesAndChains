@@ -12,7 +12,7 @@
         protected PersistentChain(IPersistentStore<TData> persistentStore)
             : this(new TData
                    {
-                       Id = Guid.NewGuid()
+                       Id = Guid.NewGuid().ToString()
                    },
                 persistentStore)
         {

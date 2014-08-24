@@ -8,9 +8,9 @@
     public class CustomPersistentStore<T> : IPersistentStore<T>
         where T : SerializableSpecificationWithId
     {
-        public static Dictionary<Guid, List<ExecutableActionSpecification>> memoryStore =
-            new Dictionary<Guid, List<ExecutableActionSpecification>>();
-        public static Dictionary<Guid, DateTime> memoryStoreDateTimes = new Dictionary<Guid, DateTime>();
+        public static Dictionary<string, List<ExecutableActionSpecification>> memoryStore =
+            new Dictionary<string, List<ExecutableActionSpecification>>();
+        public static Dictionary<string, DateTime> memoryStoreDateTimes = new Dictionary<string, DateTime>();
 
         public bool SnapshotExists(T data)
         {

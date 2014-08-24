@@ -5,7 +5,7 @@
 
     public abstract class SerializableSpecificationWithId : SerializableSpecification
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public DateTime Created { get; set; }
 

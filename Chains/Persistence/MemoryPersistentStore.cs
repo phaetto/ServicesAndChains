@@ -7,10 +7,10 @@
     public class MemoryPersistentStore<T> : IPersistentStore<T>
         where T : SerializableSpecificationWithId
     {
-        private static Dictionary<Guid, List<ExecutableActionSpecification>> memoryStore =
-            new Dictionary<Guid, List<ExecutableActionSpecification>>();
-        private static Dictionary<Guid, DateTime> memoryStoreDateTimes = new Dictionary<Guid, DateTime>();
-        private static Dictionary<Guid, T> snapshotMemoryStore = new Dictionary<Guid, T>();
+        private static Dictionary<string, List<ExecutableActionSpecification>> memoryStore =
+            new Dictionary<string, List<ExecutableActionSpecification>>();
+        private static Dictionary<string, DateTime> memoryStoreDateTimes = new Dictionary<string, DateTime>();
+        private static Dictionary<string, T> snapshotMemoryStore = new Dictionary<string, T>();
 
         public bool SnapshotExists(T data)
         {

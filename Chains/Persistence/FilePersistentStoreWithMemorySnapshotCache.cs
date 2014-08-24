@@ -9,8 +9,8 @@
     public class FilePersistentStoreWithMemorySnapshotCache<T> : IPersistentStore<T>
         where T : SerializableSpecificationWithId, new()
     {
-        private static Dictionary<Guid, T> snapshotMemoryStore = new Dictionary<Guid, T>();
-        private static Dictionary<Guid, DateTime> snapshotsStoreDateTimes = new Dictionary<Guid, DateTime>();
+        private static Dictionary<string, T> snapshotMemoryStore = new Dictionary<string, T>();
+        private static Dictionary<string, DateTime> snapshotsStoreDateTimes = new Dictionary<string, DateTime>();
 
         public readonly string folder;
         public readonly string directory;
