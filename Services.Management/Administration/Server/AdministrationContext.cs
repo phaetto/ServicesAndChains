@@ -148,6 +148,13 @@
                 foreach (var version in versions)
                 {
                     var versionInfo = new DirectoryInfo(version);
+                    
+                    int versionAsInt;
+                    if (!int.TryParse(versionInfo.Name, out versionAsInt))
+                    {
+                        continue;
+                    }
+
                     var deadInstances = Directory.GetDirectories(version, "*");
                     foreach (var deadInstanceInfo in deadInstances.Select(x => new DirectoryInfo(x)))
                     {
@@ -168,7 +175,7 @@
                                                     {
                                                         ServiceName = folderInfo.Name,
                                                         Id = deadInstanceInfo.Name,
-                                                        Version = int.Parse(versionInfo.Name)
+                                                        Version = versionAsInt
                                                     },
                                         StartedTime = deadInstanceInfo.CreationTimeUtc,
                                         Uptime = new TimeSpan(0)
