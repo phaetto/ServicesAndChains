@@ -169,7 +169,16 @@
                     catch (HttpListenerException)
                     {
                         responseHasBeenHandled = true;
-                        httpListenerContext.Response.Close();
+
+                        try
+                        {
+                            httpListenerContext.Response.Close();
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            // Connection closed
+                        }
+
                         break;
                     }
                     catch (Exception ex)
