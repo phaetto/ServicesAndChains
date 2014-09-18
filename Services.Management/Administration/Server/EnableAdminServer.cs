@@ -40,7 +40,7 @@
             adminContext.AdminTasksThread = new Thread(
                 () =>
                 {
-                    if (previousAdminReportData != null)
+                    if (previousAdminReportData == null)
                     {
                         adminContext.CleanAdminReports();
                         adminContext.Do(new StartServicesExtensionsWellKnownService());
