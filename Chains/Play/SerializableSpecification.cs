@@ -236,7 +236,14 @@
 
         private static object NormalizeArrayTypes(Type type, object data, JArray jarray)
         {
-            switch (type.GetElementType().FullName)
+            var elementType = type.GetElementType();
+
+            if (elementType == null)
+            {
+                return jarray.ToObject(type);
+            }
+
+            switch (elementType.FullName)
             {
                 case "System.String":
                     data = jarray.ToArray().Select(x => x.ToObject<string>()).ToArray();
@@ -247,8 +254,11 @@
                 case "System.Boolean":
                     data = jarray.ToArray().Select(x => x.ToObject<bool>()).ToArray();
                     break;
+                case "System.Object":
+                    data = jarray.ToArray().Select(x => x.ToObject(elementType)).ToArray();
+                    break;
                 default:
-                    data = jarray.ToArray().Select(x => x.ToObject(type.GetElementType())).ToArray();
+                    data = jarray.ToObject(type);
                     break;
             }
 

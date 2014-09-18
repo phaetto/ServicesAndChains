@@ -7,6 +7,7 @@
     using Services.Communication.Protocol;
     using Services.Management.Administration.Server;
     using Services.Management.Administration.Worker;
+    using Services.Management.UnitTests.Classes;
 
     [TestClass]
     public class WorkUnitTests
@@ -82,6 +83,19 @@
             Assert.AreEqual(typeof(string), deserializedData.Parameters[0].GetType());
             Assert.AreEqual(typeof(long), deserializedData.Parameters[1].GetType());
             Assert.AreEqual(typeof(bool), deserializedData.Parameters[2].GetType());
+        }
+
+        [TestMethod]
+        public void Chain_WhenComplexObjectIsSerializedToJsonAndDeserialized_ThenTheObjectIsTheSame()
+        {
+            var data = new ComplexSerializable();
+
+            var serializableData = data.SerializeToJson();
+
+            var deserializedData =
+                DeserializableSpecification<ComplexSerializable>.DeserializeFromJson(serializableData);
+
+            Assert.AreEqual(data.workerDataArray.Length, deserializedData.workerDataArray.Length);
         }
     }
 }
