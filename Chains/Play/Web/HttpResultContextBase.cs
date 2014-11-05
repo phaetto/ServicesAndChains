@@ -43,7 +43,7 @@ namespace Chains.Play.Web
             this.StatusText = statusText;
             this.StatusCode = statusCode;
             this.ResponseText.Append(
-                string.IsNullOrWhiteSpace(resultText)
+                string.IsNullOrWhiteSpace(resultText) && statusCode == 404
                     ? string.Format(html404DefaultBody, statusText, statusCode)
                     : resultText);
         }
@@ -56,7 +56,7 @@ namespace Chains.Play.Web
 
         public static HttpResultContextBase<T> NoContent()
         {
-            return new HttpResultContextBase<T>("No Content", 302);
+            return new HttpResultContextBase<T>("No Content", 204);
         }
 
         public static HttpResultContextBase<T> NotFound(string resultText = "Not Found")
