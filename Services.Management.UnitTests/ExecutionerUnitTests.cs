@@ -76,6 +76,54 @@
         }
 
         [TestMethod]
+        public void WorkerExecutioner_WhenWorkerIsHostedThroughHttpAndSecurityModule_ThenModuleIsBeenEnforcedAndExceptionIsThrown()
+        {
+            var workerDataWithModules = new StartWorkerData
+            {
+                AdminHost = AdministrationContext.Parent.Parent.Hostname,
+                AdminPort = AdministrationContext.Parent.Parent.Port,
+                ContextType = typeof(ContextForTestWithModules).FullName,
+                ContextServerHost = "127.0.0.1",
+                ContextServerPort = 10501,
+                Id = "test",
+                ContextHttpData = new StartWorkerHttpData
+                                  {
+                                      Path = "/awesome-path"
+                                  },
+                Modules = new List<ModuleStartEntry>
+                                                      {
+                                                          new ModuleStartEntry
+                                                          {
+                                                              ModuleType = typeof(SecurityModule).FullName,
+                                                              ModuleParameters = null
+                                                          }
+                                                      }
+            };
+
+            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithModules, processExit: new NoProcessExit()))
+            {
+                Exception exception = null;
+
+                executioner.Execute();
+
+                try
+                {
+                    using (var context = new Client("localhost", 10501, "/awesome-path").Do(new OpenConnection(protocolType: ProtocolType.Http)))
+                    {
+                        context.Do(new Send(new SecuredAuthorizableActionForTest(new ReproducibleTestData())));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    exception = ex;
+                }
+
+                Assert.IsNotNull(exception);
+                Assert.IsInstanceOfType(exception, typeof(SecurityException));
+            }
+        }
+
+        [TestMethod]
         public void WorkerExecutioner_WhenWorkerIncludesSecurityModuleAndActionIsNotSecure_ThenModuleIsBeenEnforcedAndExceptionIsThrown()
         {
             var workerDataWithModules = new StartWorkerData
