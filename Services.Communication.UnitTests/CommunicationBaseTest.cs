@@ -307,6 +307,34 @@
         }
 
         [TestMethod]
+        public void TcpServer_WhenClientSendsButNoReceiveUsingHttp_ThenHasNoContent()
+        {
+            var testAction = new ReproducibleTestAction(
+                new ReproducibleTestData
+                {
+                    ChangeToValue = "over http"
+                });
+
+            var hasCalled = false;
+            using (
+                new ServerHost("localhost", 3996, "/custom path/awesome service").Do(
+                    new StartListen(
+                        "test3",
+                        typeof(ContextForTest).FullName,
+                        onAfterExecute: x => hasCalled = true,
+                        protocolType: Protocol.ProtocolType.Http)))
+            {
+                using (
+                    new Client("localhost", 3996, "/custom path/awesome service").Do(new OpenConnection(protocolType: Protocol.ProtocolType.Http))
+                                                 .Do(new Send(testAction, expectReply: false)))
+                {
+                }
+            }
+
+            Assert.IsTrue(hasCalled);
+        }
+
+        [TestMethod]
         public void TcpServer_WhenClientSendsUsingHttp_ThenMultipleServersCanBeHosted()
         {
             var testAction = new ReproducibleTestAction(
