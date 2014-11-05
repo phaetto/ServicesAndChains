@@ -1,6 +1,7 @@
 ﻿namespace Chains.Play.Web
 {
     using System;
+    using System.Collections.Specialized;
     using System.IO;
     using System.Net;
     using System.Text;
@@ -9,7 +10,12 @@
     {
         public const string FormUrlEncodedContentType = "application/x-www-form-urlencoded";
 
-        public static HttpResponseResult DoRequest(string url, string method = "get", string postData = null, string contentType = null)
+        public static HttpResponseResult DoRequest(
+            string url,
+            string method = "get",
+            string postData = null,
+            string contentType = null,
+            NameValueCollection headers = null)
         {
             var responseData = new HttpResponseResult();
             try
@@ -29,6 +35,11 @@
                     if (!string.IsNullOrWhiteSpace(contentType))
                     {
                         webRequest.ContentType = contentType.ToLowerInvariant();
+                    }
+
+                    if (headers != null)
+                    {
+                        webRequest.Headers.Add(headers);
                     }
 
                     webRequest.ContentLength = postBytes.Length;
