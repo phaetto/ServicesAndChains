@@ -17,13 +17,14 @@
             {
                 Console.WriteLine();
                 Console.WriteLine("Worker Execution v1.0");
-                Console.WriteLine("Alexander Mantzoukas (c) 2013");
+                Console.WriteLine(string.Format("Alexander Mantzoukas (c) 2013-{0}", DateTime.Now.Year));
                 Console.WriteLine();
 
                 if (args.Length != 2)
                 {
-                    var msg = "Wrong number of inputs given." + Environment.NewLine + "You can use:" + Environment.NewLine
-                        + "(--execute|--start|--update|--admin|--prepare) {json}" + Environment.NewLine + "<admin host> <admin port>";
+                    var msg = "Wrong number of inputs given." + Environment.NewLine + "You can use:"
+                              + Environment.NewLine + "(--execute|--start|--update|--admin|--prepare) {json}"
+                              + Environment.NewLine + "<admin host> <admin port>";
 
                     Console.WriteLine();
                     Console.WriteLine(msg);
