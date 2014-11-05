@@ -105,9 +105,12 @@ namespace Services.Management.Administration.Executioner
                         {
                             WrappedContext = CreateHostedContext();
 
+                            var httpPath = WorkerData.ContextHttpData != null ? WorkerData.ContextHttpData.Path : null;
+                            var protocolType = WorkerData.ContextHttpData != null ? ProtocolType.Http : ProtocolType.Tcp;
+
                             server =
-                                new ServerHost(WorkerData.ContextServerHost, WorkerData.ContextServerPort).Do(
-                                    new StartListen(WorkerData.ServiceName, WrappedContext));
+                                new ServerHost(WorkerData.ContextServerHost, WorkerData.ContextServerPort, httpPath).Do(
+                                    new StartListen(WorkerData.ServiceName, WrappedContext, protocolType: protocolType));
                         }
                         else
                         {

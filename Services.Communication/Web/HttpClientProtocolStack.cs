@@ -1,12 +1,15 @@
 ﻿namespace Services.Communication.Web
 {
     using System;
+    using System.Collections.Specialized;
     using System.Net;
     using Chains.Play.Web;
     using Services.Communication.Protocol;
 
     public class HttpClientProtocolStack : IClientProtocolStack
     {
+        public const string HeaderKeyAndValue = "no-content";
+
         private Client context;
 
         public void OpenClientConnection(Client context)
@@ -37,7 +40,14 @@
                 server += ":" + context.Port;
             }
 
-            var response = HttpRequest.DoRequest(string.Format("{0}{1}/send", server, context.Path), "post", data);
+            var headers = new NameValueCollection();
+            headers.Add(HeaderKeyAndValue, HeaderKeyAndValue);
+
+            var response = HttpRequest.DoRequest(
+                string.Format("{0}{1}", server, context.Path),
+                "post",
+                data,
+                headers: headers);
 
             if (response.HasError)
             {
@@ -53,7 +63,7 @@
                 server += ":" + context.Port;
             }
 
-            var response = HttpRequest.DoRequest(string.Format("{0}{1}/send-receive", server, context.Path), "post", data);
+            var response = HttpRequest.DoRequest(string.Format("{0}{1}", server, context.Path), "post", data);
 
             if (response.HasError)
             {

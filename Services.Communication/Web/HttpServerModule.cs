@@ -21,20 +21,28 @@
 
             var pathLowerInvariant = httpServer.Parent.Parent.Path.ToLowerInvariant();
 
-            httpServer.AddPath(pathLowerInvariant + "/send/");
-            httpServer.AddPath(pathLowerInvariant + "/send-receive/");
+            if (!pathLowerInvariant.EndsWith("/"))
+            {
+                pathLowerInvariant += "/";
+            }
+
+            httpServer.AddPath(pathLowerInvariant);
 
             var escapedPath = Uri.EscapeUriString(pathLowerInvariant);
 
-            paths.Add(escapedPath + "/send/");
-            paths.Add(escapedPath + "/send-receive/");
-            paths.Add(escapedPath + "/send");
-            paths.Add(escapedPath + "/send-receive");
+            paths.Add(escapedPath);
         }
 
         public bool ResolveRequest(HttpListenerContext context)
         {
-            if (paths.Contains(context.Request.Url.AbsolutePath) && context.Request.HttpMethod.ToLowerInvariant() == "post")
+            var absolutePath = context.Request.Url.AbsolutePath;
+
+            if (!absolutePath.EndsWith("/"))
+            {
+                absolutePath += "/";
+            }
+
+            if (paths.Contains(absolutePath) && context.Request.HttpMethod.ToLowerInvariant() == "post")
             {
                 var httpInfoContext = new HttpContextInfo(context);
 
@@ -49,9 +57,19 @@
                     throw new InvalidOperationException("Post data are empty, this is not allowed.");
                 }
 
-                new HttpResultContext(
-                    protocolServerLogic.ApplyDataAndReturn(protocolServerLogic.Deserialize(postJson)), "text/json")
-                    .AccessControlAllowOriginAll().CompressRequest().ApplyOutputToHttpContext(httpInfoContext);
+                var resultString = protocolServerLogic.ApplyDataAndReturn(protocolServerLogic.Deserialize(postJson));
+
+                if (context.Request.Headers.Get(HttpClientProtocolStack.HeaderKeyAndValue) != HttpClientProtocolStack.HeaderKeyAndValue)
+                {
+                    new HttpResultContext(resultString, "text/json")
+                        .AccessControlAllowOriginAll()
+                        .CompressRequest()
+                        .ApplyOutputToHttpContext(httpInfoContext);
+                }
+                else
+                {
+                    HttpResultContext.NoContent().ApplyOutputToHttpContext(httpInfoContext);
+                }
 
                 return true;
             }

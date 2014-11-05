@@ -118,6 +118,7 @@
     <Compile Include="Administration\Worker\ReportProgress.cs" />
     <Compile Include="Administration\Worker\ReportProgressData.cs" />
     <Compile Include="Administration\Worker\StartWorkerData.cs" />
+    <Compile Include="Administration\Worker\StartWorkerHttpData.cs" />
     <Compile Include="Administration\Worker\StartWorkUnit.cs" />
     <Compile Include="Administration\Worker\WorkUnitContext.cs" />
     <Compile Include="Administration\Worker\WorkUnitState.cs" />

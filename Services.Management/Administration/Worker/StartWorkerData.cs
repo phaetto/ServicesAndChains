@@ -16,14 +16,11 @@ namespace Services.Management.Administration.Worker
         public object[] Parameters;
         public string AdminHost;
         public int AdminPort;
-        // public string AdminProtocol
-        // public string AdminHttpPath
         public string ContextServerHost;
         public int ContextServerPort;
-        // public string ContextProtocol
-        // public string ContextHttpPath
         public List<ModuleStartEntry> Modules;
         public int ReportUpdateIntervalInSeconds = 5;
+        public StartWorkerHttpData ContextHttpData;
 
         public override int DataStructureVersionNumber
         {
