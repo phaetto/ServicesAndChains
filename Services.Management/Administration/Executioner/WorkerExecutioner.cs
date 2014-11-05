@@ -110,7 +110,7 @@ namespace Services.Management.Administration.Executioner
 
                             server =
                                 new ServerHost(WorkerData.ContextServerHost, WorkerData.ContextServerPort, httpPath).Do(
-                                    new StartListen(WorkerData.ServiceName, WrappedContext, protocolType: protocolType));
+                                    new StartListen(WrappedContext, protocolType: protocolType));
                         }
                         else
                         {

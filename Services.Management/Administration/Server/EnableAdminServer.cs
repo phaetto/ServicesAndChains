@@ -31,9 +31,7 @@
 
             adminContext.AdminServer =
                         new ServerHost(context.Parent.Hostname, context.Parent.Port).Do(
-                            new StartListen(
-                                name,
-                                adminContext,
+                            new StartListen(adminContext,
                                 onBeforeExecute: onBeforeExecute,
                                 onAfterExecute: onAfterExecute));
 

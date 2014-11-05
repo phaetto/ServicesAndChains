@@ -47,8 +47,7 @@
         {
             var hasCalled = false;
             using (var server = new ServerHost("127.0.0.1", 7123).Do(
-                        new StartListen(
-                            "test", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+                        new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 SendMessage();
                 Thread.Sleep(1000);
@@ -149,7 +148,7 @@
 
             var servertryFinally =
                 new ServerHost("127.0.0.1", 7234).Do(
-                    new StartListen("test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true));
+                    new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true));
             try
             {
                 using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
@@ -163,7 +162,7 @@
 
             servertryFinally =
                 new ServerHost("127.0.0.1", 7234).Do(
-                    new StartListen("test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true));
+                    new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true));
             try
             {
                 using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
@@ -176,8 +175,7 @@
             }
 
             using (var server = new ServerHost("127.0.0.1", 7234).Do(
-                            new StartListen(
-                                "test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+                            new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
@@ -186,8 +184,7 @@
             }
 
             using (var server = new ServerHost("127.0.0.1", 7234).Do(
-                            new StartListen(
-                                "test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+                            new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
@@ -196,8 +193,7 @@
             }
 
             using (var server = new ServerHost("127.0.0.1", 7234).Do(
-                            new StartListen(
-                                "test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+                            new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
@@ -206,8 +202,7 @@
             }
 
             using (var server = new ServerHost("127.0.0.1", 7234).Do(
-                            new StartListen(
-                                "test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+                            new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
@@ -216,8 +211,7 @@
             }
 
             using (var server = new ServerHost("127.0.0.1", 7234).Do(
-                            new StartListen(
-                                "test0F3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+                            new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
@@ -231,8 +225,7 @@
         {
             var hasCalled = false;
             using (new ServerHost("127.0.0.1", 7124).Do(
-                        new StartListen(
-                            "test2", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+                        new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 var item = (ReproducibleTestData)SendMessageAndReceive().Data;
                 Thread.Sleep(1000);
@@ -247,8 +240,7 @@
         {
             var hasCalled = false;
             using (new ServerHost("127.0.0.1", 7124).Do(
-                        new StartListen(
-                            "test2", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+                        new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 var returnLine = SendUnsupportedMessageAndReceive();
                 Assert.AreEqual("Unknown request: WrongTcpCommand", returnLine);
@@ -268,7 +260,7 @@
 
             var hasCalled = false;
             using (new ServerHost("127.0.0.1", 3997).Do(
-                        new StartListen("test3", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+                        new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 using (new Client("127.0.0.1", 3997).Do(new OpenConnection()).Do(new Send(testAction)))
                 {
@@ -290,9 +282,7 @@
             var hasCalled = false;
             using (
                 new ServerHost("localhost", 3996, "/custom path/awesome service").Do(
-                    new StartListen(
-                        "test3",
-                        typeof(ContextForTest).FullName,
+                    new StartListen(typeof(ContextForTest).FullName,
                         onAfterExecute: x => hasCalled = true,
                         protocolType: Protocol.ProtocolType.Http)))
             {
@@ -318,9 +308,7 @@
             var hasCalled = false;
             using (
                 new ServerHost("localhost", 3996, "/custom path/awesome service").Do(
-                    new StartListen(
-                        "test3",
-                        typeof(ContextForTest).FullName,
+                    new StartListen(typeof(ContextForTest).FullName,
                         onAfterExecute: x => hasCalled = true,
                         protocolType: Protocol.ProtocolType.Http)))
             {
@@ -346,17 +334,13 @@
             var hasCalled = false;
             using (
                 new ServerHost("localhost", 3995, "/custom-path").Do(
-                    new StartListen(
-                        "test3",
-                        typeof(ContextForTest).FullName,
+                    new StartListen(typeof(ContextForTest).FullName,
                         onAfterExecute: x => hasCalled = true,
                         protocolType: Protocol.ProtocolType.Http)))
             {
                 using (
                     new ServerHost("localhost", 3995, "/custom-path-2").Do(
-                        new StartListen(
-                            "test4",
-                            typeof(ContextForTest).FullName,
+                        new StartListen(typeof(ContextForTest).FullName,
                             protocolType: Protocol.ProtocolType.Http)))
                 {
                     using (
@@ -395,7 +379,7 @@
 
             var hasCalled = false;
             using (new ServerHost("127.0.0.1", 15010).Do(
-                        new StartListen("test4", typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+                        new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 using (new Client("127.0.0.1", 15010).Do(new OpenConnection()).Do(new Send(items)))
                 {
@@ -419,7 +403,7 @@
 
             try
             {
-                using (new ServerHost("127.0.0.1", 15002).Do(new StartListen("test3", typeof(ContextForTest).FullName)))
+                using (new ServerHost("127.0.0.1", 15002).Do(new StartListen(typeof(ContextForTest).FullName)))
                 {
                     using (
                         new Client("127.0.0.1", 15002).Do(new OpenConnection())

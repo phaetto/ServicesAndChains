@@ -9,7 +9,6 @@ namespace Services.Communication.Protocol
 
     public sealed class StartListen : IChainableAction<ServerHost, ServerConnectionContext>
     {
-        private readonly string name;
         private readonly string contextTypeName;
         private readonly object contextObject;
         private readonly Func<ExecutableActionSpecification[], bool> onBeforeExecute;
@@ -18,15 +17,13 @@ namespace Services.Communication.Protocol
         private readonly ProtocolType protocolType;
         private readonly IServerProtocolStack serverProtocolStack;
 
-        public StartListen(string name,
-            object contextObject,
+        public StartListen(object contextObject,
             Func<ExecutableActionSpecification[], bool> onBeforeExecute = null,
             Action<dynamic> onAfterExecute = null,
             bool newInstanceForEachRequest = false,
             ProtocolType protocolType = ProtocolType.Tcp,
             IServerProtocolStack serverProtocolStack = null)
         {
-            this.name = name;
             this.contextObject = contextObject;
             this.onBeforeExecute = onBeforeExecute;
             this.onAfterExecute = onAfterExecute;
@@ -35,15 +32,13 @@ namespace Services.Communication.Protocol
             this.serverProtocolStack = serverProtocolStack;
         }
 
-        public StartListen(string name,
-            string contextTypeName,
+        public StartListen(string contextTypeName,
             Func<ExecutableActionSpecification[], bool> onBeforeExecute = null,
             Action<dynamic> onAfterExecute = null,
             bool newInstanceForEachRequest = false,
             ProtocolType protocolType = ProtocolType.Tcp,
             IServerProtocolStack serverProtocolStack = null)
         {
-            this.name = name;
             this.contextTypeName = contextTypeName;
             this.onBeforeExecute = onBeforeExecute;
             this.onAfterExecute = onAfterExecute;
