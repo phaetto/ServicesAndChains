@@ -15,24 +15,20 @@
 
         private readonly int randomAmountForIntervalBetweenTimesInMilliseconds;
 
-        private readonly bool expectReply;
-
         private readonly Random random = new Random();
 
         public Send(
             IReproducible action,
             int timesToRetry = 3,
             int intervalBetweenTimesInMilliseconds = 200,
-            int randomAmountForIntervalBetweenTimesInMilliseconds = 50,
-            bool expectReply = true)
+            int randomAmountForIntervalBetweenTimesInMilliseconds = 50)
             : this(new[]
                    {
                        action.GetInstanceSpec()
                    },
                 timesToRetry,
                 intervalBetweenTimesInMilliseconds,
-                randomAmountForIntervalBetweenTimesInMilliseconds,
-                expectReply)
+                randomAmountForIntervalBetweenTimesInMilliseconds)
         {
         }
 
@@ -40,16 +36,14 @@
             ExecutableActionSpecification specification,
             int timesToRetry = 3,
             int intervalBetweenTimesInMilliseconds = 200,
-            int randomAmountForIntervalBetweenTimesInMilliseconds = 50,
-            bool expectReply = true)
+            int randomAmountForIntervalBetweenTimesInMilliseconds = 50)
             : this(new[]
                    {
                        specification
                    },
                 timesToRetry,
                 intervalBetweenTimesInMilliseconds,
-                randomAmountForIntervalBetweenTimesInMilliseconds,
-                expectReply)
+                randomAmountForIntervalBetweenTimesInMilliseconds)
         {
         }
 
@@ -57,14 +51,20 @@
             ExecutableActionSpecification[] specifications,
             int timesToRetry = 3,
             int intervalBetweenTimesInMilliseconds = 200,
-            int randomAmountForIntervalBetweenTimesInMilliseconds = 50,
-            bool expectReply = true)
+            int randomAmountForIntervalBetweenTimesInMilliseconds = 50)
         {
             this.specifications = specifications;
             this.timesToRetry = timesToRetry;
             this.intervalBetweenTimesInMilliseconds = intervalBetweenTimesInMilliseconds;
             this.randomAmountForIntervalBetweenTimesInMilliseconds = randomAmountForIntervalBetweenTimesInMilliseconds;
-            this.expectReply = expectReply;
+        }
+
+        protected virtual T SendData(ClientConnectionContext context, ExecutableActionSpecification[] specifications)
+        {
+            var data = context.ClientProtocolStack.SendAndReceiveStream(
+                                specifications.SerializeToJson());
+
+            return GetResponseFromServer(context, data);
         }
 
         public T Act(ClientConnectionContext context)
@@ -77,16 +77,7 @@
                 {
                     lock (context)
                     {
-                        if (expectReply)
-                        {
-                            var data = context.ClientProtocolStack.SendAndReceiveStream(
-                                specifications.SerializeToJson());
-
-                            return GetResponseFromServer(context, data);
-                        }
-
-                        context.ClientProtocolStack.SendStream(specifications.SerializeToJson());
-                        return default(T);
+                        return SendData(context, specifications);
                     }
                 }
                 catch (Exception)
@@ -137,14 +128,12 @@
             IReproducible action,
             int timesToRetry = 3,
             int intervalBetweenTimesInMilliseconds = 200,
-            int randomAmountForIntervalBetweenTimesInMilliseconds = 50,
-            bool expectReply = true)
+            int randomAmountForIntervalBetweenTimesInMilliseconds = 50)
             : base(
                 action,
                 timesToRetry,
                 intervalBetweenTimesInMilliseconds,
-                randomAmountForIntervalBetweenTimesInMilliseconds,
-                expectReply)
+                randomAmountForIntervalBetweenTimesInMilliseconds)
         {
         }
 
@@ -152,14 +141,12 @@
             ExecutableActionSpecification specification,
             int timesToRetry = 3,
             int intervalBetweenTimesInMilliseconds = 200,
-            int randomAmountForIntervalBetweenTimesInMilliseconds = 50,
-            bool expectReply = true)
+            int randomAmountForIntervalBetweenTimesInMilliseconds = 50)
             : base(
                 specification,
                 timesToRetry,
                 intervalBetweenTimesInMilliseconds,
-                randomAmountForIntervalBetweenTimesInMilliseconds,
-                expectReply)
+                randomAmountForIntervalBetweenTimesInMilliseconds)
         {
         }
 
@@ -167,14 +154,12 @@
             ExecutableActionSpecification[] specifications,
             int timesToRetry = 3,
             int intervalBetweenTimesInMilliseconds = 200,
-            int randomAmountForIntervalBetweenTimesInMilliseconds = 50,
-            bool expectReply = true)
+            int randomAmountForIntervalBetweenTimesInMilliseconds = 50)
             : base(
                 specifications,
                 timesToRetry,
                 intervalBetweenTimesInMilliseconds,
-                randomAmountForIntervalBetweenTimesInMilliseconds,
-                expectReply)
+                randomAmountForIntervalBetweenTimesInMilliseconds)
         {
         }
     }

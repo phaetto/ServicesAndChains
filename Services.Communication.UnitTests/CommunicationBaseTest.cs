@@ -314,7 +314,7 @@
             {
                 using (
                     new Client("localhost", 3996, "/custom path/awesome service").Do(new OpenConnection(protocolType: Protocol.ProtocolType.Http))
-                                                 .Do(new Send(testAction, expectReply: false)))
+                                                 .Do(new SendNoReply(testAction)))
                 {
                 }
             }
