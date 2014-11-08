@@ -47,17 +47,34 @@ namespace Services.Communication.Protocol
             this.serverProtocolStack = serverProtocolStack;
         }
 
+        public StartListen(Func<ExecutableActionSpecification[], bool> onBeforeExecute = null,
+            Action<dynamic> onAfterExecute = null,
+            bool newInstanceForEachRequest = false,
+            ProtocolType protocolType = ProtocolType.Tcp,
+            IServerProtocolStack serverProtocolStack = null)
+        {
+            this.onBeforeExecute = onBeforeExecute;
+            this.onAfterExecute = onAfterExecute;
+            this.newInstanceForEachRequest = newInstanceForEachRequest;
+            this.protocolType = protocolType;
+            this.serverProtocolStack = serverProtocolStack;
+        }
+
         public ServerConnectionContext Act(ServerHost context)
         {
             ProtocolServerLogic protocolServerLogic;
 
-            if (contextObject == null)
+            if (!string.IsNullOrWhiteSpace(contextTypeName))
             {
                 protocolServerLogic = new ProtocolServerLogic(contextTypeName, onBeforeExecute, onAfterExecute, newInstanceForEachRequest);
             }
-            else
+            else if (contextObject != null)
             {
                 protocolServerLogic = new ProtocolServerLogic(contextObject, onBeforeExecute, onAfterExecute, newInstanceForEachRequest);
+            }
+            else
+            {
+                protocolServerLogic = new ProtocolServerLogic(onBeforeExecute, onAfterExecute, newInstanceForEachRequest);
             }
 
             switch (protocolType)

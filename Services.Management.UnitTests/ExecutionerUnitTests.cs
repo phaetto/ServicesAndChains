@@ -4,10 +4,12 @@
     using System.Collections.Generic;
     using System.Security;
     using Chains.Play.Web;
+    using Chains.Play.Web.HttpListener;
     using Chains.UnitTests.Classes;
     using Chains.UnitTests.Classes.Security;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Services.Communication.Protocol;
+    using Services.Communication.Tcp.Servers;
     using Services.Management.Administration.Executioner;
     using Services.Management.Administration.Server;
     using Services.Management.Administration.Worker;
@@ -29,6 +31,52 @@
         {
             AdministrationContext.Close();
             AdministrationContext.Dispose();
+        }
+
+        [TestMethod]
+        public void WorkerExecutioner_WhenWorkerIsExposedWithTcp_ThenClassCanAccessServer()
+        {
+            var workerDataWithoutModules = new StartWorkerData
+            {
+                AdminHost = AdministrationContext.Parent.Parent.Hostname,
+                AdminPort = AdministrationContext.Parent.Parent.Port,
+                ContextType = typeof(HostedContextForTest).FullName,
+                ContextServerHost = "127.0.0.1",
+                ContextServerPort = 10501,
+                Id = "test",
+            };
+
+            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithoutModules, processExit: new NoProcessExit()))
+            {
+                executioner.Execute();
+            }
+
+            Assert.AreEqual(HostedContextForTest.ServerProviderType, typeof(TcpServer).FullName);
+        }
+
+        [TestMethod]
+        public void WorkerExecutioner_WhenWorkerIsExposedWithHttp_ThenClassCanAccessServer()
+        {
+            var workerDataWithoutModules = new StartWorkerData
+            {
+                AdminHost = AdministrationContext.Parent.Parent.Hostname,
+                AdminPort = AdministrationContext.Parent.Parent.Port,
+                ContextType = typeof(HostedContextForTest).FullName,
+                ContextServerHost = "127.0.0.1",
+                ContextServerPort = 10501,
+                ContextHttpData = new StartWorkerHttpData
+                                  {
+                                      Path = "/"
+                                  },
+                Id = "test",
+            };
+
+            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithoutModules, processExit: new NoProcessExit()))
+            {
+                executioner.Execute();
+            }
+
+            Assert.AreEqual(HostedContextForTest.ServerProviderType, typeof(HttpServer).FullName);
         }
 
         [TestMethod]

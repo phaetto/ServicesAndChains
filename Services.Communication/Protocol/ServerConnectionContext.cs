@@ -6,29 +6,24 @@
 
     public sealed class ServerConnectionContext : ChainWithParent<ServerConnectionContext, ServerHost>, IDisposable
     {
-        private readonly IServerProtocolStack serverProtocolStack;
+        public readonly IServerProtocolStack ServerProtocolStack;
 
         public ServerConnectionContext(ServerHost parent,
             IServerProtocolStack serverProtocolStack)
             : base(parent)
         {
-            this.serverProtocolStack = serverProtocolStack;
+            this.ServerProtocolStack = serverProtocolStack;
             serverProtocolStack.OpenServerConnection(parent);
         }
 
         public void Close()
         {
-            serverProtocolStack.CloseServerConnection();
+            ServerProtocolStack.CloseServerConnection();
         }
 
         public void Dispose()
         {
             Close();
-        }
-
-        public T GetServerProvider<T>() where T : class
-        {
-            return serverProtocolStack.ServerProvider as T;
         }
     }
 }

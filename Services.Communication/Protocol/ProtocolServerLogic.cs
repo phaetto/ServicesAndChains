@@ -9,7 +9,8 @@ namespace Services.Communication.Protocol
         private readonly Func<ExecutableActionSpecification[], bool> onBeforeExecute;
         private readonly Action<dynamic> onAfterExecute;
         private readonly bool newInstanceForEachRequest;
-        private readonly ExecutionChain replayChain;
+
+        internal ExecutionChain ReplayChain;
 
         public ProtocolServerLogic(
             object contextObject,
@@ -21,7 +22,7 @@ namespace Services.Communication.Protocol
             this.onBeforeExecute = onBeforeExecute;
             this.onAfterExecute = onAfterExecute;
             this.newInstanceForEachRequest = newInstanceForEachRequest;
-            replayChain = new ExecutionChain(contextObject);
+            ReplayChain = new ExecutionChain(contextObject);
         }
 
         public ProtocolServerLogic(
@@ -34,7 +35,17 @@ namespace Services.Communication.Protocol
             this.onBeforeExecute = onBeforeExecute;
             this.onAfterExecute = onAfterExecute;
             this.newInstanceForEachRequest = newInstanceForEachRequest;
-            replayChain = new ExecutionChain(contextTypeName);
+            ReplayChain = new ExecutionChain(contextTypeName);
+        }
+
+        public ProtocolServerLogic(
+            Func<ExecutableActionSpecification[], bool> onBeforeExecute,
+            Action<dynamic> onAfterExecute,
+            bool newInstanceForEachRequest)
+        {
+            this.onBeforeExecute = onBeforeExecute;
+            this.onAfterExecute = onAfterExecute;
+            this.newInstanceForEachRequest = newInstanceForEachRequest;
         }
 
         public string ReadFromStreamAndPlay(string data, bool applyLock = false)
@@ -115,7 +126,7 @@ namespace Services.Communication.Protocol
                 chainInstance.Do(new ExecuteActionFromSpecification(actionSpecification));
             }
 
-            if (replayChain.LastExecutedAction is IRemotable)
+            if (ReplayChain.LastExecutedAction is IRemotable)
             {
                 dataToReturn = Serialize(chainInstance.LastExecutedAction as IRemotable);
             }

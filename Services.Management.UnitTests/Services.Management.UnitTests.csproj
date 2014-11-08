@@ -54,6 +54,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SuperSocket.SocketBase, Version=1.5.1.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SuperSocket(1.5.1).Binaries\Net40\Release\SuperSocket.SocketBase.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -76,6 +80,7 @@
     <Compile Include="AuthorizationScenarioTest.cs" />
     <Compile Include="Classes\ComplexSerializable.cs" />
     <Compile Include="Classes\ContextForTestWithEvents.cs" />
+    <Compile Include="Classes\HostedContextForTest.cs" />
     <Compile Include="Classes\DisposableContextForTest.cs" />
     <Compile Include="Classes\NoProcessExit.cs" />
     <Compile Include="ExecutionerUnitTests.cs" />
