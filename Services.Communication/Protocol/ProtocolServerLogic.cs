@@ -41,19 +41,7 @@ namespace Services.Communication.Protocol
         {
             var actionSpecifications = Deserialize(data);
 
-            if (actionSpecifications.Length == 0)
-            {
-                return null;
-            }
-
-            if (newInstanceForEachRequest)
-            {
-                var replayChainLocal = new ExecutionChain(contextTypeName);
-
-                return ApplyDataAndReturn(replayChainLocal, actionSpecifications, applyLock);
-            }
-
-            return ApplyDataAndReturn(replayChain, actionSpecifications, applyLock);
+            return ReadFromStreamAndPlay(actionSpecifications, applyLock);
         }
 
         public string ReadFromStreamAndPlay(ExecutableActionSpecification[] actionSpecifications, bool applyLock = false)
@@ -70,7 +58,7 @@ namespace Services.Communication.Protocol
                 return ApplyDataAndReturn(replayChainLocal, actionSpecifications, applyLock);
             }
 
-            return ApplyDataAndReturn(replayChain, actionSpecifications, applyLock);
+            return ApplyDataAndReturn(ReplayChain, actionSpecifications, applyLock);
         }
 
         public string Serialize(Exception ex)
