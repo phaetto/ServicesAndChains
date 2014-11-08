@@ -104,7 +104,7 @@ namespace Services.Management.Administration.Executioner
 
                         if (!string.IsNullOrEmpty(WorkerData.ContextServerHost) && WorkerData.ContextServerPort > 0)
                         {
-                            WrappedContext = CreateHostedContext();
+                            WrappedContext = CreateHostedContext(workUnitContext);
 
                             var httpPath = WorkerData.ContextHttpData != null ? WorkerData.ContextHttpData.Path : null;
                             var protocolType = WorkerData.ContextHttpData != null ? ProtocolType.Http : ProtocolType.Tcp;
@@ -115,7 +115,7 @@ namespace Services.Management.Administration.Executioner
                         }
                         else
                         {
-                            WrappedContext = CreateHostedContext();
+                            WrappedContext = CreateHostedContext(workUnitContext);
                         }
 
                         workUnitContext.Do(new ConnectHostedObject(WrappedContext, contextServer));
@@ -310,9 +310,9 @@ namespace Services.Management.Administration.Executioner
             }
         }
 
-        private object CreateHostedContext()
+        private object CreateHostedContext(params object [] injectedObjects)
         {
-            var contextObject = ExecutionChain.CreateObjectWithParametersAndInjection(WorkerData.ContextType, WorkerData.Parameters, new object[] { workUnitContext });
+            var contextObject = ExecutionChain.CreateObjectWithParametersAndInjection(WorkerData.ContextType, WorkerData.Parameters, injectedObjects);
 
             ConnectModules(
                 contextObject,

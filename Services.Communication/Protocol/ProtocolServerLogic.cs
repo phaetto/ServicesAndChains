@@ -5,12 +5,12 @@ namespace Services.Communication.Protocol
 
     public class ProtocolServerLogic
     {
-        internal readonly string ContextTypeName;
-        internal readonly Func<ExecutableActionSpecification[], bool> OnBeforeExecute;
-        internal readonly Action<dynamic> OnAfterExecute;
+        private readonly string ContextTypeName;
+        private readonly Func<ExecutableActionSpecification[], bool> OnBeforeExecute;
+        private readonly Action<dynamic> OnAfterExecute;
         internal readonly bool NewInstanceForEachRequest;
 
-        internal ExecutionChain replayChain;
+        private ExecutionChain replayChain;
 
         public ProtocolServerLogic(
             object contextObject,
