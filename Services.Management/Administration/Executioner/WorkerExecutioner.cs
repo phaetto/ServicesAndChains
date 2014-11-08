@@ -25,7 +25,8 @@ namespace Services.Management.Administration.Executioner
 
         private readonly IProcessExit processExit;
         private WorkUnitContext workUnitContext;
-        private object server;
+        private ServerConnectionContext contextServer;
+        private AdministrationContext adminContextServer;
 
         public object WrappedContext { get; private set; }
 
@@ -57,15 +58,15 @@ namespace Services.Management.Administration.Executioner
                 {
                     case ExecutionMode.AdministrationServer:
                     {
-                        server =
+                        adminContextServer =
                             new ServerHost(WorkerData.AdminHost, WorkerData.AdminPort).Do(
                                 new EnableAdminServer(hostProcessName: WorkerData.HostProcessFileName));
 
                         ConnectModules(
-                            server,
-                            new[]
+                            adminContextServer,
+                            new object[]
                             {
-                                workUnitContext, server
+                                workUnitContext, adminContextServer
                             },
                             WorkerData.Modules);
 
@@ -108,16 +109,16 @@ namespace Services.Management.Administration.Executioner
                             var httpPath = WorkerData.ContextHttpData != null ? WorkerData.ContextHttpData.Path : null;
                             var protocolType = WorkerData.ContextHttpData != null ? ProtocolType.Http : ProtocolType.Tcp;
 
-                            server =
+                            contextServer =
                                 new ServerHost(WorkerData.ContextServerHost, WorkerData.ContextServerPort, httpPath).Do(
                                     new StartListen(WrappedContext, protocolType: protocolType));
                         }
                         else
                         {
-                            WrappedContext = server = CreateHostedContext();
+                            WrappedContext = CreateHostedContext();
                         }
 
-                        workUnitContext.Do(new ConnectHostedObject(WrappedContext));
+                        workUnitContext.Do(new ConnectHostedObject(WrappedContext, contextServer));
 
                         break;
                     }
@@ -213,9 +214,9 @@ namespace Services.Management.Administration.Executioner
 
             try
             {
-                if (server != WrappedContext)
+                if (adminContextServer != null)
                 {
-                    var disposableObject = server as IDisposable;
+                    var disposableObject = adminContextServer as IDisposable;
                     if (disposableObject != null)
                     {
                         disposableObject.Dispose();
