@@ -4,6 +4,7 @@ namespace Services.Management.Administration.Worker
     using System.Diagnostics;
     using System.Threading;
     using Chains;
+    using Chains.Play.Web;
     using Services.Communication.Protocol;
     using Services.Management.Administration.Executioner;
 
@@ -20,7 +21,6 @@ namespace Services.Management.Administration.Worker
         public DateTime TimeStarted { get; set; }
         public WorkUnitState State { get; set; }
         public ClientConnectionContext AdminServer { get; set; }
-
         public ServerConnectionContext ContextServer { get; set; }
 
         internal Thread ReportThread { get; set; }
@@ -48,6 +48,16 @@ namespace Services.Management.Administration.Worker
             this.ApiKey = apiKey;
             this.processExit = processExit;
             ProgressData = new ReportProgressData();
+
+            if (!string.IsNullOrEmpty(WorkerData.ContextServerHost) && WorkerData.ContextServerPort > 0)
+            {
+                var httpPath = WorkerData.ContextHttpData != null ? WorkerData.ContextHttpData.Path : null;
+                var protocolType = WorkerData.ContextHttpData != null ? ProtocolType.Http : ProtocolType.Tcp;
+
+                ContextServer =
+                    new ServerHost(WorkerData.ContextServerHost, WorkerData.ContextServerPort, httpPath).Do(
+                        new StartListen(protocolType: protocolType));
+            }
         }
 
         public void Stop()

@@ -9,16 +9,14 @@ namespace Services.Management.Administration.Worker
 
         private readonly ServerConnectionContext contextServer;
 
-        public ConnectHostedObject(object hostedObject, ServerConnectionContext contextServer)
+        public ConnectHostedObject(object hostedObject)
         {
             this.hostedObject = hostedObject;
-            this.contextServer = contextServer;
         }
 
         public WorkUnitContext Act(WorkUnitContext context)
         {
             context.HostedObject = hostedObject;
-            context.ContextServer = contextServer;
 
             context.WorkerControl = hostedObject as IWorkerEvents;
 

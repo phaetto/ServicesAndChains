@@ -25,7 +25,6 @@ namespace Services.Management.Administration.Executioner
 
         private readonly IProcessExit processExit;
         private WorkUnitContext workUnitContext;
-        private ServerConnectionContext contextServer;
         private AdministrationContext adminContextServer;
 
         public object WrappedContext { get; private set; }
@@ -102,23 +101,14 @@ namespace Services.Management.Administration.Executioner
                     {
                         workUnitContext = new WorkUnitContext(WorkerData, Session, ApiKey, processExit).Do(new StartWorkUnit());
 
-                        if (!string.IsNullOrEmpty(WorkerData.ContextServerHost) && WorkerData.ContextServerPort > 0)
-                        {
-                            WrappedContext = CreateHostedContext(workUnitContext);
+                        WrappedContext = CreateHostedContext(workUnitContext);
 
-                            var httpPath = WorkerData.ContextHttpData != null ? WorkerData.ContextHttpData.Path : null;
-                            var protocolType = WorkerData.ContextHttpData != null ? ProtocolType.Http : ProtocolType.Tcp;
-
-                            contextServer =
-                                new ServerHost(WorkerData.ContextServerHost, WorkerData.ContextServerPort, httpPath).Do(
-                                    new StartListen(WrappedContext, protocolType: protocolType));
-                        }
-                        else
+                        if (workUnitContext.ContextServer != null)
                         {
-                            WrappedContext = CreateHostedContext(workUnitContext);
+                            workUnitContext.ContextServer.Do(new DelaySetHostedObject(WrappedContext));
                         }
 
-                        workUnitContext.Do(new ConnectHostedObject(WrappedContext, contextServer));
+                        workUnitContext.Do(new ConnectHostedObject(WrappedContext));
 
                         break;
                     }
@@ -156,6 +146,14 @@ namespace Services.Management.Administration.Executioner
                 catch
                 {
                     new EmergencyLogger().SaveToFile(ex);
+                }
+
+                try
+                {
+                    Dispose();
+                }
+                catch
+                {
                 }
 
                 throw;
@@ -206,7 +204,10 @@ namespace Services.Management.Administration.Executioner
         {
             try
             {
-                workUnitContext.Close();
+                if (workUnitContext != null)
+                {
+                    workUnitContext.Close();
+                }
             }
             catch
             {
