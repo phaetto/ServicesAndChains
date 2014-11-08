@@ -10,11 +10,11 @@
 
     public class TcpServerProtocolStack : IServerProtocolStack
     {
-        private TcpServer AppServer;
+        private TcpServer tcpServer;
 
         public TcpServerProtocolStack(ProtocolServerLogic protocolServerLogic)
         {
-            AppServer = new TcpServer(protocolServerLogic);
+            tcpServer = new TcpServer(protocolServerLogic);
         }
 
         public void OpenServerConnection(ServerHost context)
@@ -35,32 +35,40 @@
                 KeepAliveTime = 60,
             };
 
-            if (!AppServer.Setup(new RootConfig(), serverConfig, new SocketServerFactory()))
+            if (!tcpServer.Setup(new RootConfig(), serverConfig, new SocketServerFactory()))
             {
                 throw new InvalidOperationException("The service '" + name + "' has invalid setup.");
             }
 
-            if (!AppServer.Start())
+            if (!tcpServer.Start())
             {
-                throw new InvalidOperationException("The service '" + name + "' could not open. State:" + AppServer.State.ToString());
+                throw new InvalidOperationException("The service '" + name + "' could not open. State:" + tcpServer.State.ToString());
             }
         }
 
         public void CloseServerConnection()
         {
-            if (AppServer == null)
+            if (tcpServer == null)
             {
                 return;
             }
 
             try
             {
-                AppServer.Stop();
-                AppServer.Dispose();
+                tcpServer.Stop();
+                tcpServer.Dispose();
             }
             finally
             {
-                AppServer = null;
+                tcpServer = null;
+            }
+        }
+
+        public object ServerProvider
+        {
+            get
+            {
+                return tcpServer;
             }
         }
     }

@@ -21,6 +21,8 @@ namespace Services.Management.Administration.Worker
         public WorkUnitState State { get; set; }
         public ClientConnectionContext AdminServer { get; set; }
 
+        public ServerConnectionContext ContextServer { get; set; }
+
         internal Thread ReportThread { get; set; }
         internal object HostedObject { get; set; }
         internal IWorkerEvents WorkerControl { get; set; }
@@ -72,7 +74,18 @@ namespace Services.Management.Administration.Worker
             }
 
             if (AdminServer != null)
+            {
                 AdminServer.Close();
+                AdminServer.Dispose();
+                AdminServer = null;
+            }
+
+            if (ContextServer != null)
+            {
+                ContextServer.Close();
+                ContextServer.Dispose();
+                ContextServer = null;
+            }
 
             try
             {

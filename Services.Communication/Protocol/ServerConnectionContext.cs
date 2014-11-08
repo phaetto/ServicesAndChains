@@ -25,5 +25,10 @@
         {
             Close();
         }
+
+        public T GetServerProvider<T>() where T : class
+        {
+            return serverProtocolStack.ServerProvider as T;
+        }
     }
 }

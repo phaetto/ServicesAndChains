@@ -7,5 +7,7 @@ namespace Services.Communication.Protocol
         void OpenServerConnection(ServerHost context);
 
         void CloseServerConnection();
+
+        object ServerProvider { get; }
     }
 }

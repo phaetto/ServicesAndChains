@@ -31,5 +31,12 @@
         {
             httpServer.Stop();
         }
+
+        public object ServerProvider {
+            get
+            {
+                return httpServer;
+            }
+        }
     }
 }
