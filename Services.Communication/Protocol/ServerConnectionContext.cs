@@ -9,7 +9,7 @@
         private readonly IServerProtocolStack serverProtocolStack;
 
         public ServerConnectionContext(ServerHost parent,
-            IServerProtocolStack serverProtocolStack = null)
+            IServerProtocolStack serverProtocolStack)
             : base(parent)
         {
             this.serverProtocolStack = serverProtocolStack;
