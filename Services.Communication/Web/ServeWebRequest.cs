@@ -56,9 +56,7 @@ namespace Services.Communication.Web
                 ? new ProtocolServerLogic(contextObject, onBeforeExecute, onAfterExecute)
                 : new ProtocolServerLogic(contextTypeName, onBeforeExecute, onAfterExecute);
 
-            return
-                new HttpResultContext(
-                    protocolServerLogic.ApplyDataAndReturn(protocolServerLogic.Deserialize(postJson)), "text/json");
+            return new HttpResultContext(protocolServerLogic.ReadFromStreamAndPlay(postJson), "text/json");
         }
     }
 }

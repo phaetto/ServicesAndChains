@@ -8,7 +8,7 @@ namespace Services.Communication.Protocol
         private readonly string ContextTypeName;
         private readonly Func<ExecutableActionSpecification[], bool> OnBeforeExecute;
         private readonly Action<dynamic> OnAfterExecute;
-        internal readonly bool NewInstanceForEachRequest;
+        private readonly bool NewInstanceForEachRequest;
 
         private ExecutionChain replayChain;
 
@@ -38,157 +38,40 @@ namespace Services.Communication.Protocol
             replayChain = new ExecutionChain(contextTypeName);
         }
 
-        public string ReadFromStreamAndPlayWithUniqueInstance(string stream)
+        public string ReadFromStreamAndPlay(string data, bool applyLock = false)
         {
-            var replayChainLocal = new ExecutionChain(ContextTypeName);
-
-            var actionSpecifications = Deserialize(stream);
+            var actionSpecifications = Deserialize(data);
 
             if (actionSpecifications.Length == 0)
             {
                 return null;
             }
 
-            return ApplyDataAndReturnNoLockWithUnique(replayChainLocal, actionSpecifications);
+            if (NewInstanceForEachRequest)
+            {
+                var replayChainLocal = new ExecutionChain(ContextTypeName);
+
+                return ApplyDataAndReturn(replayChainLocal, actionSpecifications, applyLock);
+            }
+
+            return ApplyDataAndReturn(replayChain, actionSpecifications, applyLock);
         }
 
-        public string ReadFromStreamAndPlay(string stream)
+        public string ReadFromStreamAndPlay(ExecutableActionSpecification[] actionSpecifications, bool applyLock = false)
         {
-            var actionSpecifications = Deserialize(stream);
-
             if (actionSpecifications.Length == 0)
             {
                 return null;
             }
 
-            return ApplyDataAndReturnNoLock(actionSpecifications);
-        }
-
-        public string ApplyDataAndReturnNoLock(ExecutableActionSpecification[] actionSpecifications)
-        {
-            if (OnBeforeExecute == null || OnBeforeExecute(actionSpecifications))
+            if (NewInstanceForEachRequest)
             {
-                string dataToReturn;
+                var replayChainLocal = new ExecutionChain(ContextTypeName);
 
-                try
-                {
-                    foreach (var actionSpecification in actionSpecifications)
-                    {
-                        replayChain.Do(new ExecuteActionFromSpecification(actionSpecification));
-                    }
-
-                    if (replayChain.LastExecutedAction is IRemotable)
-                    {
-                        dataToReturn = Serialize(replayChain.LastExecutedAction as IRemotable);
-                    }
-                    else
-                    {
-                        dataToReturn = DefaultSerializedValue();
-                    }
-
-                    if (OnAfterExecute != null)
-                    {
-                        OnAfterExecute(replayChain.CurrentContext);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return Serialize(ex);
-                }
-
-                return dataToReturn;
+                return ApplyDataAndReturn(replayChainLocal, actionSpecifications, applyLock);
             }
 
-            return null;
-        }
-
-        public string ApplyDataAndReturnNoLockWithUnique(ExecutionChain replayChainInstance, ExecutableActionSpecification[] actionSpecifications)
-        {
-            if (OnBeforeExecute == null || OnBeforeExecute(actionSpecifications))
-            {
-                string dataToReturn;
-
-                try
-                {
-                    foreach (var actionSpecification in actionSpecifications)
-                    {
-                        replayChainInstance.Do(new ExecuteActionFromSpecification(actionSpecification));
-                    }
-
-                    if (replayChainInstance.LastExecutedAction is IRemotable)
-                    {
-                        dataToReturn = Serialize(replayChainInstance.LastExecutedAction as IRemotable);
-                    }
-                    else
-                    {
-                        dataToReturn = DefaultSerializedValue();
-                    }
-
-                    if (OnAfterExecute != null)
-                    {
-                        OnAfterExecute(replayChainInstance.CurrentContext);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return Serialize(ex);
-                }
-
-                return dataToReturn;
-            }
-
-            return null;
-        }
-
-        public string ApplyDataAndReturn(ExecutableActionSpecification[] actionSpecifications)
-        {
-            if (OnBeforeExecute == null || OnBeforeExecute(actionSpecifications))
-            {
-                string dataToReturn;
-
-                try
-                {
-                    lock (replayChain)
-                    {
-                        foreach (var actionSpecification in actionSpecifications)
-                        {
-                            replayChain.Do(new ExecuteActionFromSpecification(actionSpecification));
-                        }
-
-                        if (replayChain.LastExecutedAction is IRemotable)
-                        {
-                            dataToReturn = Serialize(replayChain.LastExecutedAction as IRemotable);
-                        }
-                        else
-                        {
-                            dataToReturn = DefaultSerializedValue();
-                        }
-                    }
-
-                    if (OnAfterExecute != null)
-                    {
-                        OnAfterExecute(replayChain.CurrentContext);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return Serialize(ex);
-                }
-
-                return dataToReturn;
-            }
-
-            return null;
-        }
-
-        public ExecutableActionSpecification[] Deserialize(string data)
-        {
-            return DeserializableSpecification<ExecutableActionSpecification>.DeserializeManyFromJson(data);
-        }
-
-        public string Serialize(IRemotable action)
-        {
-            return action.ReturnData.SerializeToJson();
+            return ApplyDataAndReturn(replayChain, actionSpecifications, applyLock);
         }
 
         public string Serialize(Exception ex)
@@ -200,7 +83,74 @@ namespace Services.Communication.Protocol
             }.SerializeToJson();
         }
 
-        public string DefaultSerializedValue()
+        private string ApplyDataAndReturn(ExecutionChain chainInstance, ExecutableActionSpecification[] actionSpecifications, bool applyLock = false)
+        {
+            if (OnBeforeExecute == null || OnBeforeExecute(actionSpecifications))
+            {
+                string dataToReturn;
+
+                try
+                {
+                    if (applyLock)
+                    {
+                        lock (chainInstance)
+                        {
+                            dataToReturn = ApplyDataOnExecutionChain(chainInstance, actionSpecifications);
+                        }
+                    }
+                    else
+                    {
+                        dataToReturn = ApplyDataOnExecutionChain(chainInstance, actionSpecifications);
+                    }
+
+                    if (OnAfterExecute != null)
+                    {
+                        OnAfterExecute(chainInstance.CurrentContext);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Serialize(ex);
+                }
+
+                return dataToReturn;
+            }
+
+            return null;
+        }
+
+        private string ApplyDataOnExecutionChain(ExecutionChain chainInstance, ExecutableActionSpecification[] actionSpecifications)
+        {
+            string dataToReturn;
+
+            foreach (var actionSpecification in actionSpecifications)
+            {
+                chainInstance.Do(new ExecuteActionFromSpecification(actionSpecification));
+            }
+
+            if (replayChain.LastExecutedAction is IRemotable)
+            {
+                dataToReturn = Serialize(chainInstance.LastExecutedAction as IRemotable);
+            }
+            else
+            {
+                dataToReturn = DefaultSerializedValue();
+            }
+
+            return dataToReturn;
+        }
+
+        private ExecutableActionSpecification[] Deserialize(string data)
+        {
+            return DeserializableSpecification<ExecutableActionSpecification>.DeserializeManyFromJson(data);
+        }
+
+        private string Serialize(IRemotable action)
+        {
+            return action.ReturnData.SerializeToJson();
+        }
+
+        private string DefaultSerializedValue()
         {
             return new ExecutableActionSpecification
             {

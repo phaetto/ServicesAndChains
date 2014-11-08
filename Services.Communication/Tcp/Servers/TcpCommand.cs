@@ -16,9 +16,7 @@ namespace Services.Communication.Tcp.Servers
                 return;
             }
 
-            var response = session.Server.ProtocolServerLogic.NewInstanceForEachRequest
-                ? session.Server.ProtocolServerLogic.ReadFromStreamAndPlayWithUniqueInstance(commandInfo.Body)
-                : session.Server.ProtocolServerLogic.ReadFromStreamAndPlay(commandInfo.Body);
+            var response = session.Server.ProtocolServerLogic.ReadFromStreamAndPlay(commandInfo.Body);
 
             if (!string.IsNullOrWhiteSpace(response))
             {

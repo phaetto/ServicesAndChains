@@ -57,7 +57,7 @@
                     throw new InvalidOperationException("Post data are empty, this is not allowed.");
                 }
 
-                var resultString = protocolServerLogic.ApplyDataAndReturn(protocolServerLogic.Deserialize(postJson));
+                var resultString = protocolServerLogic.ReadFromStreamAndPlay(postJson);
 
                 if (context.Request.Headers.Get(HttpClientProtocolStack.HeaderKeyAndValue) != HttpClientProtocolStack.HeaderKeyAndValue)
                 {
