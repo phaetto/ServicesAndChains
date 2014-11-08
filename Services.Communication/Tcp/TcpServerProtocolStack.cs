@@ -14,6 +14,7 @@
 
         public TcpServerProtocolStack(ProtocolServerLogic protocolServerLogic)
         {
+            ProtocolServerLogic = protocolServerLogic;
             tcpServer = new TcpServer(protocolServerLogic);
         }
 
@@ -71,5 +72,7 @@
                 return tcpServer;
             }
         }
+
+        public ProtocolServerLogic ProtocolServerLogic { get; private set; }
     }
 }

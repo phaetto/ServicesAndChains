@@ -9,5 +9,7 @@ namespace Services.Communication.Protocol
         void CloseServerConnection();
 
         object ServerProvider { get; }
+
+        ProtocolServerLogic ProtocolServerLogic { get; }
     }
 }

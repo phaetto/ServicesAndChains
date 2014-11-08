@@ -38,5 +38,13 @@
                 return httpServer;
             }
         }
+
+        public ProtocolServerLogic ProtocolServerLogic
+        {
+            get
+            {
+                return protocolServerLogic;
+            }
+        }
     }
 }
