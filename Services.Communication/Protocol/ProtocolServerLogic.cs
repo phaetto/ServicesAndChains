@@ -5,12 +5,11 @@ namespace Services.Communication.Protocol
 
     public class ProtocolServerLogic
     {
-        private readonly string ContextTypeName;
-        private readonly Func<ExecutableActionSpecification[], bool> OnBeforeExecute;
-        private readonly Action<dynamic> OnAfterExecute;
-        private readonly bool NewInstanceForEachRequest;
-
-        private ExecutionChain replayChain;
+        private readonly string contextTypeName;
+        private readonly Func<ExecutableActionSpecification[], bool> onBeforeExecute;
+        private readonly Action<dynamic> onAfterExecute;
+        private readonly bool newInstanceForEachRequest;
+        private readonly ExecutionChain replayChain;
 
         public ProtocolServerLogic(
             object contextObject,
@@ -18,10 +17,10 @@ namespace Services.Communication.Protocol
             Action<dynamic> onAfterExecute = null,
             bool newInstanceForEachRequest = false)
         {
-            ContextTypeName = contextObject.GetType().AssemblyQualifiedName;
-            this.OnBeforeExecute = onBeforeExecute;
-            this.OnAfterExecute = onAfterExecute;
-            this.NewInstanceForEachRequest = newInstanceForEachRequest;
+            contextTypeName = contextObject.GetType().AssemblyQualifiedName;
+            this.onBeforeExecute = onBeforeExecute;
+            this.onAfterExecute = onAfterExecute;
+            this.newInstanceForEachRequest = newInstanceForEachRequest;
             replayChain = new ExecutionChain(contextObject);
         }
 
@@ -31,10 +30,10 @@ namespace Services.Communication.Protocol
             Action<dynamic> onAfterExecute = null,
             bool newInstanceForEachRequest = false)
         {
-            this.ContextTypeName = contextTypeName;
-            this.OnBeforeExecute = onBeforeExecute;
-            this.OnAfterExecute = onAfterExecute;
-            this.NewInstanceForEachRequest = newInstanceForEachRequest;
+            this.contextTypeName = contextTypeName;
+            this.onBeforeExecute = onBeforeExecute;
+            this.onAfterExecute = onAfterExecute;
+            this.newInstanceForEachRequest = newInstanceForEachRequest;
             replayChain = new ExecutionChain(contextTypeName);
         }
 
@@ -47,9 +46,9 @@ namespace Services.Communication.Protocol
                 return null;
             }
 
-            if (NewInstanceForEachRequest)
+            if (newInstanceForEachRequest)
             {
-                var replayChainLocal = new ExecutionChain(ContextTypeName);
+                var replayChainLocal = new ExecutionChain(contextTypeName);
 
                 return ApplyDataAndReturn(replayChainLocal, actionSpecifications, applyLock);
             }
@@ -64,9 +63,9 @@ namespace Services.Communication.Protocol
                 return null;
             }
 
-            if (NewInstanceForEachRequest)
+            if (newInstanceForEachRequest)
             {
-                var replayChainLocal = new ExecutionChain(ContextTypeName);
+                var replayChainLocal = new ExecutionChain(contextTypeName);
 
                 return ApplyDataAndReturn(replayChainLocal, actionSpecifications, applyLock);
             }
@@ -85,7 +84,7 @@ namespace Services.Communication.Protocol
 
         private string ApplyDataAndReturn(ExecutionChain chainInstance, ExecutableActionSpecification[] actionSpecifications, bool applyLock = false)
         {
-            if (OnBeforeExecute == null || OnBeforeExecute(actionSpecifications))
+            if (onBeforeExecute == null || onBeforeExecute(actionSpecifications))
             {
                 string dataToReturn;
 
@@ -103,9 +102,9 @@ namespace Services.Communication.Protocol
                         dataToReturn = ApplyDataOnExecutionChain(chainInstance, actionSpecifications);
                     }
 
-                    if (OnAfterExecute != null)
+                    if (onAfterExecute != null)
                     {
-                        OnAfterExecute(chainInstance.CurrentContext);
+                        onAfterExecute(chainInstance.CurrentContext);
                     }
                 }
                 catch (Exception ex)
