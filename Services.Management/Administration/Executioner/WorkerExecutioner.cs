@@ -99,7 +99,7 @@ namespace Services.Management.Administration.Executioner
                     }
                     case ExecutionMode.Worker:
                     {
-                        workUnitContext = new WorkUnitContext(WorkerData, Session, ApiKey, processExit).Do(new StartWorkUnit());
+                        workUnitContext = new WorkUnitContext(WorkerData, Session, ApiKey, processExit);
 
                         WrappedContext = CreateHostedContext(workUnitContext);
 
@@ -108,7 +108,7 @@ namespace Services.Management.Administration.Executioner
                             workUnitContext.ContextServer.Do(new DelaySetHostedObject(WrappedContext));
                         }
 
-                        workUnitContext.Do(new ConnectHostedObject(WrappedContext));
+                        workUnitContext.Do(new ConnectHostedObject(WrappedContext)).Do(new StartWorkUnit());
 
                         break;
                     }
