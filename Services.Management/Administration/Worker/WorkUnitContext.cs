@@ -85,14 +85,12 @@ namespace Services.Management.Administration.Worker
 
             if (AdminServer != null)
             {
-                AdminServer.Close();
                 AdminServer.Dispose();
                 AdminServer = null;
             }
 
             if (ContextServer != null)
             {
-                ContextServer.Close();
                 ContextServer.Dispose();
                 ContextServer = null;
             }

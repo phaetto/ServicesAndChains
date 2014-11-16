@@ -202,30 +202,16 @@ namespace Services.Management.Administration.Executioner
 
         public void Dispose()
         {
-            try
+            if (workUnitContext != null)
             {
-                if (workUnitContext != null)
-                {
-                    workUnitContext.Close();
-                }
-            }
-            catch
-            {
+                workUnitContext.Dispose();
+                workUnitContext = null;
             }
 
-            try
+            if (adminContextServer != null)
             {
-                if (adminContextServer != null)
-                {
-                    var disposableObject = adminContextServer as IDisposable;
-                    if (disposableObject != null)
-                    {
-                        disposableObject.Dispose();
-                    }
-                }
-            }
-            catch
-            {
+                adminContextServer.Dispose();
+                adminContextServer = null;
             }
 
             AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
