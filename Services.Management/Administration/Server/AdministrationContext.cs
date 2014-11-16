@@ -298,7 +298,14 @@
 
         private void LogMessageFormatter(string text)
         {
-            AdministrationData.ServerLog = string.Format("{0} (utc) {1}{2}", DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"), text, AdministrationData.ServerLog);
+            var formattedText = string.Format(
+                "{0} (utc) {1}",
+                DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"),
+                text);
+
+            Console.WriteLine(formattedText);
+
+            AdministrationData.ServerLog = formattedText + AdministrationData.ServerLog;
         }
     }
 }
