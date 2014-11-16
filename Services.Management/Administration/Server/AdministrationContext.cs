@@ -249,17 +249,21 @@
 
         private void CleanUpMemoryDbServiceCallback(object o)
         {
-            try
+            while (true)
             {
-                using (
-                    new Client("127.0.0.1", 51234).Do(new OpenConnection())
-                                                  .Do(new WaitUntilServerIsDown()))
+                try
                 {
+                    using (new Client("127.0.0.1", 51234).Do(new OpenConnection()))
+                    {
+                        Do(new StopWorkerProcess(ReloadingMemoryDbServiceName));
+                        Thread.Sleep(1000);
+                    }
                 }
-            }
-            catch (SocketException)
-            {
-                // Server is down already
+                catch (SocketException)
+                {
+                    // Server is down
+                    break;
+                }
             }
 
             // Wait until the process is considered stopped
@@ -274,7 +278,7 @@
                 Thread.Sleep(1000);
             }
 
-            this.Do(new DeleteWorkerProcessEntry(ReloadingMemoryDbServiceName));
+            Do(new DeleteWorkerProcessEntry(ReloadingMemoryDbServiceName));
         }
 
         public void Dispose()
