@@ -260,7 +260,7 @@ namespace Services.Management.Administration.Executioner
             }
         }
 
-        void CurrentDomain_DomainUnload(object sender, EventArgs e)
+        private void CurrentDomain_DomainUnload(object sender, EventArgs e)
         {
             Dispose();
         }
