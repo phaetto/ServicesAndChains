@@ -31,11 +31,19 @@
                 workerExecutioner.SetUpPermissionsForMonoOnFolder(destinationPath);
                 var processName = context.HostProcessName.Replace(".vshost", string.Empty);
 
+                var fileName = destinationPath + processName;
+                var arguments = workerExecutioner.GetProcessArguments(ExecutionMode.Worker);
+                if (AbstractChain.IsMono)
+                {
+                    arguments = string.Format("\"{0}\" {1}", fileName, arguments);
+                    fileName = "mono";
+                }
+
                 Process.Start(
                     new ProcessStartInfo
                     {
-                        FileName = destinationPath + processName,
-                        Arguments = workerExecutioner.GetProcessArguments(ExecutionMode.Worker),
+                        FileName = fileName,
+                        Arguments = arguments,
                         WorkingDirectory = destinationPath,
                         UseShellExecute = true,
                         CreateNoWindow = true,
