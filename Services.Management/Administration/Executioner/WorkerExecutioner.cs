@@ -238,16 +238,22 @@ namespace Services.Management.Administration.Executioner
                 return;
             }
 
-            var chmodProcess = Process.Start(
-                new ProcessStartInfo
-                {
-                    FileName = "chmod",
-                    Arguments = string.Format("u+x {0}", WorkerData.HostProcessFileName),
-                    WorkingDirectory = folder,
-                    UseShellExecute = true
-                });
+            try
+            {
+                var chmodProcess = Process.Start(
+                    new ProcessStartInfo
+                    {
+                        FileName = "chmod",
+                        Arguments = string.Format("u+x {0}", "*.exe"),
+                        WorkingDirectory = folder,
+                        UseShellExecute = true
+                    });
 
-            chmodProcess.WaitForExit();
+                chmodProcess.WaitForExit();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
