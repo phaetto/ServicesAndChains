@@ -177,7 +177,9 @@ namespace Services.Management.Administration.Executioner
                                                  Parameters = WorkerData.Parameters,
                                                  ServiceName = WorkerData.ServiceName,
                                                  Session = Session,
-                                                 Version = WorkerData.Version
+                                                 Version = WorkerData.Version,
+                                                 ContextHttpData = WorkerData.ContextHttpData,
+                                                 ReportUpdateIntervalInSeconds = WorkerData.ReportUpdateIntervalInSeconds,
                                              };
 
             if (mode != ExecutionMode.UpdateAdministrationServer)
