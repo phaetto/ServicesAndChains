@@ -6,7 +6,6 @@
     using Services.Communication.Tcp.Servers;
     using SuperSocket.SocketBase;
     using SuperSocket.SocketBase.Config;
-    using SuperSocket.SocketEngine;
 
     public class TcpServerProtocolStack : IServerProtocolStack
     {
@@ -36,7 +35,7 @@
                 KeepAliveTime = 60,
             };
 
-            if (!tcpServer.Setup(new RootConfig(), serverConfig, new SocketServerFactory()))
+            if (!tcpServer.Setup(new RootConfig(), serverConfig))
             {
                 throw new InvalidOperationException("The service '" + name + "' has invalid setup.");
             }

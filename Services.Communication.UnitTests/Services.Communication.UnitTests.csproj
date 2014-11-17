@@ -60,15 +60,22 @@
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Services.Communication\bin\Debug\log4net.dll</HintPath>
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="SuperSocket.SocketBase, Version=1.4.2.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SuperSocket(1.5.1).Binaries\Net40\Release\SuperSocket.SocketBase.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SuperSocket.SocketEngine, Version=1.4.2.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+    <Reference Include="SuperSocket.Common, Version=1.6.3.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SuperSocket(1.5.1).Binaries\Net40\Release\SuperSocket.SocketEngine.dll</HintPath>
+      <HintPath>..\packages\SuperSocket.1.6.3\lib\net45\SuperSocket.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.Facility, Version=1.6.3.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SuperSocket.1.6.3\lib\net45\SuperSocket.Facility.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketBase, Version=1.6.3.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SuperSocket.1.6.3\lib\net45\SuperSocket.SocketBase.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -98,7 +105,7 @@
       <Name>Chains.UnitTests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chains\Chains.csproj">
-      <Project>{B30CB412-4B01-4739-9B54-FBB390F9C7E5}</Project>
+      <Project>{b30cb412-4b01-4739-9b54-fbb390f9c7e5}</Project>
       <Name>Chains</Name>
     </ProjectReference>
     <ProjectReference Include="..\Services.Communication\Services.Communication.csproj">
@@ -108,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="log4net.config" />
+    <None Include="log4net.unix.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

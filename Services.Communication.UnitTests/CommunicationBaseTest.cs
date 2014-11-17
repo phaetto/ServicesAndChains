@@ -13,7 +13,6 @@
     using Services.Communication.Protocol;
     using Services.Communication.Tcp.Servers;
     using SuperSocket.SocketBase.Config;
-    using SuperSocket.SocketEngine;
     using ProtocolType = System.Net.Sockets.ProtocolType;
 
     [TestClass]
@@ -31,7 +30,7 @@
                 serverConfig.Port = 4000;
                 serverConfig.Name = "myserver";
 
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig, new SocketServerFactory());
+                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
 
                 Assert.IsTrue(setupResult);
                 Assert.IsTrue(appServer.Start());
@@ -76,7 +75,7 @@
                 serverConfig.KeepAliveTime = 3;
                 serverConfig.MaxConnectionNumber = 10000;
 
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig, new SocketServerFactory());
+                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
 
                 Assert.IsTrue(setupResult);
                 Assert.IsTrue(appServer.Start());
@@ -101,7 +100,7 @@
                 serverConfig.Port = 7234;
                 serverConfig.Name = "test0F3";
 
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig, new SocketServerFactory());
+                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
 
                 Assert.IsTrue(setupResult);
                 Assert.IsTrue(appServer.Start());
@@ -114,7 +113,7 @@
                 serverConfig.Port = 7234;
                 serverConfig.Name = "test0F3";
 
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig, new SocketServerFactory());
+                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
 
                 Assert.IsTrue(setupResult);
                 Assert.IsTrue(appServer.Start());
@@ -127,7 +126,7 @@
                 serverConfig.Port = 7234;
                 serverConfig.Name = "test0F3";
 
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig, new SocketServerFactory());
+                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
 
                 Assert.IsTrue(setupResult);
                 Assert.IsTrue(appServer.Start());
@@ -140,7 +139,7 @@
                 serverConfig.Port = 7234;
                 serverConfig.Name = "test0F3";
 
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig, new SocketServerFactory());
+                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
 
                 Assert.IsTrue(setupResult);
                 Assert.IsTrue(appServer.Start());
