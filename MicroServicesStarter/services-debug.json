@@ -1,12 +1,23 @@
 ﻿[
 	{
-		"Id":"Example-Debug-Test",
-		"ServiceName":"Example",
-		"DllPath":"Example.dll",
-		"ContextType":"Example.Context",
+		"Id":"QueueContext-Debug-Test",
+		"ServiceName":"Services.Communication",
+		"DllPath":"Services.Communication.dll",
+		"ContextType":"Services.Communication.DataStructures.Queues.Simple.QueueContext",
 		"AdminHost":"localhost",
 		"AdminPort": 11001,
 		"ApiKey":null,
 		"Session":null,
-	}
+	},
+
+	{
+		"Id":"Runtime-Test-1",
+		"ServiceName":"Services.Management.UnitTests",
+		"DllPath":"Services.Management.UnitTests.dll",
+		ContextType: "Services.Management.UnitTests.RuntimeTests.RuntimeContext",
+		"AdminHost":"localhost",
+		"AdminPort": 11001,
+		"ApiKey":null,
+		"Session":null,
+	},
 ]

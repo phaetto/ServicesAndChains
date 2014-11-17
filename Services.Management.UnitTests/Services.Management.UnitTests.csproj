@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Services.Management.UnitTests</RootNamespace>
-    <AssemblyName>Services.Mangement.UnitTests</AssemblyName>
+    <AssemblyName>Services.Management.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -101,6 +101,7 @@
     <Compile Include="Classes\HostedContextForTest.cs" />
     <Compile Include="Classes\DisposableContextForTest.cs" />
     <Compile Include="Classes\NoProcessExit.cs" />
+    <Compile Include="RuntimeTests\RuntimeContext.cs" />
     <Compile Include="ExecutionerUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkUnitTests.cs" />
