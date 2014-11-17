@@ -21,14 +21,14 @@
         [TestMethod]
         public void IAuthorizationProvider_WhenProviderIsBeenSupported_ThenApplicationCanLoginAndUseSessionId()
         {
-            const int port = 5770;
+            const int adminPort = 5770;
             const int contextPort = 5772;
             const int httpPort = 5771;
 
             var adminDataWithModules = new StartWorkerData
                                        {
                                            AdminHost = "127.0.0.1",
-                                           AdminPort = port,
+                                           AdminPort = adminPort,
                                            Modules = new List<ModuleStartEntry>
                                                      {
                                                          new ModuleStartEntry
@@ -50,7 +50,7 @@
             var workerDataWithModules = new StartWorkerData
                                         {
                                             AdminHost = "localhost",
-                                            AdminPort = port,
+                                            AdminPort = adminPort,
                                             ContextType = typeof(SecuredContextForTest).FullName,
                                             ContextServerHost = "127.0.0.1",
                                             ContextServerPort = contextPort,
@@ -75,7 +75,7 @@
                 {
                     worker.Execute();
 
-                    using (var client = new Client("localhost", port).Do(new OpenConnection()))
+                    using (var client = new Client("localhost", adminPort).Do(new OpenConnection()))
                     {
                         Assert.IsTrue(client.Do(new Send<bool>(new SupportsModule(typeof(IAuthenticationGate).FullName))));
 
