@@ -10,8 +10,6 @@ namespace Services.Management.Administration.Worker
     {
         public WorkUnitContext Act(WorkUnitContext context)
         {   
-            context.AdminServer = new Client(context.WorkerData.AdminHost, context.WorkerData.AdminPort).Do(new OpenConnection());
-
             context.State = WorkUnitState.Running;
 
             context.TimeStarted = DateTime.UtcNow;

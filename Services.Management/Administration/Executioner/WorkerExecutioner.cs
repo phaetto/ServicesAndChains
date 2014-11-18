@@ -100,8 +100,9 @@ namespace Services.Management.Administration.Executioner
                     case ExecutionMode.Worker:
                     {
                         workUnitContext =
-                            new WorkUnitContext(WorkerData, Session, ApiKey, processExit).Do(
-                                new PrepareAssembliesInWorkUnit());
+                            new WorkUnitContext(WorkerData, Session, ApiKey, processExit)
+                                .Do(new PrepareAssembliesInWorkUnit())
+                                .Do(new ConnectWorkUnitToAdmin());
 
                         WrappedContext = CreateHostedContext(workUnitContext);
 
