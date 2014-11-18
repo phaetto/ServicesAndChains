@@ -98,6 +98,7 @@
     <Compile Include="AuthorizationScenarioTest.cs" />
     <Compile Include="Classes\ComplexSerializable.cs" />
     <Compile Include="Classes\ContextForTestWithEvents.cs" />
+    <Compile Include="Classes\ContextWithInjection.cs" />
     <Compile Include="Classes\HostedContextForTest.cs" />
     <Compile Include="Classes\DisposableContextForTest.cs" />
     <Compile Include="Classes\NoProcessExit.cs" />

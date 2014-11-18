@@ -80,6 +80,51 @@
         }
 
         [TestMethod]
+        public void WorkerExecutioner_WhenObjectCanGetInjectedObjects_ThenClassCanAccessInjectedInstances()
+        {
+            var workerDataWithoutModules = new StartWorkerData
+            {
+                AdminHost = AdministrationContext.Parent.Parent.Hostname,
+                AdminPort = AdministrationContext.Parent.Parent.Port,
+                ContextType = typeof(ContextWithInjection).FullName,
+                Id = "test",
+            };
+
+            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithoutModules, processExit: new NoProcessExit()))
+            {
+                executioner.Execute();
+
+                var contextWithInjection = executioner.WrappedContext as ContextWithInjection;
+                Assert.IsNotNull(contextWithInjection);
+
+                Assert.IsNotNull(contextWithInjection.WorkUnitContext);
+            }
+        }
+
+        [TestMethod]
+        public void WorkerExecutioner_WhenObjectIsBeenCreated_ThenItHasAccessToAdminConnection()
+        {
+            var workerDataWithoutModules = new StartWorkerData
+            {
+                AdminHost = AdministrationContext.Parent.Parent.Hostname,
+                AdminPort = AdministrationContext.Parent.Parent.Port,
+                ContextType = typeof(ContextWithInjection).FullName,
+                Id = "test",
+            };
+
+            using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithoutModules, processExit: new NoProcessExit()))
+            {
+                executioner.Execute();
+
+                var contextWithInjection = executioner.WrappedContext as ContextWithInjection;
+                Assert.IsNotNull(contextWithInjection);
+
+                Assert.IsNotNull(contextWithInjection.WorkUnitContext);
+                Assert.IsNotNull(contextWithInjection.WorkUnitContext.AdminServer);
+            }
+        }
+
+        [TestMethod]
         public void WorkerExecutioner_WhenWorkerIncludesSecurityModule_ThenModuleIsBeenEnforcedAndExceptionIsThrown()
         {
             var workerDataWithModules = new StartWorkerData

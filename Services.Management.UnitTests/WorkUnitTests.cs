@@ -40,7 +40,7 @@
                     ContextType = typeof(ContextForTest).FullName,
                     AdminHost = "localhost",
                     AdminPort = 10500
-                }).Do(new StartWorkUnit()))
+                }).Do(new ConnectWorkUnitToAdmin()).Do(new StartWorkUnit()))
             {
                 context.Log(lineToLog);
                 context.CanStop = false;
