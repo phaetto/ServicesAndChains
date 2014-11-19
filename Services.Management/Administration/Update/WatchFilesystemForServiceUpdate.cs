@@ -13,8 +13,6 @@
         IDisposable,
         IWorkerEvents
     {
-        public readonly Thread checkThread = null;
-
         public readonly int secondsChecking;
 
         public readonly string file;
@@ -37,10 +35,10 @@
             this.executionerMainFile = executionerMainFile;
             this.serviceName = serviceName;
             this.workUnitContext = workUnitContext;
-            checkThread = new Thread(CheckFileSystemThread);
+            ThreadPool.QueueUserWorkItem(CheckFileSystemThread);
         }
 
-        private void CheckFileSystemThread()
+        private void CheckFileSystemThread(object state)
         {
             var lastChangedTime = File.GetLastWriteTimeUtc(file);
 
@@ -92,14 +90,6 @@
             catch
             {
             }
-
-            try
-            {
-                checkThread.Abort();
-            }
-            catch
-            {
-            }
         }
 
         public void OnStart()
@@ -111,14 +101,11 @@
             checkIfThisProcessIsUpdated = new CheckIfThisProcessIsUpdated(
                 executionerMainFile, secondsChecking, adminServer, workUnitContext);
             checkIfThisProcessIsUpdated.OnStart();
-
-            checkThread.Start();
         }
 
         public void OnStop()
         {
             checkIfThisProcessIsUpdated.OnStop();
-            checkThread.Abort();
         }
     }
 }

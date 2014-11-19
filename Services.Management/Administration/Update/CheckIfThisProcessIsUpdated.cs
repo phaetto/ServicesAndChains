@@ -14,8 +14,6 @@
         IDisposable,
         IWorkerEvents
     {
-        public readonly Thread checkForUpdateThread = null;
-
         public readonly int secondsChecking;
 
         public readonly string executionerMainFile;
@@ -31,10 +29,10 @@
             this.secondsChecking = secondsChecking;
             this.executionerMainFile = executionerMainFile;
             this.workUnitContext = workUnitContext;
-            checkForUpdateThread = new Thread(CheckForThisServiceUpdateThread);
+            ThreadPool.QueueUserWorkItem(CheckForThisServiceUpdateThread);
         }
 
-        private void CheckForThisServiceUpdateThread()
+        private void CheckForThisServiceUpdateThread(object state)
         {
             var lastChangedTime = File.GetLastWriteTimeUtc(executionerMainFile);
             workUnitContext.LogLine("Listening for new updates at '" + executionerMainFile + "'...");
@@ -87,14 +85,6 @@
             catch
             {
             }
-
-            try
-            {
-                checkForUpdateThread.Abort();
-            }
-            catch
-            {
-            }
         }
 
         public void OnStart()
@@ -102,8 +92,6 @@
             adminServer =
                 new Client(workUnitContext.WorkerData.AdminHost, workUnitContext.WorkerData.AdminPort)
                     .Do(new OpenConnection());
-
-            checkForUpdateThread.Start();
         }
 
         public void OnStop()
