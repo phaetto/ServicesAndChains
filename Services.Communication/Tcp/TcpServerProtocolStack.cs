@@ -22,27 +22,35 @@
             var name = string.Format("{0}:{1}", context.Parent.Hostname, context.Parent.Port);
 
             var serverConfig = new ServerConfig
-            {
-                Ip = context.Parent.Hostname,
-                Port = context.Parent.Port,
-                Name = string.Format("{0}-{1}", name, Guid.NewGuid().ToString()),
-                Mode = SocketMode.Tcp,
-                MaxConnectionNumber = 5000,
-                DisableSessionSnapshot = true,
-                ClearIdleSession = false,
-                MaxRequestLength = int.MaxValue,
-                KeepAliveInterval = 10,
-                KeepAliveTime = 60,
-            };
+                               {
+                                   Ip = context.Parent.Hostname,
+                                   Port = context.Parent.Port,
+                                   Name = string.Format("{0}-{1}", name, Guid.NewGuid().ToString()),
+                                   Mode = SocketMode.Tcp,
+                                   MaxConnectionNumber = 5000,
+                                   DisableSessionSnapshot = true,
+                                   ClearIdleSession = false,
+                                   MaxRequestLength = int.MaxValue,
+                                   KeepAliveInterval = 10,
+                                   KeepAliveTime = 60,
+                               };
 
-            if (!tcpServer.Setup(new RootConfig(), serverConfig))
+            var rootConfig = new RootConfig
+                             {
+                                 MaxWorkingThreads =
+                                     context.ServerThreads > Environment.ProcessorCount
+                                         ? context.ServerThreads
+                                         : Environment.ProcessorCount,
+                             };
+
+            if (!tcpServer.Setup(rootConfig, serverConfig))
             {
                 throw new InvalidOperationException("The service '" + name + "' has invalid setup.");
             }
 
             if (!tcpServer.Start())
             {
-                throw new InvalidOperationException("The service '" + name + "' could not open. State:" + tcpServer.State.ToString());
+                throw new InvalidOperationException("The service '" + name + "' could not open. State:" + tcpServer.State);
             }
         }
 

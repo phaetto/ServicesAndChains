@@ -53,9 +53,10 @@ namespace Services.Management.Administration.Worker
             {
                 var httpPath = WorkerData.ContextHttpData != null ? WorkerData.ContextHttpData.Path : null;
                 var protocolType = WorkerData.ContextHttpData != null ? ProtocolType.Http : ProtocolType.Tcp;
+                var threads = WorkerData.ContextServerThreads > 1 ? WorkerData.ContextServerThreads : 1;
 
                 ContextServer =
-                    new ServerHost(WorkerData.ContextServerHost, WorkerData.ContextServerPort, httpPath).Do(
+                    new ServerHost(WorkerData.ContextServerHost, WorkerData.ContextServerPort, httpPath, threads).Do(
                         new StartListen(protocolType: protocolType));
             }
         }

@@ -3,8 +3,6 @@ namespace Services.Management.Administration.Worker
     using System;
     using System.Threading;
     using Chains;
-    using Chains.Play.Web;
-    using Services.Communication.Protocol;
 
     public sealed class StartWorkUnit : IChainableAction<WorkUnitContext, WorkUnitContext>
     {

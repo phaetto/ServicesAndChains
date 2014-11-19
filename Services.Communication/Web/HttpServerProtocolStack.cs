@@ -23,7 +23,7 @@
                 throw new InvalidOperationException("The http protocol stack needs to include the 'path' in server (non-null).");
             }
 
-            httpServer = context.Do(new StartHttpServer());
+            httpServer = context.Do(new StartHttpServer(null, context.ServerThreads));
             httpServer.Modules.Add(new HttpServerRequestHandler(httpServer, protocolServerLogic));
         }
 

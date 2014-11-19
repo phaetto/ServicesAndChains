@@ -18,6 +18,7 @@ namespace Services.Management.Administration.Worker
         public int AdminPort;
         public string ContextServerHost;
         public int ContextServerPort;
+        public int ContextServerThreads;
         public List<ModuleStartEntry> Modules;
         public int ReportUpdateIntervalInSeconds = 5;
         public StartWorkerHttpData ContextHttpData;
