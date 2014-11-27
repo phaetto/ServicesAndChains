@@ -9,6 +9,8 @@
 
     public class TcpServerProtocolStack : IServerProtocolStack
     {
+        private const int AutoManageMaxWorkingThreads = -1;
+
         private TcpServer tcpServer;
 
         public TcpServerProtocolStack(ProtocolServerLogic protocolServerLogic)
@@ -25,7 +27,7 @@
                                {
                                    Ip = context.Parent.Hostname,
                                    Port = context.Parent.Port,
-                                   Name = string.Format("{0}-{1}", name, Guid.NewGuid().ToString()),
+                                   Name = string.Format("{0}-{1}", name, Guid.NewGuid()),
                                    Mode = SocketMode.Tcp,
                                    MaxConnectionNumber = 5000,
                                    DisableSessionSnapshot = true,
@@ -40,7 +42,7 @@
                                  MaxWorkingThreads =
                                      context.ServerThreads > Environment.ProcessorCount
                                          ? context.ServerThreads
-                                         : Environment.ProcessorCount,
+                                         : AutoManageMaxWorkingThreads,
                              };
 
             if (!tcpServer.Setup(rootConfig, serverConfig))
