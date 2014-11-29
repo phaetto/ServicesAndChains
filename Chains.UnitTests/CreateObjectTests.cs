@@ -68,6 +68,27 @@ namespace Chains.UnitTests
             Assert.IsInstanceOfType(createdObject.InjectedClass, typeof(InjectedClass));
         }
 
+        [TestMethod]
+        public void CreateObjectWithParameters_WhenDefaultOptionIsUsed_ThenParameterIsBeenSetCorrectly()
+        {
+            var createdObject = ExecutionChain.CreateObjectWithParametersAndInjection(
+                typeof(WantedClass).FullName,
+                new object[]
+                {
+                    1
+                },
+                new object[]
+                {
+                    new InjectedClass2(),
+                    new InjectedClass()
+                }) as WantedClass;
+
+            Assert.IsNotNull(createdObject);
+            Assert.AreEqual("default", createdObject.astring);
+            Assert.IsInstanceOfType(createdObject, typeof(WantedClass));
+            Assert.IsNull(createdObject.InjectedClass);
+        }
+
         public class InjectedClass
         {
         }
@@ -91,7 +112,7 @@ namespace Chains.UnitTests
                 InjectedClass = injectedClass;
             }
 
-            public WantedClass(bool abool, string astring)
+            public WantedClass(bool abool, string astring = "default")
             {
                 this.abool = abool;
                 this.astring = astring;

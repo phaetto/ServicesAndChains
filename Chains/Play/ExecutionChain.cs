@@ -82,36 +82,37 @@ namespace Chains.Play
         public static object CreateObjectWithParametersAndInjection(Type type, object[] parameters, object[] injectedParameters = null)
         {
             var constructors = type.GetConstructors().OrderByDescending(x => x.GetParameters().Length);
-            foreach (var ci in constructors)
+            foreach (var constructor in constructors)
             {
                 try
                 {
-                    var ciParameters = ci.GetParameters();
+                    var constructorParameters = constructor.GetParameters();
                     var totalParametersCheck = parameters.Length
                         + (injectedParameters != null ? injectedParameters.Length : 0);
-                    if (ciParameters.Length <= totalParametersCheck)
+
+                    if (constructorParameters.Length <= totalParametersCheck)
                     {
                         // This is a candidate
                         var transformedObjects = new List<object>(totalParametersCheck);
                         for (var n = 0; n < parameters.Length; ++n)
                         {
-                            transformedObjects.Add(Convert.ChangeType(parameters[n], ciParameters[n].ParameterType));
+                            transformedObjects.Add(Convert.ChangeType(parameters[n], constructorParameters[n].ParameterType));
                         }
 
                         if (injectedParameters != null)
                         {
-                            for (var m = parameters.Length; m < ciParameters.Length; ++m)
+                            for (var m = parameters.Length; m < constructorParameters.Length; ++m)
                             {
                                 var found = false;
                                 for (var n = 0; n < injectedParameters.Length; ++n)
                                 {
                                     if (injectedParameters[n] != null
-                                        && (ciParameters[m].ParameterType.IsInstanceOfType(injectedParameters[n])
-                                            || ciParameters[m].ParameterType.IsSubclassOf(
+                                        && (constructorParameters[m].ParameterType.IsInstanceOfType(injectedParameters[n])
+                                            || constructorParameters[m].ParameterType.IsSubclassOf(
                                                 injectedParameters[n].GetType())))
                                     {
                                         transformedObjects.Add(
-                                            Convert.ChangeType(injectedParameters[n], ciParameters[m].ParameterType));
+                                            Convert.ChangeType(injectedParameters[n], constructorParameters[m].ParameterType));
                                         found = true;
                                         break;
                                     }
@@ -119,32 +120,44 @@ namespace Chains.Play
 
                                 if (!found)
                                 {
-                                    transformedObjects.Add(null);
+                                    if (!constructorParameters[m].IsOptional)
+                                    {
+                                        throw new InvalidCastException();
+                                    }
+
+                                    transformedObjects.Add(constructorParameters[m].DefaultValue);
                                 }
                             }
                         }
 
-                        for (var n = totalParametersCheck; n < ciParameters.Length; ++n)
+                        for (var n = totalParametersCheck; n < constructorParameters.Length; ++n)
                         {
-                            transformedObjects.Add(null);
+                            if (!constructorParameters[n].IsOptional)
+                            {
+                                transformedObjects.Add(constructorParameters[n].DefaultValue);
+                            }
+                            else
+                            {
+                                transformedObjects.Add(null);
+                            }
                         }
 
-                        return ci.Invoke(transformedObjects.ToArray());
+                        return constructor.Invoke(transformedObjects.ToArray());
                     }
                 }
                 catch (InvalidCastException)
                 {
                     // Go to the next
                 }
-                catch (Exception exception)
-                {
-                    if (exception.InnerException != null)
-                    {
-                        throw exception.InnerException;
-                    }
+                //catch (Exception exception)
+                //{
+                //    if (exception.InnerException != null)
+                //    {
+                //        throw exception.InnerException;
+                //    }
 
-                    throw;
-                }
+                //    throw;
+                //}
             }
 
             throw new Exception("No constructor could be found to create the type: " + type.AssemblyQualifiedName);
