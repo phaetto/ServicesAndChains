@@ -12,6 +12,12 @@
 
         public int ProcessId;
 
+        public string RepositoryFolder;
+
+        public string ServicesFolder;
+
+        public string DataFolder;
+
         public override int DataStructureVersionNumber
         {
             get

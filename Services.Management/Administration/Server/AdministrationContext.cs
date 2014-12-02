@@ -87,6 +87,10 @@
                 Directory.CreateDirectory(this.DataFolder);
             }
 
+            this.AdministrationData.RepositoryFolder = this.RepositoryFolder;
+            this.AdministrationData.ServicesFolder = this.ServicesFolder;
+            this.AdministrationData.DataFolder = this.DataFolder;
+
             if (string.IsNullOrEmpty(hostProcessName))
             {
                 hostProcessName = Process.GetCurrentProcess().ProcessName + ".exe";

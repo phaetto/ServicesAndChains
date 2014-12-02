@@ -13,10 +13,9 @@ namespace Services.Management.Administration.Worker
         public readonly StartWorkerData WorkerData;
         public readonly string Session;
         public readonly string ApiKey;
+        public readonly ReportProgressData ProgressData = new ReportProgressData();
 
         private readonly IProcessExit processExit;
-
-        public readonly ReportProgressData ProgressData;
 
         public DateTime TimeStarted { get; set; }
         public WorkUnitState State { get; set; }
@@ -47,7 +46,6 @@ namespace Services.Management.Administration.Worker
             this.Session = session;
             this.ApiKey = apiKey;
             this.processExit = processExit;
-            ProgressData = new ReportProgressData();
 
             if (!string.IsNullOrEmpty(WorkerData.ContextServerHost) && WorkerData.ContextServerPort > 0)
             {
