@@ -1,5 +1,6 @@
 ﻿namespace Services.Management.UnitTests
 {
+    using System.IO;
     using Chains.Play.Web;
     using Chains.UnitTests.Classes;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,6 +15,34 @@
     public class AdministrationServerTests
     {
         private const string ServiceId = "test 1";
+
+        [TestMethod]
+        public void ServerHost_WhenAnAdminLoads_ThenDirectoriesAreRelativeToEachOther()
+        {
+            using (var admin = new ServerHost("127.0.0.1", 12005).Do(new EnableAdminServer()))
+            {
+                Assert.IsFalse(admin.DataFolder.IndexOf("..") > -1);
+                Assert.IsTrue(admin.DataFolder.EndsWith(AdministrationContext.DataFolderName + Path.DirectorySeparatorChar));
+                Assert.IsTrue(admin.ServicesFolder.EndsWith(AdministrationContext.ServiceFolderName + Path.DirectorySeparatorChar));
+                Assert.IsTrue(admin.RepositoryFolder.EndsWith(AdministrationContext.RepositoryFolderName + Path.DirectorySeparatorChar));
+
+                Assert.AreNotEqual(
+                    Directory.GetParent(admin.DataFolder).Parent.FullName,
+                    Directory.GetParent(admin.ServicesFolder).Parent.FullName);
+
+                Assert.AreNotEqual(
+                    Directory.GetParent(admin.DataFolder).Parent.FullName,
+                    Directory.GetParent(admin.RepositoryFolder).Parent.FullName);
+
+                Assert.AreEqual(
+                    Directory.GetParent(admin.ServicesFolder).Parent.FullName,
+                    Directory.GetParent(admin.RepositoryFolder).Parent.FullName);
+
+                Assert.IsTrue(Directory.Exists(admin.RepositoryFolder));
+                Assert.IsTrue(Directory.Exists(admin.ServicesFolder));
+                Assert.IsTrue(Directory.Exists(admin.DataFolder));
+            }
+        }
 
         [TestMethod]
         public void ServerHost_WhenAWorkUnitContextConnects_ThenThereIsNoError()

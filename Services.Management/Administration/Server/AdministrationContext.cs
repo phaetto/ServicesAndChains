@@ -20,10 +20,14 @@
     {
         public const string ReloadingMemoryDbServiceName = "reload-hash-db-service";
         public const string GeneralServiceName = "General";
+        public const string RepositoryFolderName = "repository";
+        public const string ServiceFolderName = "services";
+        public const string DataFolderName = "data";
 
         public readonly Dictionary<string, WorkUnitReportData> ReportData = new Dictionary<string, WorkUnitReportData>();
         public readonly string RepositoryFolder;
         public readonly string ServicesFolder;
+        public readonly string DataFolder;
         public readonly string HostProcessName;
         public AdministrationData AdministrationData = new AdministrationData();
 
@@ -63,6 +67,11 @@
                                       + Path.DirectorySeparatorChar;
             }
 
+            this.DataFolder =
+                Path.GetFullPath(
+                    Directory.GetCurrentDirectory() + System.IO.Path.DirectorySeparatorChar + ".."
+                    + Path.DirectorySeparatorChar + DataFolderName) + Path.DirectorySeparatorChar;
+
             if (!Directory.Exists(this.RepositoryFolder))
             {
                 Directory.CreateDirectory(this.RepositoryFolder);
@@ -71,6 +80,11 @@
             if (!Directory.Exists(this.ServicesFolder))
             {
                 Directory.CreateDirectory(this.ServicesFolder);
+            }
+
+            if (!Directory.Exists(this.DataFolder))
+            {
+                Directory.CreateDirectory(this.DataFolder);
             }
 
             if (string.IsNullOrEmpty(hostProcessName))
