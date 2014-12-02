@@ -36,23 +36,17 @@
         public AdministrationContext(
             string hostname,
             int port,
-            string RepositoryFolder = null,
-            string ServicesFolder = null,
             string hostProcessName = null)
-            : this(new ServerHost(hostname, port), RepositoryFolder, ServicesFolder, hostProcessName)
+            : this(new ServerHost(hostname, port), hostProcessName)
         {
         }
 
         public AdministrationContext(
             ServerHost serverHost,
-            string RepositoryFolder = null,
-            string ServicesFolder = null,
             string hostProcessName = null,
             Dictionary<string, WorkUnitReportData> previousReportData = null)
             : base(serverHost)
         {
-            this.RepositoryFolder = RepositoryFolder;
-            this.ServicesFolder = ServicesFolder;
             this.Modules = new List<AbstractChain>();
             this.ReportData = previousReportData ?? ReportData;
             this.AdministrationData.StartedOn = DateTime.UtcNow;
