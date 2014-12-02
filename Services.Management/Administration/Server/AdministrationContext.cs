@@ -53,14 +53,14 @@
 
             if (string.IsNullOrWhiteSpace(this.RepositoryFolder))
             {
-                this.RepositoryFolder = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "repository"
-                    + Path.DirectorySeparatorChar;
+                this.RepositoryFolder = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar
+                                        + RepositoryFolderName + Path.DirectorySeparatorChar;
             }
 
             if (string.IsNullOrWhiteSpace(this.ServicesFolder))
             {
-                this.ServicesFolder = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "services"
-                    + Path.DirectorySeparatorChar;
+                this.ServicesFolder = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + ServiceFolderName
+                                      + Path.DirectorySeparatorChar;
             }
 
             if (!Directory.Exists(this.RepositoryFolder))
