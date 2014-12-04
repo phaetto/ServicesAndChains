@@ -79,7 +79,7 @@
 
         private string InternalSendAndReceiveStream(string data, string command = "TcpCommand")
         {
-            if (!(ClientSocket.Poll(0, SelectMode.SelectWrite) && ClientSocket.Available == 0))
+            if (ClientSocket == null || !(ClientSocket.Poll(0, SelectMode.SelectWrite) && ClientSocket.Available == 0))
             {
                 throw new SocketException((int)SocketError.ConnectionAborted);
             }
