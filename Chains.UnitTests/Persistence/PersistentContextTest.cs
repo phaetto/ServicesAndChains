@@ -2,6 +2,7 @@
 {
     using System;
     using Chains.Persistence.Exceptions;
+    using Chains.UnitTests.Classes;
     using Chains.UnitTests.Persistence.Classes;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -9,7 +10,7 @@
     class PersistentContextTest
     {
         [TestMethod]
-        public void Persistence_WhenActionsAreBeenExecuted_ThenOptimisticConcurrencyErrorMustOccur()
+        public void Persistence_WhenActionsAreBeenExecutedInParallel_ThenOptimisticConcurrencyErrorMustOccur()
         {
             var store = new CustomPersistentStore<ContextData>();
 
@@ -22,17 +23,9 @@
             CustomPersistentStore<ContextData>.memoryStoreDateTimes[persistentTestContext.Data.Id] =
                 CustomPersistentStore<ContextData>.memoryStoreDateTimes[persistentTestContext.Data.Id].AddSeconds(10);
 
-            try
-            {
-                persistentTestContext.Do(new ChangeNameAction("Another Name"));
+            Test.Throws<DataIntegrityViolationException>(() => persistentTestContext.Do(new ChangeNameAction("Another Name")));
 
-                Assert.Fail("Failed to throw DataIntegrityViolationException");
-            }
-            catch (Exception ex)
-            {
-                Assert.IsInstanceOfType(ex, typeof(DataIntegrityViolationException));
-                Assert.AreEqual("Name 3", persistentTestContext.Data.Name);
-            }
+            Assert.AreEqual("Name 3", persistentTestContext.Data.Name);
         }
     }
 }
