@@ -13,9 +13,17 @@
         IChainableAction<AdministrationContext, AdministrationContext>,
         IAuthorizableAction, IApplicationAuthorizableAction
     {
+        private readonly int triesLeft;
+
         public StartWorkerProcess(StartWorkerData data)
+            : this(data, 10)
+        {
+        }
+
+        public StartWorkerProcess(StartWorkerData data, int triesLeft)
             : base(data)
         {
+            this.triesLeft = triesLeft;
         }
 
         public AdministrationContext Act(AdministrationContext context)
@@ -52,20 +60,19 @@
                         RedirectStandardError = false,
                     });
             }
-            catch (InvalidOperationException ex)
-            {
-                // When the id already exists
-                context.LogException(ex);
-            }
             catch (Exception ex)
             {
-                context.Do(
-                    new StartWorkerProcessWithDelay(
-                        new WorkerDataWithDelay
-                        {
-                            DelayInSeconds = 10,
-                            WorkerData = Data
-                        }));
+                if (triesLeft > 0)
+                {
+                    context.Do(
+                        new StartWorkerProcessWithDelay(
+                            new WorkerDataWithDelay
+                            {
+                                DelayInSeconds = 10,
+                                WorkerData = Data,
+                                TriesLeft = triesLeft - 1
+                            }));
+                }
 
                 context.LogException(ex);
             }

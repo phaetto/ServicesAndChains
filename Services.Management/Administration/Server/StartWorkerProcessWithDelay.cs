@@ -21,7 +21,7 @@
                 {
                     Thread.Sleep(Data.DelayInSeconds * 1000);
 
-                    context.Do(new StartWorkerProcess(Data.WorkerData));
+                    context.Do(new StartWorkerProcess(Data.WorkerData, Data.TriesLeft));
                 });
 
             return context;
