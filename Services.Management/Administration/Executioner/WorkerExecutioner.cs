@@ -235,7 +235,7 @@ namespace Services.Management.Administration.Executioner
                     new ProcessStartInfo
                     {
                         FileName = "chmod",
-                        Arguments = string.Format("u+x {0}", "*.exe"),
+                        Arguments = string.Format("u+x {0}", "*"),
                         WorkingDirectory = folder,
                         UseShellExecute = true
                     });
