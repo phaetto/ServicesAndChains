@@ -4,7 +4,7 @@ namespace Services.Communication.DataStructures.Queues.Simple
 
     public sealed class Dequeue : RemotableAction<ExecutableActionSpecification, QueueContext>
     {
-        protected override ExecutableActionSpecification ActRemotely(QueueContext context)
+        public override ExecutableActionSpecification Act(QueueContext context)
         {
             var actionSpecification = new ExecutableActionSpecification();
             context.Queue.TryDequeue(out actionSpecification);

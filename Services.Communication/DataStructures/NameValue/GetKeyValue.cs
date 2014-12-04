@@ -9,7 +9,7 @@
         {
         }
 
-        protected override KeyValueData ActRemotely(HashContext context)
+        public override KeyValueData Act(HashContext context)
         {
             return new KeyValueData
                    {
