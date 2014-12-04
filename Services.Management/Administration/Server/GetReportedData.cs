@@ -11,7 +11,7 @@
 
         private const int MaximumErrorsToSend = 20;
 
-        protected override GetReportedDataReturnData ActRemotely(AdministrationContext context)
+        public override GetReportedDataReturnData Act(AdministrationContext context)
         {
             var reportDataWithSomeOfTheLog = context.ReportData.ToDictionary(
                 x => x.Key,

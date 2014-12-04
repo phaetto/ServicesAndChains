@@ -15,7 +15,7 @@
         {
         }
 
-        protected override GetFileTypesReturnData ActRemotely(AdministrationContext context)
+        public override GetFileTypesReturnData Act(AdministrationContext context)
         {
             var assemblyPath = context.RepositoryFolder + Data.ServiceName + Path.DirectorySeparatorChar
                 + Data.Version + Path.DirectorySeparatorChar + Data.File;

@@ -5,7 +5,7 @@
 
     public sealed class GetAdministratorData : RemotableAction<AdministrationData, AdministrationContext>
     {
-        protected override AdministrationData ActRemotely(AdministrationContext context)
+        public override AdministrationData Act(AdministrationContext context)
         {
             context.AdministrationData.ProcessId = Process.GetCurrentProcess().Id;
 

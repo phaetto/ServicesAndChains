@@ -12,7 +12,7 @@ namespace Services.Management.Administration.Worker
         {
         }
 
-        protected override ReportProgressReturnData ActRemotely(AdministrationContext context)
+        public override ReportProgressReturnData Act(AdministrationContext context)
         {
             var key = Data.StartData.Id;
 

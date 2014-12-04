@@ -19,7 +19,7 @@
 
         public AdministrationContext Act(AdministrationContext context)
         {
-            var data = context.DoRemotable(new GetAllRepoServices()).RepoServices;
+            var data = context.Do(new GetAllRepoServices()).RepoServices;
 
             if (!data.ContainsKey(Data.ServiceName))
             {
