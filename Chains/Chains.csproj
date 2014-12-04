@@ -70,6 +70,7 @@
     <Compile Include="ChainWithHistory.cs" />
     <Compile Include="ChainWithHistoryAndParent.cs" />
     <Compile Include="ChainWithParent.cs" />
+    <Compile Include="Exceptions\Check.cs" />
     <Compile Include="IAggreggatable.cs" />
     <Compile Include="IChainableAction.cs" />
     <Compile Include="Persistence\Exceptions\DataIntegrityViolation.cs" />
