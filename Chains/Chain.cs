@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Chains.Exceptions;
     using Chains.Play;
 
     public class Chain<T> : AbstractChain
@@ -14,10 +15,7 @@
         public ReturnChainType Do<ReturnChainType>(
             IChainableAction<T, ReturnChainType> action)
         {
-            if (action == null)
-            {
-                throw new ArgumentNullException("action");
-            }
+            Check.ArgumentNull(() => action);
 
             if (OnBeforeExecuteAction != null)
             {
@@ -50,15 +48,8 @@
             Func<ReturnChainType, bool> condition,
             params IChainableAction<T, ReturnChainType>[] actions)
         {
-            if (condition == null)
-            {
-                throw new ArgumentNullException("condition");
-            }
-
-            if (actions == null)
-            {
-                throw new ArgumentNullException("actions");
-            }
+            Check.ArgumentNull(() => condition);
+            Check.ArgumentNull(() => actions);
 
             foreach (var action in actions)
             {
@@ -91,15 +82,8 @@
             Func<ReturnChainType, bool> condition,
             params Func<T, ReturnChainType>[] actions)
         {
-            if (condition == null)
-            {
-                throw new ArgumentNullException("condition");
-            }
-
-            if (actions == null)
-            {
-                throw new ArgumentNullException("actions");
-            }
+            Check.ArgumentNull(() => condition);
+            Check.ArgumentNull(() => actions);
 
             foreach (var action in actions)
             {
@@ -128,25 +112,10 @@
             int to,
             IChainableAction<T, ReturnChainType> action)
         {
-            if (from < 0)
-            {
-                throw new ArgumentOutOfRangeException("from", from, "From should be larger than -1.");
-            }
-
-            if (to < 1)
-            {
-                throw new ArgumentOutOfRangeException("to", to, "to should be larger than 0.");
-            }
-
-            if (to < from)
-            {
-                throw new ArgumentOutOfRangeException("to", from, "to should be larger than from.");
-            }
-
-            if (action == null)
-            {
-                throw new ArgumentNullException("action");
-            }
+            Check.ArgumentOutOfRange(from < 0, () => from, "Should be larger than -1.");
+            Check.ArgumentOutOfRange(to < 1, () => to, "Should be larger than 0");
+            Check.ArgumentOutOfRange(to < from, () => to, "To should be larger than From.");
+            Check.ArgumentNull(() => action);
 
             if (OnBeforeExecuteAction != null)
             {
@@ -176,10 +145,7 @@
         public IEnumerable<ReturnChainType> DoParallelFor<ReturnChainType>(
             IChainableAction<T, ReturnChainType>[] actions)
         {
-            if (actions == null)
-            {
-                throw new ArgumentNullException("action");
-            }
+            Check.ArgumentNull(() => actions);
 
             if (OnBeforeExecuteAction != null)
             {
@@ -212,10 +178,7 @@
         public ReturnChainType Decorate<ReturnChainType>(IChainableAction<T, ReturnChainType> action, Func<IChainableAction<T, ReturnChainType>, T, ReturnChainType> decorator)
             where ReturnChainType : class 
         {
-            if (action == null)
-            {
-                throw new ArgumentNullException("action");
-            }
+            Check.ArgumentNull(() => action);
 
             return decorator(action, (T)this);
         }
@@ -223,17 +186,11 @@
         public T Aggregate<ContextType>(ContextType context, IChainableAction<ContextType, T> action)
             where ContextType : Chain<ContextType>
         {
-            if (action == null)
-            {
-                throw new ArgumentNullException("action");
-            }
+            Check.ArgumentNull(() => action);
 
             var aggregatable = this as IAggreggatable<T>;
-            
-            if (aggregatable == null)
-            {
-                throw new NotSupportedException("Aggregation is not supported from the type " + this.GetType().FullName);
-            }
+
+            Check.ConditionNotSupported(aggregatable == null, "Aggregation is not supported from the type " + this.GetType().FullName);
 
             aggregatable.AggregateToThis(context.Do(action));
 
@@ -243,14 +200,11 @@
         public ReturnChainType DoRemotable<ReturnChainType>(
             IChainableAction<T, T> action)
         {
-            if (action is IRemotable)
-            {
-                this.Do(action);
-                var remotable = action as IRemotable;
-                return (ReturnChainType)Convert.ChangeType(remotable.ReturnData.Data, typeof(ReturnChainType));
-            }
+            Check.Argument(action is IRemotable, () => action, "The action must be an IRemotable object");
 
-            throw new InvalidOperationException("The action must be an IRemotable object");
+            this.Do(action);
+            var remotable = action as IRemotable;
+            return (ReturnChainType)Convert.ChangeType(remotable.ReturnData.Data, typeof(ReturnChainType));
         }
 
         public TReceive DoRemotable<TReceive>(RemotableAction<TReceive, T> action)
