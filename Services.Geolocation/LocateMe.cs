@@ -11,7 +11,7 @@
         public const string BaseUri =
             "https://maps.googleapis.com/maps/api/browserlocation/json?browser=&sensor=true";
 
-        protected override Location ActRemotely(LocateContext context)
+        public override Location Act(LocateContext context)
         {
             var url = BaseUri;
 
