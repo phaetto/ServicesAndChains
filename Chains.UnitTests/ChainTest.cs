@@ -67,8 +67,7 @@
                                         x => x.Do(new ActionForTest("1")).DoIfNotNull(new ActionForTestReturnsNull()),
                                         x => x.Do(new ActionForTestReturnsNull()).DoIfNotNull(new ActionForTest("2")),
                                         x =>
-                                            x.Do(new ReproducibleTestAction(new ReproducibleTestData()))
-                                             .DoIfNotNull(new ActionForTestReturnsNull()),
+                                            x.DoIfNotNull(new ActionForTestReturnsNull()),
                                         x => x.Do(new ActionForTest("3")).DoIfNotNull(new ActionForTest("4")),
                                         x =>
                                         {

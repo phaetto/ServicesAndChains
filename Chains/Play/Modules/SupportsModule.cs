@@ -9,7 +9,7 @@
         {
         }
 
-        protected override bool ActRemotely(IModular context)
+        public override bool Act(IModular context)
         {
             var type = ExecutionChain.FindType(Data);
 

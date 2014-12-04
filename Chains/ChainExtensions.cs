@@ -52,64 +52,6 @@
             return context != null ? context.Do(action) : null;
         }
 
-        public static TReceive DoRemoteIf<T, TReceive>(
-            this T context, Func<T, bool> predicate,
-            RemotableAction<TReceive, T> action)
-            where T : Chain<T>
-            where TReceive : SerializableSpecification, new()
-        {
-            return predicate(context) ? context.DoRemotable(action) : null;
-        }
-
-        public static TReceive DoRemoteIfNotNull<T, TReceive>(
-            this T context,
-            RemotableAction<TReceive, T> action)
-            where T : Chain<T>
-            where TReceive : SerializableSpecification, new()
-        {
-            return context != null ? context.DoRemotable(action) : null;
-        }
-
-        public static TReceive DoRemoteIf<T, TReceive, TSend>(
-            this T context, Func<T, bool> predicate,
-            RemotableActionWithData<TSend, TReceive, T> action)
-            where T : Chain<T>
-            where TReceive : SerializableSpecification, new()
-            where TSend : SerializableSpecification, new()
-        {
-            return predicate(context) ? context.DoRemotable(action) : null;
-        }
-
-        public static TReceive DoRemoteIfNotNull<T, TReceive, TSend>(
-            this T context,
-            RemotableActionWithData<TSend, TReceive, T> action)
-            where T : Chain<T>
-            where TReceive : SerializableSpecification, new()
-            where TSend : SerializableSpecification, new()
-        {
-            return context != null ? context.DoRemotable(action) : null;
-        }
-
-        public static TReceive DoRemoteIf<T, TReceive, TSend>(
-            this T context, Func<T, bool> predicate,
-            RemotableActionWithSerializableData<TSend, TReceive, T> action)
-            where T : Chain<T>
-            where TReceive : SerializableSpecification, new()
-            where TSend : SerializableSpecification, new()
-        {
-            return predicate(context) ? context.DoRemotable(action) : null;
-        }
-
-        public static TReceive DoRemoteIfNotNull<T, TReceive, TSend>(
-            this T context,
-            RemotableActionWithSerializableData<TSend, TReceive, T> action)
-            where T : Chain<T>
-            where TReceive : SerializableSpecification, new()
-            where TSend : SerializableSpecification, new()
-        {
-            return context != null ? context.DoRemotable(action) : null;
-        }
-
         public static T IfNullChangeTo<T>(
             this T context,
             T otherObject)

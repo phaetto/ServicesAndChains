@@ -13,13 +13,13 @@
 
         public ExecutableActionSpecification Play(ExecutableActionSpecification specification)
         {
-            replayChain.Do(new ExecuteActionFromSpecification(specification));
+            var executionResultContext = replayChain.Do(new ExecuteActionFromSpecification(specification));
 
             var remotableAction = replayChain.LastExecutedAction as IRemotable;
 
             if (remotableAction != null)
             {
-                return remotableAction.ReturnData;
+                return executionResultContext.ToSpecification();
             }
 
             var reproducibleAction = replayChain.LastExecutedAction as IReproducible;

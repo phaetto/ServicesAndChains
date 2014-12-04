@@ -53,8 +53,9 @@
             var player =
                 new ExecutionChain(new ContextForTest()).Do(new ExecuteAction(qualifiedName, "value 1"))
                                                             .Do(new ExecuteAction(fullName, "value 2"))
-                                                            .Do(new ExecuteAction(fullName, "value 3"))
-                                                            .Do(new ExecuteActionFromSpecification(spec));
+                                                            .Do(new ExecuteAction(fullName, "value 3"));
+
+            player.Do(new ExecuteActionFromSpecification(spec));
 
             var result = (ContextForTest)player.CurrentContext;
 
@@ -70,9 +71,8 @@
                     ChangeToValue = "new value"
                 });
 
-            var player =
-                new ExecutionChain(new ContextForTest()).Do(
-                    new ExecuteActionFromSpecification(testAction.GetInstanceSpec()));
+            var player = new ExecutionChain(new ContextForTest());
+            player.Do(new ExecuteActionFromSpecification(testAction.GetInstanceSpec()));
 
             var result = (ContextForTest)player.CurrentContext;
 

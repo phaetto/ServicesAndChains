@@ -11,7 +11,7 @@
             Data.DomainName = AppDomain.CurrentDomain.FriendlyName;
         }
 
-        protected override ReproducibleTestData ActRemotely(ContextForTest context)
+        public override ReproducibleTestData Act(ContextForTest context)
         {
             context.contextVariable = Data.ChangeToValue;
             return Data;
