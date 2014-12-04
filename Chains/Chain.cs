@@ -34,6 +34,60 @@
             return result;
         }
 
+        public Task<ReturnChainType> Do<ReturnChainType>(
+            IChainableAction<T, Task<ReturnChainType>> action)
+        {
+            Check.ArgumentNull(() => action);
+
+            if (OnBeforeExecuteAction != null)
+            {
+                OnBeforeExecuteAction(action);
+            }
+
+            var result = action.Act((T)this).ContinueWith(
+                x =>
+                {
+                    LastKnownGoodObject = (T)this;
+
+                    if (OnAfterExecuteAction != null)
+                    {
+                        OnAfterExecuteAction(action);
+                    }
+
+                    return x.Result;
+                });
+
+            return result;
+        }
+
+        public Task<ReturnChainType> DoAsync<ReturnChainType>(
+            IChainableAction<T, ReturnChainType> action)
+        {
+            Check.ArgumentNull(() => action);
+
+            if (OnBeforeExecuteAction != null)
+            {
+                OnBeforeExecuteAction(action);
+            }
+
+            var resultTask = Task.Factory.StartNew(
+                () =>
+                {
+                    var result = action.Act((T)this);
+
+                    LastKnownGoodObject = (T)this;
+
+                    if (OnAfterExecuteAction != null)
+                    {
+                        OnAfterExecuteAction(action);
+                    }
+
+                    return result;
+                });
+
+            return resultTask;
+        }
+
         public ReturnChainType Do<ReturnChainType>(Func<T, ReturnChainType> action)
         {
             if (action == null)

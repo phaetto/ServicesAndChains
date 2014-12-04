@@ -82,6 +82,7 @@
     <Compile Include="Classes\ActionThatPlaysInTwoContexts.cs" />
     <Compile Include="Classes\AssertExtensions.cs" />
     <Compile Include="Classes\ContextForTestWithModules.cs" />
+    <Compile Include="Classes\ActionForTestAsync.cs" />
     <Compile Include="Classes\Http\HttpContextForTestNotSupportAnything.cs" />
     <Compile Include="Classes\Http\HttpContextForTestWithError.cs" />
     <Compile Include="Classes\Http\Security\HttpLoginProviderForTest.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Classes\Security\SecurityModule.cs" />
     <Compile Include="Classes\Security\SecurityProvider.cs" />
     <Compile Include="CheckTest.cs" />
+    <Compile Include="ChainAsyncTest.cs" />
     <Compile Include="CreateObjectTests.cs" />
     <Compile Include="HttpContextInfoBehavior.cs" />
     <Compile Include="HttpListenerTest.cs" />
