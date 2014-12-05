@@ -91,5 +91,39 @@
 
             Assert.AreEqual(result.contextVariable, "value 6");
         }
+
+        [TestMethod]
+        public async Task Chain_WhenDoingAsyncLoopTask_ThenContextIsBeenUpdatedAtTheRightTime()
+        {
+            var context = new ContextForTest();
+
+            Assert.IsFalse(context.HasBeenChecked);
+
+            var loopTask = context.Do(new ActionForTestAsyncLoopCheck("value 6"));
+
+            Assert.IsFalse(context.HasBeenChecked);
+
+            var task =
+                context.DoAsync(new ActionForTest("value 1"))
+                    .Do(new ActionForTestAsync("value 2"))
+                    .Do(new ActionForTest("value 3"));
+
+            Assert.IsFalse(context.HasBeenChecked);
+
+            Task.WaitAll(task);
+
+            Assert.IsFalse(context.HasBeenChecked);
+            Assert.AreEqual("value 3", context.contextVariable);
+
+            context = await context.Do(new ActionForTest("value 4"))
+                      .Do(new ActionForTestAsync("value 5"))
+                      .Do(new ActionForTest("value 6"));
+
+            Assert.AreEqual("value 6", context.contextVariable);
+
+            await loopTask;
+
+            Assert.IsTrue(context.HasBeenChecked);
+        }
     }
 }

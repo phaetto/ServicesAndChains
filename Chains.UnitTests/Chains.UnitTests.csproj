@@ -83,6 +83,7 @@
     <Compile Include="Classes\AssertExtensions.cs" />
     <Compile Include="Classes\ContextForTestWithModules.cs" />
     <Compile Include="Classes\ActionForTestAsync.cs" />
+    <Compile Include="Classes\ActionForTestAsyncLoopCheck.cs" />
     <Compile Include="Classes\Http\HttpContextForTestNotSupportAnything.cs" />
     <Compile Include="Classes\Http\HttpContextForTestWithError.cs" />
     <Compile Include="Classes\Http\Security\HttpLoginProviderForTest.cs" />
