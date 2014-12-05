@@ -8,7 +8,6 @@
         public static TResultType Do<T, TResultType>(
             this ClientConnectionContext context,
             IRemotableAction<T, TResultType> action)
-            where TResultType : class
             where T : Chain<T>
         {
             return context.Do(new Send<TResultType>(action));
@@ -31,7 +30,6 @@
         public static TResultType Do<TResultType>(
             this ClientConnectionContext context,
             params ExecutableActionSpecification[] actionSpecifications)
-            where TResultType : class
         {
             return context.Do(new Send<TResultType>(actionSpecifications));
         }
