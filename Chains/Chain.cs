@@ -79,16 +79,6 @@
             return resultTask;
         }
 
-        public ReturnChainType Do<ReturnChainType>(Func<T, ReturnChainType> action)
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException("action");
-            }
-
-            return action((T)this);
-        }
-
         public ReturnChainType DoFirst<ReturnChainType>(
             Func<ReturnChainType, bool> condition,
             params IChainableAction<T, ReturnChainType>[] actions)
