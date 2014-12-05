@@ -96,6 +96,7 @@
     <Compile Include="Play\Installation\InstallAsServiceData.cs" />
     <Compile Include="Play\Installation\InstallData.cs" />
     <Compile Include="Play\IRemotable.cs" />
+    <Compile Include="Play\IRemotableAction.cs" />
     <Compile Include="Play\Json.cs" />
     <Compile Include="Play\Modules\DisableModule.cs" />
     <Compile Include="Play\Modules\EnableModule.cs" />

@@ -1,8 +1,7 @@
 ﻿namespace Chains.Play
 {
     public abstract class RemotableActionWithData<TSend, TReceived, TChain> : ReproducibleWithData<TSend>,
-        IChainableAction<TChain, TReceived>,
-        IRemotable
+        IRemotableAction<TChain, TReceived>
         where TSend : SerializableSpecification, new()
     {
         protected RemotableActionWithData(TSend data)
