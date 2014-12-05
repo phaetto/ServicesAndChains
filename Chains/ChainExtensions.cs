@@ -30,17 +30,5 @@
         {
             return context ?? otherObject;
         }
-
-        public static T IfTrueRevert<T>(this T context, Func<T, bool> predicate)
-            where T : Chain<T>
-        {
-            return predicate(context) ? Chain<T>.LastKnownGoodObject : context;
-        }
-
-        public static T IfNullRevert<T>(this T context)
-            where T : Chain<T>
-        {
-            return context ?? Chain<T>.LastKnownGoodObject;
-        }
     }
 }

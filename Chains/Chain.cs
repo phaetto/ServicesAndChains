@@ -9,9 +9,6 @@
     public class Chain<T> : AbstractChain
         where T : Chain<T>
     {
-        [ThreadStatic]
-        internal static T LastKnownGoodObject;
-
         public ReturnChainType Do<ReturnChainType>(
             IChainableAction<T, ReturnChainType> action)
         {
@@ -23,8 +20,6 @@
             }
 
             var result = action.Act((T)this);
-
-            LastKnownGoodObject = (T)this;
 
             if (OnAfterExecuteAction != null)
             {
@@ -47,8 +42,6 @@
             var result = action.Act((T)this).ContinueWith(
                 x =>
                 {
-                    LastKnownGoodObject = (T)this;
-
                     if (OnAfterExecuteAction != null)
                     {
                         OnAfterExecuteAction(action);
@@ -74,8 +67,6 @@
                 () =>
                 {
                     var result = action.Act((T)this);
-
-                    LastKnownGoodObject = (T)this;
 
                     if (OnAfterExecuteAction != null)
                     {
@@ -123,8 +114,6 @@
                 {
                     OnAfterExecuteAction(action);
                 }
-
-                LastKnownGoodObject = (T)this;
 
                 return actionResult;
             }
@@ -191,8 +180,6 @@
                     }
                 });
 
-            LastKnownGoodObject = (T)this;
-
             return results;
         }
 
@@ -224,17 +211,7 @@
                     }
                 });
 
-            LastKnownGoodObject = (T)this;
-
             return results;
-        }
-
-        public ReturnChainType Decorate<ReturnChainType>(IChainableAction<T, ReturnChainType> action, Func<IChainableAction<T, ReturnChainType>, T, ReturnChainType> decorator)
-            where ReturnChainType : class 
-        {
-            Check.ArgumentNull(() => action);
-
-            return decorator(action, (T)this);
         }
 
         public T Aggregate<ContextType>(ContextType context, IChainableAction<ContextType, T> action)

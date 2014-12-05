@@ -25,7 +25,7 @@
         }
 
         [TestMethod]
-        public void IfNullRevert_WhenActionWithMultipleContextsIsExecuted_ThenContextIsBeenUpdated()
+        public void Do_WhenActionWithMultipleContextsIsExecuted_ThenContextIsBeenUpdated()
         {
             var result = new ContextForTest().Do<ContextForTest>(new ActionThatPlaysInTwoContexts("value"));
 
@@ -34,25 +34,17 @@
         }
 
         [TestMethod]
-        public void IfNullRevert_WhenSomethingIsNull_ThenTheLastKnownGoodInstanceIsReverted()
-        {
-            var result = new ContextForTest().Do(new ActionForTestReturnsNull()).IfNullRevert();
-
-            Assert.IsNotNull(result);
-        }
-
-        [TestMethod]
         public void DoIfNotNull_WhenAChainMightReturnNull_ThenTheActionsAfterNullAreNotExecuted()
         {
-            var result =
-                new ContextForTest().DoIfNotNull(new ActionForTest("value 1"))
-                                    .DoIfNotNull(new ActionForTest("value 2"))
-                                    .DoIfNotNull(new ActionForTest("value 3"))
-                                    .DoIfNotNull(new ActionForTestReturnsNull())
-                                    .DoIfNotNull(new ActionForTest("value 4"))
-                                    .DoIfNotNull(new ActionForTest("value 5"))
-                                    .DoIfNotNull(new ActionForTest("value 6"))
-                                    .IfNullRevert();
+            var result = new ContextForTest();
+
+            result.DoIfNotNull(new ActionForTest("value 1"))
+                .DoIfNotNull(new ActionForTest("value 2"))
+                .DoIfNotNull(new ActionForTest("value 3"))
+                .DoIfNotNull(new ActionForTestReturnsNull())
+                .DoIfNotNull(new ActionForTest("value 4"))
+                .DoIfNotNull(new ActionForTest("value 5"))
+                .DoIfNotNull(new ActionForTest("value 6"));
 
             Assert.AreEqual(result.contextVariable, "value 3");
         }
@@ -61,9 +53,7 @@
         public void DoFirstNotNull_WhenManyOptionsAreReturningNull_ThenTheFirstThatIsNotNullShouldBePicked()
         {
             var result =
-                new ContextForTest().Do(new ActionForTestReturnsNull())
-                                    .IfNullRevert()
-                                    .DoFirstNotNull(
+                new ContextForTest().DoFirstNotNull(
                                         x => x.Do(new ActionForTest("1")).DoIfNotNull(new ActionForTestReturnsNull()),
                                         x => x.Do(new ActionForTestReturnsNull()).DoIfNotNull(new ActionForTest("2")),
                                         x =>
@@ -82,15 +72,15 @@
         [TestMethod]
         public void DoFirstNotNull_WhenAllOptionsAreReturningNullButExecuteOneChange_ThenTheContextShouldHaveChanged()
         {
-            var result =
-                new ContextForTest().Do(new ActionForTest("0"))
-                                    .DoFirstNotNull(
-                                        x => x.Do(new ActionForTest("1")).DoIfNotNull(new ActionForTestReturnsNull()),
-                                        x => x.Do(new ActionForTest("2")).DoIfNotNull(new ActionForTestReturnsNull()),
-                                        x => x.Do(new ActionForTest("3")).DoIfNotNull(new ActionForTestReturnsNull()),
-                                        x => x.Do(new ActionForTest("4")).DoIfNotNull(new ActionForTestReturnsNull()),
-                                        x => x.Do(new ActionForTest("5")).DoIfNotNull(new ActionForTestReturnsNull()))
-                                    .IfNullRevert();
+            var result = new ContextForTest();
+
+            result.Do(new ActionForTest("0"))
+                .DoFirstNotNull(
+                    x => x.Do(new ActionForTest("1")).DoIfNotNull(new ActionForTestReturnsNull()),
+                    x => x.Do(new ActionForTest("2")).DoIfNotNull(new ActionForTestReturnsNull()),
+                    x => x.Do(new ActionForTest("3")).DoIfNotNull(new ActionForTestReturnsNull()),
+                    x => x.Do(new ActionForTest("4")).DoIfNotNull(new ActionForTestReturnsNull()),
+                    x => x.Do(new ActionForTest("5")).DoIfNotNull(new ActionForTestReturnsNull()));
 
             Assert.AreEqual("5", result.contextVariable);
         }
