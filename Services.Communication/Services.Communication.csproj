@@ -82,6 +82,7 @@
     <Compile Include="DataStructures\Queues\Simple\QueueContext.cs" />
     <Compile Include="Protocol\ClientConnectionContextExtensions.cs" />
     <Compile Include="Protocol\ClientConnectionContext.cs" />
+    <Compile Include="Protocol\ClientConnectionContextExtensionsAsync.cs" />
     <Compile Include="Protocol\DelaySetHostedObject.cs" />
     <Compile Include="Protocol\SendNoReply.cs" />
     <Compile Include="Protocol\SendRaw.cs" />
