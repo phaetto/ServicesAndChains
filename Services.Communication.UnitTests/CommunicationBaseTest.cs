@@ -80,16 +80,19 @@
                 Assert.IsTrue(setupResult);
                 Assert.IsTrue(appServer.Start());
 
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
 
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
 
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
             }
 
@@ -150,8 +153,9 @@
                     new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true));
             try
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
             }
             finally
@@ -164,8 +168,9 @@
                     new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true));
             try
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
             }
             finally
@@ -176,8 +181,9 @@
             using (var server = new ServerHost("127.0.0.1", 7234).Do(
                             new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
                 server.Close();
             }
@@ -185,8 +191,9 @@
             using (var server = new ServerHost("127.0.0.1", 7234).Do(
                             new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
                 server.Close();
             }
@@ -194,8 +201,9 @@
             using (var server = new ServerHost("127.0.0.1", 7234).Do(
                             new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
                 server.Close();
             }
@@ -203,8 +211,9 @@
             using (var server = new ServerHost("127.0.0.1", 7234).Do(
                             new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
                 server.Close();
             }
@@ -212,8 +221,9 @@
             using (var server = new ServerHost("127.0.0.1", 7234).Do(
                             new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 7234).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
                 server.Close();
             }
@@ -261,8 +271,9 @@
             using (new ServerHost("127.0.0.1", 3997).Do(
                         new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 3997).Do(new OpenConnection()).Do(new Send(testAction)))
+                using (var connection = new Client("127.0.0.1", 3997).Do(new OpenConnection()))
                 {
+                    connection.Do(testAction);
                 }
             }
 
@@ -286,9 +297,11 @@
                         protocolType: Protocol.ProtocolType.Http)))
             {
                 using (
-                    new Client("localhost", 3996, "/custom path/awesome service").Do(new OpenConnection(protocolType: Protocol.ProtocolType.Http))
-                                                 .Do(new Send(testAction)))
+                    var connection =
+                        new Client("localhost", 3996, "/custom path/awesome service").Do(
+                            new OpenConnection(protocolType: Protocol.ProtocolType.Http)))
                 {
+                    connection.Do(testAction);
                 }
             }
 
@@ -343,17 +356,19 @@
                             protocolType: Protocol.ProtocolType.Http)))
                 {
                     using (
-                        new Client("localhost", 3995, "/custom-path").Do(
-                            new OpenConnection(protocolType: Protocol.ProtocolType.Http))
-                                                                     .Do(new Send(testAction)))
+                        var connection =
+                            new Client("localhost", 3995, "/custom-path").Do(
+                                new OpenConnection(protocolType: Protocol.ProtocolType.Http)))
                     {
+                        connection.Do(testAction);
                     }
 
                     using (
-                        new Client("localhost", 3995, "/custom-path-2").Do(
-                            new OpenConnection(protocolType: Protocol.ProtocolType.Http))
-                                                                     .Do(new Send(testAction)))
+                        var connection =
+                            new Client("localhost", 3995, "/custom-path-2").Do(
+                                new OpenConnection(protocolType: Protocol.ProtocolType.Http)))
                     {
+                        connection.Do(testAction);
                     }
                 }
             }
@@ -380,7 +395,7 @@
             using (new ServerHost("127.0.0.1", 15010).Do(
                         new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 15010).Do(new OpenConnection()).Do(new Send(items)))
+                using (new Client("127.0.0.1", 15010).Do(new OpenConnection()).Do(items))
                 {
                 }
             }
@@ -406,7 +421,7 @@
                 {
                     using (
                         new Client("127.0.0.1", 15002).Do(new OpenConnection())
-                                                      .Do(new Send(testAction)))
+                                                      .Do(testAction))
                     {
                         Assert.Fail("Execution should never reach here");
                     }
