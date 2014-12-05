@@ -11,7 +11,7 @@
         IAuthorizableAction,
         IApplicationAuthorizableAction
     {
-        protected override GetFileTypesReturnData ActRemotely(AdministrationContext context)
+        public override GetFileTypesReturnData Act(AdministrationContext context)
         {
             return new GetFileTypesReturnData
                    {

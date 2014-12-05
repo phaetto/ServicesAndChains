@@ -18,13 +18,13 @@
             executionerRepo = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar;
         }
 
-        protected override StartWorkerData ActRemotely(AdministrationContext context)
+        public override StartWorkerData Act(AdministrationContext context)
         {
             var repoServicePath = context.RepositoryFolder + Data.ServiceName + Path.DirectorySeparatorChar;
             if (Data.Version == 0 && Directory.Exists(repoServicePath))
             {
                 Data.Version =
-                    context.DoRemotable(new GetAllRepoServices())
+                    context.Do(new GetAllRepoServices())
                         .RepoServices[Data.ServiceName]
                         .OrderByDescending(x => x.Version).First().Version;
             }

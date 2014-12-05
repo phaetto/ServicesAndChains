@@ -12,7 +12,7 @@
 
         public AdministrationContext Act(AdministrationContext context)
         {
-            var repoServices = context.DoRemotable(new GetAllRepoServices());
+            var repoServices = context.Do(new GetAllRepoServices());
 
             if (repoServices.RepoServices.ContainsKey(ServiceName))
             {

@@ -13,7 +13,7 @@
         {
         }
 
-        protected override GetServiceFilesReturnData ActRemotely(AdministrationContext context)
+        public override GetServiceFilesReturnData Act(AdministrationContext context)
         {
             var repositoryPath = context.RepositoryFolder + Data.ServiceName + Path.DirectorySeparatorChar
                 + Data.Version + Path.DirectorySeparatorChar;

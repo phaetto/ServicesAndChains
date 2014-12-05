@@ -11,7 +11,7 @@
         IAuthorizableAction,
         IApplicationAuthorizableAction
     {
-        protected override GetAllRepoServicesReturnData ActRemotely(AdministrationContext context)
+        public override GetAllRepoServicesReturnData Act(AdministrationContext context)
         {
             if (string.IsNullOrEmpty(context.RepositoryFolder))
             {

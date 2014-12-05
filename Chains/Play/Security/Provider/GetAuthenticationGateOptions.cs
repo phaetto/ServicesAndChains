@@ -2,7 +2,7 @@
 {
     public sealed class GetAuthenticationGateOptions : RemotableAction<ProviderAuthenticationGateData, IAuthenticationGate>
     {
-        protected override ProviderAuthenticationGateData ActRemotely(IAuthenticationGate context)
+        public override ProviderAuthenticationGateData Act(IAuthenticationGate context)
         {
             return context.GetAuthorizationData();
         }

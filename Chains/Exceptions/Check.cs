@@ -19,6 +19,20 @@
             throw new ArgumentNullException(name, message ?? string.Format("Parameter '{0}' is null", name));
         }
 
+        public static void ArgumentNullOrEmpty(Expression<Func<string>> action, string message = null)
+        {
+            var testObject = action.Compile()();
+
+            if (!string.IsNullOrEmpty(testObject))
+            {
+                return;
+            }
+
+            var expression = (MemberExpression)action.Body;
+            var name = expression.Member.Name;
+            throw new ArgumentNullException(name, message ?? string.Format("Parameter '{0}' is null or empty", name));
+        }
+
         public static void Argument<T>(bool condition, Expression<Func<T>> action, string message)
         {
             if (!condition)

@@ -120,15 +120,16 @@ namespace Services.Communication.Protocol
         private string ApplyDataOnExecutionChain(ExecutionChain chainInstance, ExecutableActionSpecification[] actionSpecifications)
         {
             string dataToReturn;
+            ExecutionResultContext resultContext = null;
 
             foreach (var actionSpecification in actionSpecifications)
             {
-                chainInstance.Do(new ExecuteActionFromSpecification(actionSpecification));
+                resultContext = chainInstance.Do(new ExecuteActionFromSpecification(actionSpecification));
             }
 
-            if (ReplayChain.LastExecutedAction is IRemotable)
+            if (resultContext.LastExecutedAction is IRemotable)
             {
-                dataToReturn = Serialize(chainInstance.LastExecutedAction as IRemotable);
+                dataToReturn = resultContext.ToSpecification().SerializeToJson();
             }
             else
             {
@@ -141,11 +142,6 @@ namespace Services.Communication.Protocol
         private ExecutableActionSpecification[] Deserialize(string data)
         {
             return DeserializableSpecification<ExecutableActionSpecification>.DeserializeManyFromJson(data);
-        }
-
-        private string Serialize(IRemotable action)
-        {
-            return action.ReturnData.SerializeToJson();
         }
 
         private string DefaultSerializedValue()

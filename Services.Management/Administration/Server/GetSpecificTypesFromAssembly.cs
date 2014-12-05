@@ -13,7 +13,7 @@ namespace Chains.Play.Installation
         {
         }
 
-        protected override GetTypesFromAssemblyReturnData ActRemotely(InstallationContext context)
+        public override GetTypesFromAssemblyReturnData Act(InstallationContext context)
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             var types = assemblies.First(x => x.GetName().Name == Path.GetFileNameWithoutExtension(Data.FileName))

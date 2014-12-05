@@ -5,7 +5,7 @@ namespace Services.Communication.DataStructures.Queues.Reliable
 
     public sealed class Dequeue : RemotableAction<UnacknowledgedItem, QueueContext>
     {
-        protected override UnacknowledgedItem ActRemotely(QueueContext context)
+        public override UnacknowledgedItem Act(QueueContext context)
         {
             var actionSpecification = new ExecutableActionSpecification();
             lock (context.UnacknowledgedQueuedItemsLock)

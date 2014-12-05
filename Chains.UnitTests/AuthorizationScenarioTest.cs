@@ -114,7 +114,7 @@
                 // Get the authentication options from server
                 var authorizationOptions =
                     executionChain.Do(
-                        new ExecuteActionAsRemotable<ProviderAuthenticationGateData>(new GetAuthenticationGateOptions()));
+                        new ExecuteAction<ProviderAuthenticationGateData>(new GetAuthenticationGateOptions()));
 
                 Assert.AreEqual(LoginUrlMethod.PostRequest, authorizationOptions.LoginUrlMethod);
 

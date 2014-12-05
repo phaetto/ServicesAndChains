@@ -250,38 +250,5 @@
 
             return (T)this;
         }
-
-        public ReturnChainType DoRemotable<ReturnChainType>(
-            IChainableAction<T, T> action)
-        {
-            Check.Argument(action is IRemotable, () => action, "The action must be an IRemotable object");
-
-            this.Do(action);
-            var remotable = action as IRemotable;
-            return (ReturnChainType)Convert.ChangeType(remotable.ReturnData.Data, typeof(ReturnChainType));
-        }
-
-        public TReceive DoRemotable<TReceive>(RemotableAction<TReceive, T> action)
-            where TReceive : SerializableSpecification, new()
-        {
-            this.Do(action);
-
-            return (TReceive)Convert.ChangeType(action.ReturnData.Data, typeof(TReceive));
-        }
-
-        public TReceive DoRemotable<TSend, TReceive>(RemotableActionWithData<TSend, TReceive, T> action)
-            where TSend : SerializableSpecification, new()
-        {
-            this.Do(action);
-
-            return (TReceive)Convert.ChangeType(action.ReturnData.Data, typeof(TReceive));
-        }
-
-        public TReceive DoRemotable<TSend, TReceive>(RemotableActionWithSerializableData<TSend, TReceive, T> action)
-        {
-            this.Do(action);
-
-            return (TReceive)Convert.ChangeType(action.ReturnData.Data, typeof(TReceive));
-        }
     }
 }

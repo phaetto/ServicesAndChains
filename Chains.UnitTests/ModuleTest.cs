@@ -14,7 +14,7 @@
         {
             var executionChain = new ExecutionChain(new ContextForTestWithModules());
 
-            Assert.IsTrue(executionChain.Do(new ExecuteActionAsRemotable<bool>(new SupportsModule(typeof(ContextForTestWithModules).FullName))));
+            Assert.IsTrue(executionChain.Do(new ExecuteAction<bool>(new SupportsModule(typeof(ContextForTestWithModules).FullName))));
         }
 
         [TestMethod]
@@ -22,7 +22,7 @@
         {
             var executionChain = new ExecutionChain(new ContextForTestWithModules());
 
-            Assert.IsTrue(executionChain.Do(new ExecuteActionAsRemotable<bool>(new SupportsModule(typeof(ContextForTest2).FullName))));
+            Assert.IsTrue(executionChain.Do(new ExecuteAction<bool>(new SupportsModule(typeof(ContextForTest2).FullName))));
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@
         {
             var executionChain = new ExecutionChain(new ContextForTestWithModules());
 
-            Assert.IsFalse(executionChain.Do(new ExecuteActionAsRemotable<bool>(new SupportsModule(typeof(ContextForTest).FullName))));
+            Assert.IsFalse(executionChain.Do(new ExecuteAction<bool>(new SupportsModule(typeof(ContextForTest).FullName))));
         }
 
         [TestMethod]

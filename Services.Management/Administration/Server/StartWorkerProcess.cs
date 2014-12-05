@@ -30,7 +30,7 @@
         {
             try
             {
-                Data = context.DoRemotable(new PrepareWorkerProcessFiles(Data));
+                Data = context.Do(new PrepareWorkerProcessFiles(Data));
 
                 var destinationPath = context.ServicesFolder + Data.ServiceName + Path.DirectorySeparatorChar
                     + Data.Version + Path.DirectorySeparatorChar + Data.Id + Path.DirectorySeparatorChar;

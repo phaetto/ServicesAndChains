@@ -81,10 +81,11 @@
     <Compile Include="Persistence\MemoryPersistentStore.cs" />
     <Compile Include="Persistence\PersistentChain.cs" />
     <Compile Include="Persistence\SerializableSpecificationWithId.cs" />
+    <Compile Include="Play\ExecuteActionAndGetResult.cs" />
     <Compile Include="Play\Debug\AttachDebugger.cs" />
     <Compile Include="Play\Debug\BreakDebugger.cs" />
     <Compile Include="Play\Debug\DebugContext.cs" />
-    <Compile Include="Play\ExecuteActionAsRemotable.cs" />
+    <Compile Include="Play\ExecutionResultContext.cs" />
     <Compile Include="Play\Installation\UninstallService.cs" />
     <Compile Include="Play\Installation\GetTypesFromAssemblyReturnData.cs" />
     <Compile Include="Play\Installation\GetTypesFromAssembly.cs" />
