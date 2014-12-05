@@ -119,6 +119,7 @@
     <Compile Include="Administration\Worker\CloseService.cs" />
     <Compile Include="Administration\Worker\ConnectHostedObject.cs" />
     <Compile Include="Administration\Worker\ConnectWorkUnitToAdmin.cs" />
+    <Compile Include="Administration\Worker\StartWorkUnitContextServer.cs" />
     <Compile Include="Administration\Worker\PrepareAssembliesInWorkUnit.cs" />
     <Compile Include="Administration\Worker\IWorkerEvents.cs">
       <SubType>Code</SubType>

@@ -46,17 +46,6 @@ namespace Services.Management.Administration.Worker
             this.Session = session;
             this.ApiKey = apiKey;
             this.processExit = processExit;
-
-            if (!string.IsNullOrEmpty(WorkerData.ContextServerHost) && WorkerData.ContextServerPort > 0)
-            {
-                var httpPath = WorkerData.ContextHttpData != null ? WorkerData.ContextHttpData.Path : null;
-                var protocolType = WorkerData.ContextHttpData != null ? ProtocolType.Http : ProtocolType.Tcp;
-                var threads = WorkerData.ContextServerThreads > 1 ? WorkerData.ContextServerThreads : 1;
-
-                ContextServer =
-                    new ServerHost(WorkerData.ContextServerHost, WorkerData.ContextServerPort, httpPath, threads).Do(
-                        new StartListen(protocolType: protocolType));
-            }
         }
 
         public void Stop()
