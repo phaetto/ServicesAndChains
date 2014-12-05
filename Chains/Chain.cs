@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Chains.Exceptions;
-    using Chains.Play;
 
     public class Chain<T> : AbstractChain
         where T : Chain<T>
