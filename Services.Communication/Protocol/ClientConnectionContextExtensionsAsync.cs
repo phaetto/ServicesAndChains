@@ -41,5 +41,10 @@
         {
             return context.Do(new Send(actionSpecifications));
         }
+
+        public static Task<string> Do(this Task<ClientConnectionContext> context, string rawInput)
+        {
+            return context.Do(new SendRaw(rawInput));
+        }
     }
 }
