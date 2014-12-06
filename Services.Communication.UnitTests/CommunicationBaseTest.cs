@@ -412,27 +412,16 @@
                     ChangeToValue = "over tcp"
                 });
 
-            var hasCalled = false;
-            Exception exception = null;
-
-            try
-            {
-                using (new ServerHost("127.0.0.1", 15002).Do(new StartListen(typeof(ContextForTest).FullName)))
+            Test.Throws<NotSupportedException>(
+                () =>
                 {
-                    using (
-                        new Client("127.0.0.1", 15002).Do(new OpenConnection())
-                                                      .Do(testAction))
+                    using (new ServerHost("127.0.0.1", 15002).Do(new StartListen(typeof(ContextForTest).FullName)))
                     {
-                        Assert.Fail("Execution should never reach here");
+                        using (new Client("127.0.0.1", 15002).Do(new OpenConnection()).Do(testAction))
+                        {
+                        }
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
-
-            Assert.IsNotNull(exception);
+                });
         }
 
         private void SendMessage()
@@ -518,7 +507,7 @@
                 {
                     using (var writer = new StreamWriter(socketStream, Encoding.ASCII))
                     {
-                        writer.Write(string.Format("{0} ", command));
+                        writer.Write("{0} ", command);
                         writer.Write(
                             SerializableSpecification.SerializeManyToJson(
                                 new[]
