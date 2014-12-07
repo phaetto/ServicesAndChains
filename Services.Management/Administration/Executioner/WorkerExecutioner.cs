@@ -290,6 +290,13 @@ namespace Services.Management.Administration.Executioner
                     "Source directory '" + SourcePath + "' does not exists");
             }
 
+            var filesToDelete = Directory.GetFiles(DestinationPath, "*", SearchOption.TopDirectoryOnly);
+
+            foreach (var file in filesToDelete)
+            {
+                File.Delete(file);
+            }
+
             var allDirectories = Directory.GetDirectories(SourcePath, "*", SearchOption.AllDirectories);
             foreach (string dirPath in allDirectories)
             {

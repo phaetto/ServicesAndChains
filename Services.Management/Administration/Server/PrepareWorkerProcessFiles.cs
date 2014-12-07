@@ -45,6 +45,11 @@
                 context.ReportData[id].AdviceGiven = AdviceState.Continue;
             }
 
+            if (Directory.Exists(destinationPath))
+            {
+                DeleteFolderAndFiles(destinationPath);
+            }
+
             if (Directory.Exists(sourcePath))
             {
                 CopyFiles(context, sourcePath, destinationPath);
@@ -121,6 +126,23 @@
 
                 File.Copy(file, newFile);
             }
+        }
+
+        internal static void DeleteFolderAndFiles(string folder)
+        {
+            var folderToDelete = new DirectoryInfo(folder);
+
+            foreach (var file in folderToDelete.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (var dir in folderToDelete.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+
+            folderToDelete.Delete();
         }
 
         public string Session { get; set; }

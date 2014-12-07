@@ -13,7 +13,6 @@
     using Chains.Play.Web;
     using Services.Communication.DataStructures.NameValue;
     using Services.Communication.Protocol;
-    using Services.Management.Administration.Update;
     using Services.Management.Administration.Worker;
 
     public sealed class AdministrationContext : ChainWithParent<AdministrationContext, ServerHost>, IDisposable, IModular
