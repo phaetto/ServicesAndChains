@@ -52,7 +52,7 @@
 
             if (Directory.Exists(sourcePath))
             {
-                CopyFiles(context, sourcePath, destinationPath);
+                CopyFiles(sourcePath, destinationPath);
             }
 
             CopyFilesWithoutRepoAndServices(context, executionerRepo, destinationPath);
@@ -96,7 +96,7 @@
             }
         }
 
-        internal static void CopyFiles(AdministrationContext context, string SourcePath, string DestinationPath)
+        internal static void CopyFiles(string SourcePath, string DestinationPath)
         {
             if (!Directory.Exists(SourcePath))
             {

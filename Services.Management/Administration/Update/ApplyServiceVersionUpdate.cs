@@ -33,7 +33,7 @@
             var repositoryPath = context.RepositoryFolder + Data.ServiceName + Path.DirectorySeparatorChar
                 + (lastVersion + 1) + Path.DirectorySeparatorChar;
 
-            PrepareWorkerProcessFiles.CopyFiles(context, Data.UpdateFolderOrFile, repositoryPath);
+            PrepareWorkerProcessFiles.CopyFiles(Data.UpdateFolderOrFile, repositoryPath);
 
             return context;
         }

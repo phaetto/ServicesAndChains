@@ -17,7 +17,7 @@
 
         public AdministrationContext Act(AdministrationContext context)
         {
-            PrepareWorkerProcessFiles.CopyFiles(context, Path.GetDirectoryName(Data.File), Data.FolderToUpdate);
+            PrepareWorkerProcessFiles.CopyFiles(Path.GetDirectoryName(Data.File), Data.FolderToUpdate);
 
             return context;
         }
