@@ -1,6 +1,5 @@
 ﻿namespace Services.Management.UnitTests
 {
-    using System;
     using System.Collections.Generic;
     using System.Security;
     using Chains.Play.Web;
@@ -147,24 +146,16 @@
 
             using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithModules, processExit: new NoProcessExit()))
             {
-                Exception exception = null;
-
                 executioner.Execute();
 
-                try
-                {
-                    using (var context = new Client("localhost", 10501).Do(new OpenConnection()))
+                Test.Throws<SecurityException>(
+                    () =>
                     {
-                        context.Do(new Send(new SecuredAuthorizableActionForTest(new ReproducibleTestData())));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    exception = ex;
-                }
-
-                Assert.IsNotNull(exception);
-                Assert.IsInstanceOfType(exception, typeof(SecurityException));
+                        using (var context = new Client("localhost", 10501).Do(new OpenConnection()))
+                        {
+                            context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
+                        }
+                    });
             }
         }
 
@@ -195,24 +186,16 @@
 
             using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithModules, processExit: new NoProcessExit()))
             {
-                Exception exception = null;
-
                 executioner.Execute();
 
-                try
-                {
-                    using (var context = new Client("localhost", 10501, "/awesome-path").Do(new OpenConnection(protocolType: ProtocolType.Http)))
+                Test.Throws<SecurityException>(
+                    () =>
                     {
-                        context.Do(new Send(new SecuredAuthorizableActionForTest(new ReproducibleTestData())));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    exception = ex;
-                }
-
-                Assert.IsNotNull(exception);
-                Assert.IsInstanceOfType(exception, typeof(SecurityException));
+                        using (var context = new Client("localhost", 10501, "/awesome-path").Do(new OpenConnection(protocolType: ProtocolType.Http)))
+                        {
+                            context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
+                        }
+                    });
             }
         }
 
@@ -239,24 +222,16 @@
 
             using (var executioner = new WorkerExecutioner(ExecutionMode.Worker, workerDataWithModules, processExit: new NoProcessExit()))
             {
-                Exception exception = null;
-
                 executioner.Execute();
 
-                try
-                {
-                    using (var context = new Client("localhost", 10501).Do(new OpenConnection()))
+                Test.Throws<SecurityException>(
+                    () =>
                     {
-                        context.Do(new Send(new ReproducibleTestAction(new ReproducibleTestData())));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    exception = ex;
-                }
-
-                Assert.IsNotNull(exception);
-                Assert.IsInstanceOfType(exception, typeof(InvalidOperationException));
+                        using (var context = new Client("localhost", 10501).Do(new OpenConnection()))
+                        {
+                            context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
+                        }
+                    });
             }
         }
 
@@ -279,7 +254,7 @@
 
                 using (var context = new Client("localhost", 10501).Do(new OpenConnection()))
                 {
-                    context.Do(new Send(new ReproducibleTestAction(new ReproducibleTestData())));
+                    context.Do(new ReproducibleTestAction(new ReproducibleTestData()));
                 }
             }
         }
