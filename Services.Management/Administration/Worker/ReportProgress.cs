@@ -4,6 +4,7 @@ namespace Services.Management.Administration.Worker
     using System.Collections.Generic;
     using Chains.Play;
     using Services.Management.Administration.Server;
+    using Services.Management.Administration.Server.LastWellKnownConfiguration;
 
     public sealed class ReportProgress : RemotableActionWithData<ReportProgressData, ReportProgressReturnData, AdministrationContext>
     {
@@ -15,6 +16,11 @@ namespace Services.Management.Administration.Worker
         public override ReportProgressReturnData Act(AdministrationContext context)
         {
             var key = Data.StartData.Id;
+
+            if (!context.ReportData.ContainsKey(key) || context.ReportData[key].WorkerState == WorkUnitState.Stopping)
+            {
+                context.LastWellKnownConfigurationContext.Do(new EnqueueService(key));
+            }
 
             if (!context.ReportData.ContainsKey(key))
             {
