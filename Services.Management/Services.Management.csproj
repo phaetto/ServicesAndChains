@@ -85,6 +85,10 @@
     <Compile Include="Administration\Server\GetServiceFiles.cs" />
     <Compile Include="Administration\Server\GetServiceFilesData.cs" />
     <Compile Include="Administration\Server\GetSpecificTypesFromAssembly.cs" />
+    <Compile Include="Administration\Server\LastWellKnownConfiguration\BeginLastWellKnownConfigurationLoop.cs" />
+    <Compile Include="Administration\Server\LastWellKnownConfiguration\CreateLastKnownConfiguration.cs" />
+    <Compile Include="Administration\Server\LastWellKnownConfiguration\EnqueueService.cs" />
+    <Compile Include="Administration\Server\LastWellKnownConfiguration\LastWellKnownConfigurationContext.cs" />
     <Compile Include="Administration\Server\PrepareWorkerProcessFiles.cs" />
     <Compile Include="Administration\Server\RestartWorkerProcess.cs" />
     <Compile Include="Administration\Server\GetAllRepoServices.cs" />

@@ -6,6 +6,7 @@
     using Chains.Play;
     using Chains.Play.Web;
     using Services.Communication.Protocol;
+    using Services.Management.Administration.Server.LastWellKnownConfiguration;
 
     public sealed class EnableAdminServer : IChainableAction<ServerHost, AdministrationContext>
     {
@@ -55,6 +56,8 @@
             adminContext.AdminTasksThread.Start();
 
             adminContext.CleanUpMemoryDbService();
+
+            adminContext.LastWellKnownConfigurationContext.Do(new BeginLastWellKnownConfigurationLoop());
 
             return adminContext;
         }

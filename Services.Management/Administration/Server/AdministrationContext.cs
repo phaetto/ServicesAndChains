@@ -13,6 +13,7 @@
     using Chains.Play.Web;
     using Services.Communication.DataStructures.NameValue;
     using Services.Communication.Protocol;
+    using Services.Management.Administration.Server.LastWellKnownConfiguration;
     using Services.Management.Administration.Worker;
 
     public sealed class AdministrationContext : ChainWithParent<AdministrationContext, ServerHost>, IDisposable, IModular
@@ -28,6 +29,9 @@
         public readonly string ServicesFolder;
         public readonly string DataFolder;
         public readonly string HostProcessName;
+
+        internal readonly LastWellKnownConfigurationContext LastWellKnownConfigurationContext;
+
         public AdministrationData AdministrationData = new AdministrationData();
 
         public List<AbstractChain> Modules { get; set; }
@@ -50,6 +54,7 @@
             Dictionary<string, WorkUnitReportData> previousReportData = null)
             : base(serverHost)
         {
+            LastWellKnownConfigurationContext = new LastWellKnownConfigurationContext(this);
             this.Modules = new List<AbstractChain>();
             this.ReportData = previousReportData ?? ReportData;
             this.AdministrationData.StartedOn = DateTime.UtcNow;
