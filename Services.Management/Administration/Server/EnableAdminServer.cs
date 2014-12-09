@@ -7,6 +7,7 @@
     using Chains.Play.Web;
     using Services.Communication.Protocol;
     using Services.Management.Administration.Server.LastWellKnownConfiguration;
+    using Services.Management.Administration.Server.Processes;
 
     public sealed class EnableAdminServer : IChainableAction<ServerHost, AdministrationContext>
     {
@@ -38,22 +39,16 @@
 
             adminContext.AdminTasksThread = new Thread(
                 () =>
-                {
-                    if (previousAdminReportData == null)
-                    {
-                        adminContext.CleanAdminReports();
-                        adminContext.Do(new StartServicesExtensionsWellKnownService());
-                        Thread.Sleep(1000);
-                    }
-
+                {   
                     while (true)
                     {
-                        adminContext.CleanAdminReports();
-                        Thread.Sleep(1000);
+                        Thread.Sleep(60000);
                     }
                 });
 
             adminContext.AdminTasksThread.Start();
+
+            adminContext.Do(new BeginAdminLoop(previousAdminReportData == null));
 
             adminContext.CleanUpMemoryDbService();
 
