@@ -102,8 +102,9 @@ namespace Services.Management.Administration.Executioner
                         // Needs to be attached to the object to finalize it before running any actions
                         workUnitContext = new WorkUnitContext(WorkerData, Session, ApiKey, processExit);
 
-                        workUnitContext.Do(new StartWorkUnitContextServer())
+                        workUnitContext
                             .Do(new PrepareAssembliesInWorkUnit())
+                            .Do(new StartWorkUnitContextServer())
                             .Do(new ConnectWorkUnitToAdmin());
 
                         WrappedContext = CreateHostedContext(workUnitContext);
