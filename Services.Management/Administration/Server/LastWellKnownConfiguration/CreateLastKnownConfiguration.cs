@@ -30,8 +30,11 @@
                 return context;
             }
 
-            var dataLwkcFolder = context.Parent.DataFolder + "LastWellKnownConfiguration" + Path.DirectorySeparatorChar
-                                 + "AssemblyBlending" + Path.DirectorySeparatorChar + reportData.StartData.ServiceName
+            var dataLwkcFolder = context.Parent.DataFolder + LastWellKnownConfigurationContext.ConfigurationFolderName
+                                 + Path.DirectorySeparatorChar
+                                 + LastWellKnownConfigurationContext.AssemblyBlendingFolderName
+                                 + Path.DirectorySeparatorChar + reportData.StartData.ServiceName
+                                 + Path.DirectorySeparatorChar + reportData.StartData.Version
                                  + Path.DirectorySeparatorChar;
 
             var sourcePath = context.Parent.ServicesFolder + reportData.StartData.ServiceName + Path.DirectorySeparatorChar

@@ -72,6 +72,9 @@
     <Compile Include="Administration\Executioner\WorkerDataSessionAndApiKey.cs" />
     <Compile Include="Administration\Executioner\WorkerExecutioner.cs" />
     <Compile Include="Administration\Server\AdministrationData.cs" />
+    <Compile Include="Administration\Server\LastWellKnownConfiguration\RestoreLastKnownConfiguration.cs" />
+    <Compile Include="Administration\Server\LastWellKnownConfiguration\QueueStartProcessData.cs" />
+    <Compile Include="Administration\Server\LastWellKnownConfiguration\ServiceStartedData.cs" />
     <Compile Include="Administration\Server\Tasks\BeginAdminLoop.cs" />
     <Compile Include="Administration\Server\CloseAdminForUpdate.cs" />
     <Compile Include="Administration\Server\GetAdministratorData.cs" />

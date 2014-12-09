@@ -5,7 +5,13 @@
 
     public sealed class LastWellKnownConfigurationContext : ChainWithParent<LastWellKnownConfigurationContext, AdministrationContext>
     {
+        public const string ConfigurationFolderName = "LastWellKnownConfiguration";
+
+        public const string AssemblyBlendingFolderName = "AssemblyBlending";
+
         internal readonly ConcurrentQueue<string> ServicesToCreateSnapshotConcurrentQueue = new ConcurrentQueue<string>();
+
+        internal readonly ConcurrentQueue<ServiceStartedData> ServicesThatHaveStartedConcurrentQueue = new ConcurrentQueue<ServiceStartedData>();
 
         public LastWellKnownConfigurationContext(AdministrationContext chain)
             : base(chain)
