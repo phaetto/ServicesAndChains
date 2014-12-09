@@ -80,7 +80,7 @@ namespace Services.Management.Administration.Executioner
                                 new Client(adminHost, WorkerData.AdminPort).Do(new OpenConnection()))
                         {
                             adminServer
-                                .Do(new Send(new CloseAdminForUpdate { Session = Session, ApiKey = ApiKey }))
+                                .Do(new CloseAdminForUpdate { Session = Session, ApiKey = ApiKey })
                                 .Do(new WaitUntilServerIsDown());
                         }
 
@@ -124,7 +124,7 @@ namespace Services.Management.Administration.Executioner
                             var adminServer =
                                 new Client(WorkerData.AdminHost, WorkerData.AdminPort).Do(new OpenConnection()))
                         {
-                            adminServer.Do(new Send(new PrepareWorkerProcessFiles(WorkerData) { Session = Session, ApiKey = ApiKey }));
+                            adminServer.Do(new PrepareWorkerProcessFiles(WorkerData) { Session = Session, ApiKey = ApiKey });
                         }
 
                         break;
@@ -135,7 +135,7 @@ namespace Services.Management.Administration.Executioner
                             var adminServer =
                                 new Client(WorkerData.AdminHost, WorkerData.AdminPort).Do(new OpenConnection()))
                         {
-                            adminServer.Do(new Send(new StartWorkerProcess(WorkerData) { Session = Session, ApiKey = ApiKey }));
+                            adminServer.Do(new StartWorkerProcess(WorkerData) { Session = Session, ApiKey = ApiKey });
                         }
 
                         break;
