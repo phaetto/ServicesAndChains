@@ -1,4 +1,4 @@
-﻿namespace Services.Management.Administration.Server.Processes
+﻿namespace Services.Management.Administration.Server.Tasks
 {
     using System.Threading.Tasks;
     using Chains;

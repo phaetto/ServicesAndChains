@@ -8,9 +8,9 @@
         public Task<LastWellKnownConfigurationContext> Act(LastWellKnownConfigurationContext context)
         {
             string serviceToProcess;
-            if (context.ServicesToProcessConcurrentQueue.TryDequeue(out serviceToProcess))
+            if (context.ServicesToCreateSnapshotConcurrentQueue.TryDequeue(out serviceToProcess))
             {
-                context.Do(new CreateLastWellKnownConfiguration(serviceToProcess));
+                context.Do(new CreateLastWellKnownConfigurationSnapshot(serviceToProcess));
 
                 TaskEx.FromResult(context);
             }

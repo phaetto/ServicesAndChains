@@ -7,7 +7,7 @@
     using Chains.Play.Web;
     using Services.Communication.Protocol;
     using Services.Management.Administration.Server.LastWellKnownConfiguration;
-    using Services.Management.Administration.Server.Processes;
+    using Services.Management.Administration.Server.Tasks;
 
     public sealed class EnableAdminServer : IChainableAction<ServerHost, AdministrationContext>
     {

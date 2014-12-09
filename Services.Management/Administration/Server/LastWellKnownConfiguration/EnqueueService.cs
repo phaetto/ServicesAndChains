@@ -13,7 +13,7 @@
 
         public LastWellKnownConfigurationContext Act(LastWellKnownConfigurationContext context)
         {
-            context.ServicesToProcessConcurrentQueue.Enqueue(serviceToCheck);
+            context.ServicesToCreateSnapshotConcurrentQueue.Enqueue(serviceToCheck);
 
             return context;
         }

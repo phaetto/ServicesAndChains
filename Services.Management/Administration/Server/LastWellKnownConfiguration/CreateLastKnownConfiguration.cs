@@ -4,11 +4,11 @@
     using Chains;
     using Services.Management.Administration.Worker;
 
-    internal sealed class CreateLastWellKnownConfiguration : IChainableAction<LastWellKnownConfigurationContext, LastWellKnownConfigurationContext>
+    internal sealed class CreateLastWellKnownConfigurationSnapshot : IChainableAction<LastWellKnownConfigurationContext, LastWellKnownConfigurationContext>
     {
         private readonly string serviceId;
 
-        public CreateLastWellKnownConfiguration(string serviceId)
+        public CreateLastWellKnownConfigurationSnapshot(string serviceId)
         {
             this.serviceId = serviceId;
         }

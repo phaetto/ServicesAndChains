@@ -5,7 +5,7 @@
 
     public sealed class LastWellKnownConfigurationContext : ChainWithParent<LastWellKnownConfigurationContext, AdministrationContext>
     {
-        internal readonly ConcurrentQueue<string> ServicesToProcessConcurrentQueue = new ConcurrentQueue<string>();
+        internal readonly ConcurrentQueue<string> ServicesToCreateSnapshotConcurrentQueue = new ConcurrentQueue<string>();
 
         public LastWellKnownConfigurationContext(AdministrationContext chain)
             : base(chain)
