@@ -62,7 +62,7 @@
                 AdminPort = AdministrationContext.Parent.Parent.Port,
                 ContextType = typeof(HostedContextForTest).FullName,
                 ContextServerHost = "127.0.0.1",
-                ContextServerPort = 10501,
+                ContextServerPort = 10502,
                 ContextHttpData = new StartWorkerHttpData
                                   {
                                       Path = "/"
@@ -132,7 +132,7 @@
                                             AdminPort = AdministrationContext.Parent.Parent.Port,
                                             ContextType = typeof(ContextForTestWithModules).FullName,
                                             ContextServerHost = "127.0.0.1",
-                                            ContextServerPort = 10501,
+                                            ContextServerPort = 10503,
                                             Id = "test",
                                             Modules = new List<ModuleStartEntry>
                                                       {
@@ -151,7 +151,7 @@
                 Test.Throws<SecurityException>(
                     () =>
                     {
-                        using (var context = new Client("localhost", 10501).Do(new OpenConnection()))
+                        using (var context = new Client("localhost", 10503).Do(new OpenConnection()))
                         {
                             context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
                         }
@@ -168,7 +168,7 @@
                 AdminPort = AdministrationContext.Parent.Parent.Port,
                 ContextType = typeof(ContextForTestWithModules).FullName,
                 ContextServerHost = "127.0.0.1",
-                ContextServerPort = 10501,
+                ContextServerPort = 10504,
                 Id = "test",
                 ContextHttpData = new StartWorkerHttpData
                                   {
@@ -191,7 +191,7 @@
                 Test.Throws<SecurityException>(
                     () =>
                     {
-                        using (var context = new Client("localhost", 10501, "/awesome-path").Do(new OpenConnection(protocolType: ProtocolType.Http)))
+                        using (var context = new Client("localhost", 10504, "/awesome-path").Do(new OpenConnection(protocolType: ProtocolType.Http)))
                         {
                             context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
                         }
@@ -208,7 +208,7 @@
                 AdminPort = AdministrationContext.Parent.Parent.Port,
                 ContextType = typeof(ContextForTestWithModules).FullName,
                 ContextServerHost = "127.0.0.1",
-                ContextServerPort = 10501,
+                ContextServerPort = 10505,
                 Id = "test",
                 Modules = new List<ModuleStartEntry>
                                                       {
@@ -227,7 +227,7 @@
                 Test.Throws<SecurityException>(
                     () =>
                     {
-                        using (var context = new Client("localhost", 10501).Do(new OpenConnection()))
+                        using (var context = new Client("localhost", 10505).Do(new OpenConnection()))
                         {
                             context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
                         }
@@ -244,7 +244,7 @@
                 AdminPort = AdministrationContext.Parent.Parent.Port,
                 ContextType = typeof(ContextForTest).FullName,
                 ContextServerHost = "127.0.0.1",
-                ContextServerPort = 10501,
+                ContextServerPort = 10506,
                 Id = "test",
             };
 
@@ -252,7 +252,7 @@
             {
                 executioner.Execute();
 
-                using (var context = new Client("localhost", 10501).Do(new OpenConnection()))
+                using (var context = new Client("localhost", 10506).Do(new OpenConnection()))
                 {
                     context.Do(new ReproducibleTestAction(new ReproducibleTestData()));
                 }
