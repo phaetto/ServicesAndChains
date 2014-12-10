@@ -186,6 +186,8 @@ namespace Services.Management.Administration.Executioner
                                                  Version = WorkerData.Version,
                                                  ContextHttpData = WorkerData.ContextHttpData,
                                                  ReportUpdateIntervalInSeconds = WorkerData.ReportUpdateIntervalInSeconds,
+                                                 ContextServerThreads = WorkerData.ContextServerThreads,
+                                                 FilesRepository = WorkerData.FilesRepository,
                                              };
 
             if (mode != ExecutionMode.UpdateAdministrationServer)

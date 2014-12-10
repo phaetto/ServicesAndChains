@@ -12,6 +12,7 @@ namespace Services.Management.Administration.Worker
         public int Version;
         public string HostProcessFileName;
         public string DllPath;
+        public string FilesRepository;
         public string ContextType;
         public object[] Parameters;
         public string AdminHost;
