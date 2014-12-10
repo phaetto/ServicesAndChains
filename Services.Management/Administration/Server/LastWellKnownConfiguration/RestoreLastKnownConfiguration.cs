@@ -28,7 +28,9 @@
                                  + Path.DirectorySeparatorChar
                                  + LastWellKnownConfigurationContext.AssemblyBlendingFolderName
                                  + Path.DirectorySeparatorChar + workerData.ServiceName + Path.DirectorySeparatorChar
-                                 + workerData.Version + Path.DirectorySeparatorChar;
+                                 + workerData.Version + Path.DirectorySeparatorChar
+                                 + CreateLastWellKnownConfigurationSnapshot.RemoveTypeSuffix(workerData.ContextType)
+                                 + Path.DirectorySeparatorChar;
 
                 if (Directory.Exists(destinationPath))
                 {
@@ -47,6 +49,8 @@
             }
 
             PrepareWorkerProcessFiles.CopyFiles(dataLwkcFolder, destinationPath);
+
+            workerData.FilesRepository = LastWellKnownConfigurationContext.LastWellKnownConfigurationFilesRepository;
 
             return context;
         }

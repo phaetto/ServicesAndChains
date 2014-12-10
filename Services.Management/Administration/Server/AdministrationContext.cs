@@ -23,6 +23,7 @@
         public const string RepositoryFolderName = "repository";
         public const string ServiceFolderName = "services";
         public const string DataFolderName = "data";
+        public const string DefaultFilesRepository = "Admin Repository";
 
         public readonly Dictionary<string, WorkUnitReportData> ReportData = new Dictionary<string, WorkUnitReportData>();
         public readonly string RepositoryFolder;

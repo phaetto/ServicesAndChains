@@ -1,8 +1,10 @@
 ﻿namespace Services.Management.Administration.Server
 {
+    using System;
     using Chains;
     using Chains.Play;
     using Chains.Play.Security;
+    using Services.Management.Administration.Server.LastWellKnownConfiguration;
     using Services.Management.Administration.Worker;
 
     public sealed class StartWorkerProcess : ReproducibleWithData<StartWorkerData>,
@@ -24,9 +26,34 @@
 
         public AdministrationContext Act(AdministrationContext context)
         {
-            Data = context.Do(new PrepareWorkerProcessFiles(Data));
+            try
+            {
+                Data = context.Do(new PrepareWorkerProcessFiles(Data));
 
-            return context.Do(new StartWorkerProcessWithoutPreparing(Data, triesLeft));
+                context.Do(new StartWorkerProcessWithoutPreparing(Data, triesLeft));
+            }
+            catch (Exception ex)
+            {
+                if (triesLeft > 0)
+                {
+                    context.Do(
+                        new StartWorkerProcessWithDelay(
+                            new WorkerDataWithDelay
+                            {
+                                DelayInSeconds = 10,
+                                WorkerData = Data,
+                                TriesLeft = triesLeft - 1
+                            }));
+                }
+                else
+                {
+                    context.LastWellKnownConfigurationContext.Do(new QueueStartProcessData(Data));
+                }
+
+                context.LogException(ex);
+            }
+
+            return context;
         }
 
         public string Session { get; set; }

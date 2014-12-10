@@ -59,6 +59,7 @@
 
             Data.Id = id;
             Data.HostProcessFileName = context.HostProcessName;
+            Data.FilesRepository = AdministrationContext.DefaultFilesRepository;
 
             return Data;
         }
@@ -125,6 +126,16 @@
                 }
 
                 File.Copy(file, newFile);
+            }
+        }
+
+        internal static void DeleteFiles(string folder)
+        {
+            var folderToDelete = new DirectoryInfo(folder);
+
+            foreach (var file in folderToDelete.GetFiles())
+            {
+                file.Delete();
             }
         }
 

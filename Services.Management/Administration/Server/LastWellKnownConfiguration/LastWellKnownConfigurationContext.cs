@@ -9,6 +9,8 @@
 
         public const string AssemblyBlendingFolderName = "AssemblyBlending";
 
+        public const string LastWellKnownConfigurationFilesRepository = "LastWellKnownConfiguration";
+
         internal readonly ConcurrentQueue<string> ServicesToCreateSnapshotConcurrentQueue = new ConcurrentQueue<string>();
 
         internal readonly ConcurrentQueue<ServiceStartedData> ServicesThatHaveStartedConcurrentQueue = new ConcurrentQueue<ServiceStartedData>();

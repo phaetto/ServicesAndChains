@@ -39,10 +39,10 @@
 
             adminContext.AdminTasksThread = new Thread(
                 () =>
-                {   
+                {
                     while (true)
                     {
-                        Thread.Sleep(60000);
+                        Thread.Sleep(5000);
                     }
                 });
 

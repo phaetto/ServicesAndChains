@@ -25,7 +25,8 @@
             var reportData = reports.Reports[serviceId];
 
             if (reportData.WorkerState == WorkUnitState.Abandoned
-                || reportData.StartData.ServiceName == AdministrationContext.GeneralServiceName)
+                || reportData.StartData.ServiceName == AdministrationContext.GeneralServiceName
+                || reportData.StartData.FilesRepository == LastWellKnownConfigurationContext.LastWellKnownConfigurationFilesRepository)
             {
                 return context;
             }
@@ -35,6 +36,7 @@
                                  + LastWellKnownConfigurationContext.AssemblyBlendingFolderName
                                  + Path.DirectorySeparatorChar + reportData.StartData.ServiceName
                                  + Path.DirectorySeparatorChar + reportData.StartData.Version
+                                 + Path.DirectorySeparatorChar + RemoveTypeSuffix(reportData.StartData.ContextType)
                                  + Path.DirectorySeparatorChar;
 
             var sourcePath = context.Parent.ServicesFolder + reportData.StartData.ServiceName + Path.DirectorySeparatorChar
@@ -49,6 +51,17 @@
             PrepareWorkerProcessFiles.CopyFiles(sourcePath, dataLwkcFolder);
 
             return context;
+        }
+
+        internal static string RemoveTypeSuffix(string typename)
+        {
+            var indexOfComma = typename.IndexOf(',');
+            if (indexOfComma > -1)
+            {
+                return typename.Substring(0, indexOfComma);
+            }
+
+            return typename;
         }
     }
 }

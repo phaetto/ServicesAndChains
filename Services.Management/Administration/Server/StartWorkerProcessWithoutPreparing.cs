@@ -1,6 +1,7 @@
 ﻿namespace Services.Management.Administration.Server
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using Chains;
@@ -39,6 +40,12 @@
                 {
                     arguments = string.Format("\"{0}\" {1}", fileName, arguments);
                     fileName = "mono";
+                }
+
+                if (context.ReportData.ContainsKey(Data.Id))
+                {
+                    context.ReportData[Data.Id].Errors = new List<Exception>();
+                    context.ReportData[Data.Id].ErrorCount = 0;
                 }
 
                 var process = Process.Start(

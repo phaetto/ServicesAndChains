@@ -18,6 +18,12 @@
 
         public LastWellKnownConfigurationContext Act(LastWellKnownConfigurationContext context)
         {
+            if (workerData.FilesRepository
+                == LastWellKnownConfigurationContext.LastWellKnownConfigurationFilesRepository)
+            {
+                return context;
+            }
+
             context.ServicesThatHaveStartedConcurrentQueue.Enqueue(
                 new ServiceStartedData
                 {

@@ -72,6 +72,7 @@
     <Compile Include="Administration\Executioner\WorkerDataSessionAndApiKey.cs" />
     <Compile Include="Administration\Executioner\WorkerExecutioner.cs" />
     <Compile Include="Administration\Server\AdministrationData.cs" />
+    <Compile Include="Administration\Server\StartWorkerProcessWithoutPreparationAndDelay.cs" />
     <Compile Include="Administration\Server\StartWorkerProcessWithoutPreparing.cs" />
     <Compile Include="Administration\Server\LastWellKnownConfiguration\RestoreLastKnownConfiguration.cs" />
     <Compile Include="Administration\Server\LastWellKnownConfiguration\QueueStartProcessData.cs" />
