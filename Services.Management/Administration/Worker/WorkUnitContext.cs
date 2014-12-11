@@ -2,11 +2,13 @@ namespace Services.Management.Administration.Worker
 {
     using System;
     using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
     using System.Threading;
     using Chains;
-    using Chains.Play.Web;
     using Services.Communication.Protocol;
     using Services.Management.Administration.Executioner;
+    using Services.Management.Administration.Server;
 
     public sealed class WorkUnitContext : Chain<WorkUnitContext>, IDisposable
     {
@@ -25,6 +27,11 @@ namespace Services.Management.Administration.Worker
         internal Thread ReportThread { get; set; }
         internal object HostedObject { get; set; }
         internal IWorkerEvents WorkerControl { get; set; }
+
+        internal readonly PerformanceCounter CpuCounter = new PerformanceCounter(
+            "Process",
+            "% Processor Time",
+            Process.GetCurrentProcess().ProcessName);
 
         private bool canStop = true;
 
@@ -46,6 +53,8 @@ namespace Services.Management.Administration.Worker
             this.Session = session;
             this.ApiKey = apiKey;
             this.processExit = processExit;
+
+            CpuCounter.NextValue();
         }
 
         public void Stop()
@@ -220,6 +229,12 @@ namespace Services.Management.Administration.Worker
                 ProgressData.PerformanceData.PeakPagedMemorySize64 = myProcess.PeakPagedMemorySize64;
                 ProgressData.PerformanceData.PeakVirtualMemorySize64 = myProcess.PeakVirtualMemorySize64;
                 ProgressData.PerformanceData.PeakWorkingSet64 = myProcess.PeakWorkingSet64;
+                ProgressData.PerformanceData.CpuPercentage = CpuCounter.NextValue();
+                if (ProgressData.PerformanceData.DiskUsageInBytes == 0)
+                {
+                    ProgressData.PerformanceData.DiskUsageInBytes =
+                        PrepareWorkerProcessFiles.MeasureFilesDiskSize(AppDomain.CurrentDomain.BaseDirectory);
+                }
 
                 reportProgress = AdminServer.Do(new Send<ReportProgressReturnData>(new ReportProgress(ProgressData), timesToRetry: 0));
                 ProgressData.AdditionalLog = string.Empty;

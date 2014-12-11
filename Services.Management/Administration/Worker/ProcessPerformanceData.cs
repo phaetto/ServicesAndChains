@@ -29,6 +29,10 @@
 
         public long PeakWorkingSet64;
 
+        public float CpuPercentage;
+
+        public long DiskUsageInBytes;
+
         public override int DataStructureVersionNumber
         {
             get

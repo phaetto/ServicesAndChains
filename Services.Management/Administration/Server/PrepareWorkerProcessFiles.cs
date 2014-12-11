@@ -156,6 +156,13 @@
             folderToDelete.Delete();
         }
 
+        internal static long MeasureFilesDiskSize(string folder)
+        {
+            var folderToMeasure = new DirectoryInfo(folder);
+
+            return folderToMeasure.GetFiles().Select(x => x.Length).Aggregate((x, y) => x + y);
+        }
+
         public string Session { get; set; }
 
         public string ApiKey { get; set; }
