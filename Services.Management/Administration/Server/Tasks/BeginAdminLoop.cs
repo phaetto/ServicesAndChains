@@ -16,12 +16,11 @@
         {
             if (hasJustStarted)
             {
-                context.CleanAdminReports();
-                context.Do(new StartServicesExtensionsWellKnownService());
+                context.Do(new CleanUpAdminReports()).Do(new StartServicesExtensionsWellKnownService());
                 return TaskEx.Delay(1000).ContinueWith(x => context.Do(new BeginAdminLoop(false))).Unwrap();
             }
 
-            context.CleanAdminReports();
+            context.Do(new CleanUpAdminReports());
 
             return TaskEx.Delay(1000).ContinueWith(x => context.Do(this)).Unwrap();
         }

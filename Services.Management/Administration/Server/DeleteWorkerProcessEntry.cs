@@ -30,7 +30,14 @@
                     throw new InvalidOperationException("The service still runs and cannot be deleted.");
                 }
 
-                Directory.Delete(processPath, true);
+                try
+                {
+                    Directory.Delete(processPath, true);
+                }
+                catch (IOException exception)
+                {
+                    context.LogException(exception);
+                }
 
                 context.ReportData.Remove(Data);
             }

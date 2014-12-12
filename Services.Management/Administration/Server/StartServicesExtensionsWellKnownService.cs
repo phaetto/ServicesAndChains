@@ -6,9 +6,10 @@
     public sealed class StartServicesExtensionsWellKnownService : IChainableAction<AdministrationContext, AdministrationContext>
     {
         private const string ContextType = "Services.Extensions.Contexts.ServiceStarter.ServiceStarterContext, Services.Extensions";
-        private const string Id = "auto-service-starter";
         private const string ServiceName = "Services.Extensions";
         private const string DllName = "Services.Extensions.dll";
+
+        public const string Id = "auto-service-starter";
 
         public AdministrationContext Act(AdministrationContext context)
         {

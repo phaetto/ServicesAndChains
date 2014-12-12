@@ -31,7 +31,7 @@ namespace Services.Management.Administration.Update
                                                                                       Session = Session
                                                                                   }));
 
-                if (reportedData.Reports[serviceId].WorkerState == WorkUnitState.Stopping)
+                if (!reportedData.Reports.ContainsKey(serviceId) || reportedData.Reports[serviceId].WorkerState == WorkUnitState.Stopping)
                 {
                     return context;
                 }

@@ -71,6 +71,7 @@
     <Compile Include="Administration\Executioner\WorkerDataSessionAndApiKey.cs" />
     <Compile Include="Administration\Executioner\WorkerExecutioner.cs" />
     <Compile Include="Administration\Server\AdministrationData.cs" />
+    <Compile Include="Administration\Server\Tasks\CleanUpAdminReports.cs" />
     <Compile Include="Administration\Server\StartWorkerProcessWithoutPreparationAndDelay.cs" />
     <Compile Include="Administration\Server\StartWorkerProcessWithoutPreparing.cs" />
     <Compile Include="Administration\Server\LastWellKnownConfiguration\RestoreLastKnownConfiguration.cs" />
@@ -103,6 +104,9 @@
     <Compile Include="Administration\Server\StartWorkerProcess.cs" />
     <Compile Include="Administration\Server\StartWorkerProcessWithDelay.cs" />
     <Compile Include="Administration\Server\StopWorkerProcess.cs" />
+    <Compile Include="Administration\Server\Tasks\CleanUpMemoryDbServiceLoop.cs" />
+    <Compile Include="Administration\Server\Tasks\ReloadFromMemoryDbService.cs" />
+    <Compile Include="Administration\Server\Tasks\RemoveWellknownStartedServicesLoop.cs" />
     <Compile Include="Administration\Server\WorkerDataWithDelay.cs" />
     <Compile Include="Administration\Server\WorkUnitReportData.cs" />
     <Compile Include="Administration\Server\AdviceState.cs" />

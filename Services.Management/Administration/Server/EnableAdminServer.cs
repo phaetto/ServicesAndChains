@@ -24,7 +24,7 @@
 
         public AdministrationContext Act(ServerHost context)
         {
-            var previousAdminReportData = AdministrationContext.ReloadFromMemoryDbService();
+            var previousAdminReportData = new Client("127.0.0.1", 51234).Do(new ReloadFromMemoryDbService());
 
             var adminContext = new AdministrationContext(
                 context, hostProcessName: HostProcessName, previousReportData: previousAdminReportData);
@@ -40,7 +40,7 @@
             adminContext.AdminTasksThread = new Thread(
                 () =>
                 {
-                    while (true)
+                    while (!adminContext.IsClosing)
                     {
                         Thread.Sleep(5000);
                     }
@@ -50,9 +50,14 @@
 
             adminContext.Do(new BeginAdminLoop(previousAdminReportData == null));
 
-            adminContext.CleanUpMemoryDbService();
+            if (previousAdminReportData != null)
+            {
+                adminContext.Do(new CleanUpMemoryDbServiceLoop());
+            }
 
             adminContext.LastWellKnownConfigurationContext.Do(new BeginLastWellKnownConfigurationLoop());
+
+            adminContext.Do(new RemoveWellKnownStartedServicesLoop());
 
             return adminContext;
         }

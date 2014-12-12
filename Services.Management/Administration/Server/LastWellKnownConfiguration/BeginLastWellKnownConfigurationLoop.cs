@@ -44,25 +44,32 @@
                 {
                     Process.GetProcessById(serviceStartedData.ProcessId);
 
-                    var workerData = context.Parent.ReportData[serviceStartedData.WorkerData.Id];
-
-                    if (workerData == null || workerData.WorkerState != WorkUnitState.Running)
+                    if (!context.Parent.ReportData.ContainsKey(serviceStartedData.WorkerData.Id))
                     {
-                        // Wait until the service gets running, or the process fails.
                         context.ServicesThatHaveStartedConcurrentQueue.Enqueue(serviceStartedData);
                     }
                     else
                     {
-                        // Service must be up and contacted recently
-                        // Must have a respectable uptime
-                        var minimumTimeInSeconds = workerData.StartData.ReportUpdateIntervalInSeconds * 6;
-                        if (workerData.Uptime.TotalSeconds > minimumTimeInSeconds)
+                        var workerData = context.Parent.ReportData[serviceStartedData.WorkerData.Id];
+
+                        if (workerData.WorkerState != WorkUnitState.Running)
                         {
-                            // Working fine
+                            // Wait until the service gets running, or the process fails.
+                            context.ServicesThatHaveStartedConcurrentQueue.Enqueue(serviceStartedData);
                         }
                         else
                         {
-                            context.ServicesThatHaveStartedConcurrentQueue.Enqueue(serviceStartedData);
+                            // Service must be up and contacted recently
+                            // Must have a respectable uptime
+                            var minimumTimeInSeconds = workerData.StartData.ReportUpdateIntervalInSeconds * 6;
+                            if (workerData.Uptime.TotalSeconds > minimumTimeInSeconds)
+                            {
+                                // Working fine
+                            }
+                            else
+                            {
+                                context.ServicesThatHaveStartedConcurrentQueue.Enqueue(serviceStartedData);
+                            }
                         }
                     }
                 }
