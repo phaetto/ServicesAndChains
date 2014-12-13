@@ -9,7 +9,7 @@
 
         public const string AssemblyBlendingFolderName = "AssemblyBlending";
 
-        public const string LastWellKnownConfigurationFilesRepository = "LastWellKnownConfiguration";
+        public const string LastWellKnownConfigurationFilesRepository = "Last Well Known Configuration";
 
         internal readonly ConcurrentQueue<string> ServicesToCreateSnapshotConcurrentQueue = new ConcurrentQueue<string>();
 
