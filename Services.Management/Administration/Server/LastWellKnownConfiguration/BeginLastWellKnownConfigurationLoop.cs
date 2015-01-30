@@ -81,7 +81,12 @@
                 }
             }
 
-            return TaskEx.Delay(1000).ContinueWith(x => context.Do(this)).Unwrap();
+            if (serviceIdToProcess == null && serviceStartedData == null)
+            {
+                return TaskEx.DelayWithCarbageCollection(5000).ContinueWith(x => context.Do(this)).Unwrap();
+            }
+
+            return TaskEx.DelayWithCarbageCollection(1000).ContinueWith(x => context.Do(this)).Unwrap();
         }
     }
 }
