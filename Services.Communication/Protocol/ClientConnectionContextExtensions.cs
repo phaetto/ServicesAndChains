@@ -8,7 +8,6 @@
         public static TResultType Do<T, TResultType>(
             this ClientConnectionContext context,
             IRemotableAction<T, TResultType> action)
-            where T : Chain<T>
         {
             return context.Do(new Send<TResultType>(action));
         }
@@ -17,7 +16,6 @@
             this ClientConnectionContext context,
             IReproducible action)
             where TResultType : Chain<TResultType>
-            where T : Chain<T>
         {
             return context.Do(new Send(action));
         }

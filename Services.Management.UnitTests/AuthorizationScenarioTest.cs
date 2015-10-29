@@ -77,10 +77,9 @@
 
                     using (var client = new Client("localhost", adminPort).Do(new OpenConnection()))
                     {
-                        Assert.IsTrue(client.Do(new Send<bool>(new SupportsModule(typeof(IAuthenticationGate).FullName))));
+                        Assert.IsTrue(client.Do(new SupportsModule(typeof(IAuthenticationGate).FullName)));
 
-                        var authorizationOptions =
-                            client.Do(new Send<ProviderAuthenticationGateData>(new GetAuthenticationGateOptions()));
+                        var authorizationOptions = client.Do(new GetAuthenticationGateOptions());
 
                         using (var httpServer = new ServerHost(new Client("localhost", httpPort)).Do(new StartHttpServer()))
                         {
@@ -107,15 +106,14 @@
                             using (var workerClient = new Client("localhost", contextPort).Do(new OpenConnection()))
                             {
                                 workerClient.Do(
-                                    new Send(
-                                        new SecuredAuthorizableActionForTest(
-                                            new ReproducibleTestData
-                                            {
-                                                ChangeToValue = "to-value"
-                                            })
+                                    new SecuredAuthorizableActionForTest(
+                                        new ReproducibleTestData
                                         {
-                                            Session = resultedSession
-                                        }));
+                                            ChangeToValue = "to-value"
+                                        })
+                                    {
+                                        Session = resultedSession
+                                    });
                             }
                         }
                     }

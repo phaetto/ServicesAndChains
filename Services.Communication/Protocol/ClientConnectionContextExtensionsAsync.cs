@@ -9,7 +9,6 @@
         public static Task<TResultType> Do<T, TResultType>(
             this Task<ClientConnectionContext> context,
             IRemotableAction<T, TResultType> action)
-            where T : Chain<T>
         {
             return context.ContinueWith(x => x.Do(new Send<TResultType>(action))).Unwrap();
         }
@@ -18,7 +17,6 @@
             this Task<ClientConnectionContext> context,
             IReproducible action)
             where TResultType : Chain<TResultType>
-            where T : Chain<T>
         {
             return context.Do(new Send(action));
         }
