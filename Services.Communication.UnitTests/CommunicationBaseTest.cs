@@ -432,21 +432,22 @@
                     ChangeToValue = "over tcp"
                 });
 
+            var commandText = string.Format(
+                "TcpCommand {0}{1}",
+                SerializableSpecification.SerializeManyToJson(
+                    new[]
+                    {
+                        testAction.GetInstanceSpec()
+                    }),
+                Environment.NewLine);
+
             using (var socket = CreateClient(7123))
             {
                 using (var socketStream = new NetworkStream(socket))
                 {
                     using (var writer = new StreamWriter(socketStream, Encoding.ASCII))
                     {
-                        writer.Write(string.Format("TcpCommand "));
-                        writer.Write(
-                            SerializableSpecification.SerializeManyToJson(
-                                new[]
-                                {
-                                    testAction.GetInstanceSpec()
-                                }));
-
-                        writer.Write(string.Format("\r\n"));
+                        writer.Write(commandText);
                         writer.Flush();
                     }
                 }
