@@ -1,7 +1,6 @@
 ﻿namespace Chains.UnitTests.Classes.Security
 {
     using System.Net;
-    using Chains.Play.Web;
     using Chains.Play.Web.HttpListener;
 
     public class HttpContextForTestNotSupportAnything : Chain<HttpContextForTestNotSupportAnything>, IHttpRequestHandler

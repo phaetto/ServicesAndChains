@@ -1,9 +1,9 @@
 ﻿namespace Chains.Play.Web
 {
     using System;
-    using System.IO;
-    using System.Collections.Specialized;
     using System.Collections;
+    using System.Collections.Specialized;
+    using System.IO;
     using System.Net;
     using System.Web;
 
@@ -65,19 +65,11 @@
                         input = streamReader.ReadToEnd();
                     }
 
-                    var formData = input.Split(
-                        new[]
-                        {
-                            '&'
-                        });
+                    var formData = input.Split('&');
 
                     foreach (var formNameValue in formData)
                     {
-                        var nameValue = formNameValue.Split(
-                            new[]
-                            {
-                                '='
-                            });
+                        var nameValue = formNameValue.Split('=');
 
                         formRequestData.Add(nameValue[0], nameValue[1]);
                     }

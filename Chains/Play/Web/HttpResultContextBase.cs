@@ -8,7 +8,6 @@ namespace Chains.Play.Web
     using System.Net;
     using System.Text;
     using System.Web;
-    using Chains;
 
     public class HttpResultContextBase<T> : Chain<T>, IAggreggatable<T>
         where T : HttpResultContextBase<T>
@@ -32,17 +31,17 @@ namespace Chains.Play.Web
 
         public HttpResultContextBase(string resultText = "", string contentType = "text/html", int statusCode = 0, string statusText = null)
         {
-            this.ResponseText.Append(resultText);
-            this.ContentType = contentType;
-            this.StatusCode = statusCode;
-            this.StatusText = statusText;
+            ResponseText.Append(resultText);
+            ContentType = contentType;
+            StatusCode = statusCode;
+            StatusText = statusText;
         }
 
         public HttpResultContextBase(string statusText, int statusCode, string resultText = "")
         {
-            this.StatusText = statusText;
-            this.StatusCode = statusCode;
-            this.ResponseText.Append(
+            StatusText = statusText;
+            StatusCode = statusCode;
+            ResponseText.Append(
                 string.IsNullOrWhiteSpace(resultText) && statusCode == 404
                     ? string.Format(html404DefaultBody, statusText, statusCode)
                     : resultText);
@@ -50,8 +49,8 @@ namespace Chains.Play.Web
 
         public HttpResultContextBase(string redirectTo, bool permanentRedirect)
         {
-            this.RedirectTo = redirectTo;
-            this.PermanentRedirect = permanentRedirect;
+            RedirectTo = redirectTo;
+            PermanentRedirect = permanentRedirect;
         }
 
         public static HttpResultContextBase<T> NoContent()
@@ -90,27 +89,27 @@ namespace Chains.Play.Web
 
         public void ApplyOutputToHttpContext(HttpContext httpContext)
         {
-            if (!string.IsNullOrEmpty(this.RedirectTo))
+            if (!string.IsNullOrEmpty(RedirectTo))
             {
                 if (!PermanentRedirect)
                 {
-                    httpContext.Response.Redirect(this.RedirectTo);
+                    httpContext.Response.Redirect(RedirectTo);
                 }
                 else
                 {
-                    httpContext.Response.RedirectPermanent(this.RedirectTo);
+                    httpContext.Response.RedirectPermanent(RedirectTo);
                 }
 
                 return;
             }
 
-            if (!this.IsNotCached && this.WhenModified > default(DateTime))
+            if (!IsNotCached && WhenModified > default(DateTime))
             {
                 var textIfModifiedSince = httpContext.Request.Headers["If-Modified-Since"];
                 if (!string.IsNullOrEmpty(textIfModifiedSince))
                 {
                     var modified = DateTime.Parse(textIfModifiedSince);
-                    if (modified <= this.WhenModified)
+                    if (modified <= WhenModified)
                     {
                         httpContext.Response.Status = "304 Not Modified";
                         return;
@@ -119,26 +118,26 @@ namespace Chains.Play.Web
 
                 // Common headers
                 httpContext.Response.Cache.SetCacheability(HttpCacheability.Public);
-                httpContext.Response.Cache.SetLastModified(this.WhenModified);
+                httpContext.Response.Cache.SetLastModified(WhenModified);
             }
 
-            if (!string.IsNullOrEmpty(this.StatusText) && this.StatusCode > 0)
+            if (!string.IsNullOrEmpty(StatusText) && StatusCode > 0)
             {
-                httpContext.Response.StatusCode = this.StatusCode;
-                httpContext.Response.Status = this.StatusText;
+                httpContext.Response.StatusCode = StatusCode;
+                httpContext.Response.Status = StatusText;
             }
 
-            foreach (string name in this.ResponseHeaders)
+            foreach (string name in ResponseHeaders)
             {
-                httpContext.Response.AddHeader(name, this.ResponseHeaders[name]);
+                httpContext.Response.AddHeader(name, ResponseHeaders[name]);
             }
 
-            foreach (HttpCookie cookie in this.ResponseCookies)
+            foreach (HttpCookie cookie in ResponseCookies)
             {
                 httpContext.Response.Cookies.Add(cookie);
             }
 
-            if (this.IsNotCached)
+            if (IsNotCached)
             {
                 httpContext.Response.ExpiresAbsolute = DateTime.UtcNow.AddDays(-1d);
                 httpContext.Response.Expires = -1500;
@@ -161,7 +160,7 @@ namespace Chains.Play.Web
             httpContext.Response.AddHeader("Vary", "Accept-Encoding");
             httpContext.Response.Cache.SetNoServerCaching();
 
-            if (this.IsCompressing)
+            if (IsCompressing)
             {
                 string acceptEncoding = httpContext.Request.Headers["Accept-Encoding"];
 
@@ -184,26 +183,26 @@ namespace Chains.Play.Web
 
             if (!string.IsNullOrEmpty(FileName))
             {
-                httpContext.Response.ContentType = this.ContentType;
+                httpContext.Response.ContentType = ContentType;
                 httpContext.Response.WriteFile(FileName);
                 return;
             }
 
-            if (this.ResponseText.Length > 0)
+            if (ResponseText.Length > 0)
             {
-                httpContext.Response.ContentType = this.ContentType + "; charset=utf-8";
+                httpContext.Response.ContentType = ContentType + "; charset=utf-8";
                 httpContext.Response.ContentEncoding = Encoding.UTF8;
-                httpContext.Response.Write(this.ResponseText.ToString());
+                httpContext.Response.Write(ResponseText.ToString());
             }
         }
 
         public void ApplyOutputToHttpContext(HttpListenerContext httpContext)
         {
-            if (!string.IsNullOrEmpty(this.RedirectTo))
+            if (!string.IsNullOrEmpty(RedirectTo))
             {
                 if (!PermanentRedirect)
                 {
-                    httpContext.Response.Redirect(this.RedirectTo);
+                    httpContext.Response.Redirect(RedirectTo);
                 }
                 else
                 {
@@ -214,19 +213,19 @@ namespace Chains.Play.Web
                 return;
             }
 
-            if (!string.IsNullOrEmpty(this.StatusText) && this.StatusCode > 0)
+            if (!string.IsNullOrEmpty(StatusText) && StatusCode > 0)
             {
-                httpContext.Response.StatusCode = this.StatusCode;
-                httpContext.Response.StatusDescription = this.StatusText;
+                httpContext.Response.StatusCode = StatusCode;
+                httpContext.Response.StatusDescription = StatusText;
             }
 
-            if (!this.IsNotCached && this.WhenModified > default(DateTime))
+            if (!IsNotCached && WhenModified > default(DateTime))
             {
                 var textIfModifiedSince = httpContext.Request.Headers["If-Modified-Since"];
                 if (!string.IsNullOrEmpty(textIfModifiedSince))
                 {
                     var modified = DateTime.Parse(textIfModifiedSince);
-                    if (modified <= this.WhenModified)
+                    if (modified <= WhenModified)
                     {
                         httpContext.Response.StatusDescription = "Not Modified";
                         httpContext.Response.StatusCode = 304;
@@ -236,15 +235,15 @@ namespace Chains.Play.Web
 
                 // Common headers
                 httpContext.Response.Headers.Add(HttpRequestHeader.CacheControl, "public");
-                httpContext.Response.Headers.Add(HttpRequestHeader.LastModified, this.WhenModified.ToUniversalTime().ToString("R"));
+                httpContext.Response.Headers.Add(HttpRequestHeader.LastModified, WhenModified.ToUniversalTime().ToString("R"));
             }
 
-            foreach (string name in this.ResponseHeaders)
+            foreach (string name in ResponseHeaders)
             {
-                httpContext.Response.AddHeader(name, this.ResponseHeaders[name]);
+                httpContext.Response.AddHeader(name, ResponseHeaders[name]);
             }
 
-            foreach (HttpCookie cookie in this.ResponseCookies)
+            foreach (HttpCookie cookie in ResponseCookies)
             {
                 httpContext.Response.Cookies.Add(new Cookie(cookie.Name, cookie.Value, cookie.Path, cookie.Domain)
                                                  {
@@ -254,7 +253,7 @@ namespace Chains.Play.Web
                                                  });
             }
 
-            if (this.IsNotCached)
+            if (IsNotCached)
             {
                 httpContext.Response.Headers.Add(HttpResponseHeader.Expires, DateTime.UtcNow.AddDays(-1d).ToString("R"));
                 httpContext.Response.Headers.Add(HttpResponseHeader.CacheControl, "no-cache");
@@ -271,13 +270,13 @@ namespace Chains.Play.Web
             var buffer = new byte[0];
             if (!string.IsNullOrEmpty(FileName))
             {
-                httpContext.Response.ContentType = this.ContentType;
+                httpContext.Response.ContentType = ContentType;
                 buffer = File.ReadAllBytes(FileName);
             }
 
-            if (this.ResponseText.Length > 0)
+            if (ResponseText.Length > 0)
             {
-                buffer = Encoding.UTF8.GetBytes(this.ResponseText.ToString());
+                buffer = Encoding.UTF8.GetBytes(ResponseText.ToString());
             }
 
             if (IsCompressing)
@@ -321,7 +320,7 @@ namespace Chains.Play.Web
                 }
             }
 
-            httpContext.Response.ContentType = this.ContentType + "; charset=utf-8";
+            httpContext.Response.ContentType = ContentType + "; charset=utf-8";
             httpContext.Response.ContentEncoding = Encoding.UTF8;
             httpContext.Response.ContentLength64 = buffer.LongLength;
             httpContext.Response.OutputStream.Write(buffer, 0, buffer.Length);
@@ -329,37 +328,37 @@ namespace Chains.Play.Web
 
         public T AccessControlAllowOriginAll()
         {
-            this.ResponseHeaders.Add("Access-Control-Allow-Origin", "*");
+            ResponseHeaders.Add("Access-Control-Allow-Origin", "*");
             return (T)this;
         }
 
         public T NoCache()
         {
-            this.IsNotCached = true;
+            IsNotCached = true;
             return (T)this;
         }
 
         public T Cache(TimeSpan maxAge)
         {
-            this.MaxAge = maxAge;
+            MaxAge = maxAge;
             return (T)this;
         }
 
         public T CompressRequest()
         {
-            this.IsCompressing = true;
+            IsCompressing = true;
             return (T)this;
         }
 
         public T RenderOnlyIfIsModifiedSince(DateTime whenModified)
         {
-            this.WhenModified = whenModified;
+            WhenModified = whenModified;
             return (T)this;
         }
 
         public T AddHeader(string key, string value)
         {
-            this.ResponseHeaders.Add(key, value);
+            ResponseHeaders.Add(key, value);
             return (T)this;
         }
 
@@ -371,16 +370,16 @@ namespace Chains.Play.Web
 
         public void AggregateToThis(T context)
         {
-            this.ResponseText.Append(context.ResponseText);
+            ResponseText.Append(context.ResponseText);
 
             foreach (string name in context.ResponseHeaders)
             {
-                this.AddHeader(name, context.ResponseHeaders[name]);
+                AddHeader(name, context.ResponseHeaders[name]);
             }
 
             foreach (HttpCookie cookie in context.ResponseCookies)
             {
-                this.ResponseCookies.Add(cookie);
+                ResponseCookies.Add(cookie);
             }
         }
     }

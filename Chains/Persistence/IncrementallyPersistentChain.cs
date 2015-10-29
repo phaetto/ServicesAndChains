@@ -1,7 +1,6 @@
 ﻿namespace Chains.Persistence
 {
     using System;
-    using Chains;
     using Chains.Persistence.Exceptions;
     using Chains.Play;
 
@@ -27,8 +26,8 @@
             Data = data;
             this.persistentStore = persistentStore;
 
-            this.OnAfterExecuteAction = OnAfterExecute;
-            this.OnBeforeExecuteAction = OnBeforeExecute;
+            OnAfterExecuteAction = OnAfterExecute;
+            OnBeforeExecuteAction = OnBeforeExecute;
 
             CheckIfNeedsToBeLoaded();
         }
@@ -89,8 +88,8 @@
 
                 var executionChain = new ExecutionChain(this);
 
-                this.OnAfterExecuteAction = null;
-                this.OnBeforeExecuteAction = null;
+                OnAfterExecuteAction = null;
+                OnBeforeExecuteAction = null;
 
                 foreach (var action in actions)
                 {
@@ -99,8 +98,8 @@
 
                 persistentStore.SaveSnapshot(Data);
 
-                this.OnAfterExecuteAction = OnAfterExecute;
-                this.OnBeforeExecuteAction = OnBeforeExecute;
+                OnAfterExecuteAction = OnAfterExecute;
+                OnBeforeExecuteAction = OnBeforeExecute;
 
                 mediaLastUpdateTime = lastUpdatedElementtype;
             }

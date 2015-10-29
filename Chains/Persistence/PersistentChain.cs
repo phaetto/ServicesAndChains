@@ -1,7 +1,6 @@
 ﻿namespace Chains.Persistence
 {
     using System;
-    using Chains;
 
     public abstract class PersistentChain<T, TData> : Chain<T>
         where T : Chain<T>
@@ -22,7 +21,7 @@
         {
             Data = data;
             this.persistentStore = persistentStore;
-            this.OnAfterExecuteAction = OnAfterExecute;
+            OnAfterExecuteAction = OnAfterExecute;
 
             if (!persistentStore.SnapshotExists(Data))
             {

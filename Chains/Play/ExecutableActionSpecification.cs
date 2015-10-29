@@ -35,7 +35,7 @@
 
             if (Data == null)
             {
-                generatedObject = ExecutionChain.CreateObjectWithParameters(this.Type);
+                generatedObject = ExecutionChain.CreateObjectWithParameters(Type);
             }
             else
             {
@@ -44,7 +44,7 @@
                     throw new NullReferenceException("DataType cannot be null nor a whitespace when data exist.");
                 }
 
-                generatedObject = ExecutionChain.CreateObjectWithParameters(this.Type, this.Data);
+                generatedObject = ExecutionChain.CreateObjectWithParameters(Type, Data);
             }
 
             if (generatedObject == null)

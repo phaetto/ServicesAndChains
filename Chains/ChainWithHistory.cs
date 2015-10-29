@@ -44,7 +44,7 @@
                 throw new ArgumentNullException("type");
             }
 
-            return this.ActionList.Any(x => x.GetType() == type);
+            return ActionList.Any(x => x.GetType() == type);
         }
 
         public bool IsInChain<Type>()
@@ -70,14 +70,14 @@
 
         public IChainableAction<ChainType, ReturnChainType> Get<ChainType, ReturnChainType>()
         {
-            return this.ActionList
+            return ActionList
                 .FirstOrDefault(x => x as IChainableAction<ChainType, ReturnChainType> != null)
                 as IChainableAction<ChainType, ReturnChainType>;
         }
 
         public IEnumerable<IChainableAction<ChainType, ReturnChainType>> GetAll<ChainType, ReturnChainType>()
         {
-            return this.ActionList.Where(x => x as IChainableAction<ChainType, ReturnChainType> != null)
+            return ActionList.Where(x => x as IChainableAction<ChainType, ReturnChainType> != null)
                 .Select(x => x as IChainableAction<ChainType, ReturnChainType>)
                 .ToArray();
         }

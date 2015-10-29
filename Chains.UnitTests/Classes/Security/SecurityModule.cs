@@ -21,7 +21,7 @@
                 return true;
             }
 
-            if (!this.IsValid(securableAction))
+            if (!IsValid(securableAction))
             {
                 throw new SecurityException("Access denied.");
             }

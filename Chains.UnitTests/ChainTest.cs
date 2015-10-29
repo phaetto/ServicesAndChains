@@ -38,35 +38,15 @@
         {
             var result = new ContextForTest();
 
-            result.DoIfNotNull(new ActionForTest("value 1"))
-                .DoIfNotNull(new ActionForTest("value 2"))
-                .DoIfNotNull(new ActionForTest("value 3"))
-                .DoIfNotNull(new ActionForTestReturnsNull())
-                .DoIfNotNull(new ActionForTest("value 4"))
-                .DoIfNotNull(new ActionForTest("value 5"))
-                .DoIfNotNull(new ActionForTest("value 6"));
+            result.Do(new ActionForTest("value 1"))
+                ?.Do(new ActionForTest("value 2"))
+                ?.Do(new ActionForTest("value 3"))
+                ?.Do(new ActionForTestReturnsNull())
+                ?.Do(new ActionForTest("value 4"))
+                ?.Do(new ActionForTest("value 5"))
+                ?.Do(new ActionForTest("value 6"));
 
             Assert.AreEqual(result.contextVariable, "value 3");
-        }
-
-        [TestMethod]
-        public void DoFirstNotNull_WhenManyOptionsAreReturningNull_ThenTheFirstThatIsNotNullShouldBePicked()
-        {
-            var result =
-                new ContextForTest().DoFirstNotNull(
-                                        x => x.Do(new ActionForTest("1")).DoIfNotNull(new ActionForTestReturnsNull()),
-                                        x => x.Do(new ActionForTestReturnsNull()).DoIfNotNull(new ActionForTest("2")),
-                                        x =>
-                                            x.DoIfNotNull(new ActionForTestReturnsNull()),
-                                        x => x.Do(new ActionForTest("3")).DoIfNotNull(new ActionForTest("4")),
-                                        x =>
-                                        {
-                                            Assert.Fail("Should never reach here");
-                                            return x;
-                                        },
-                                        x => x.Do(new ActionForTest("5")).DoIfNotNull(new ActionForTest("6")));
-
-            Assert.AreEqual("4", result.contextVariable);
         }
 
         [TestMethod]
@@ -76,11 +56,11 @@
 
             result.Do(new ActionForTest("0"))
                 .DoFirstNotNull(
-                    x => x.Do(new ActionForTest("1")).DoIfNotNull(new ActionForTestReturnsNull()),
-                    x => x.Do(new ActionForTest("2")).DoIfNotNull(new ActionForTestReturnsNull()),
-                    x => x.Do(new ActionForTest("3")).DoIfNotNull(new ActionForTestReturnsNull()),
-                    x => x.Do(new ActionForTest("4")).DoIfNotNull(new ActionForTestReturnsNull()),
-                    x => x.Do(new ActionForTest("5")).DoIfNotNull(new ActionForTestReturnsNull()));
+                    x => x.Do(new ActionForTest("1"))?.Do(new ActionForTestReturnsNull()),
+                    x => x.Do(new ActionForTest("2"))?.Do(new ActionForTestReturnsNull()),
+                    x => x.Do(new ActionForTest("3"))?.Do(new ActionForTestReturnsNull()),
+                    x => x.Do(new ActionForTest("4"))?.Do(new ActionForTestReturnsNull()),
+                    x => x.Do(new ActionForTest("5"))?.Do(new ActionForTestReturnsNull()));
 
             Assert.AreEqual("5", result.contextVariable);
         }

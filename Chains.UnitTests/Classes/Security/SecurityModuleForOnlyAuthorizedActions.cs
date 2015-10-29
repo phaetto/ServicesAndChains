@@ -22,7 +22,7 @@
                 throw new InvalidOperationException("Access denied");
             }
 
-            if (!this.IsValid(securableAction))
+            if (!IsValid(securableAction))
             {
                 throw new SecurityException("Access denied.");
             }

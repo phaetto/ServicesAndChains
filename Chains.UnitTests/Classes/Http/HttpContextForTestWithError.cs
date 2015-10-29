@@ -2,7 +2,6 @@
 {
     using System;
     using System.Net;
-    using Chains.Play.Web;
     using Chains.Play.Web.HttpListener;
 
     public class HttpContextForTestWithError : Chain<HttpContextForTestWithError>, IHttpRequestHandler

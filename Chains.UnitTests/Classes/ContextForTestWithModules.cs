@@ -1,7 +1,6 @@
 ﻿namespace Chains.UnitTests.Classes
 {
     using System.Collections.Generic;
-    using Chains.Play;
     using Chains.Play.Modules;
 
     public class ContextForTestWithModules : Chain<ContextForTestWithModules>, IModular

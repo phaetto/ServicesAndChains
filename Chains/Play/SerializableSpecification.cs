@@ -30,7 +30,7 @@
                             properties =
                                 GetType()
                                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                                .Where(x => x.GetSetMethod(nonPublic: true) != null)
+                                .Where(x => x.GetSetMethod(true) != null)
                                 .Where(x => x.GetIndexParameters().Length == 0)
                                 .Where(x => x.PropertyType.IsSerializable)
                                 .ToList(),
@@ -43,7 +43,7 @@
 
             lock (reflectionCaching)
             {
-                reflectionCaching[this.GetType().FullName] = entry;
+                reflectionCaching[GetType().FullName] = entry;
             }
         }
 
@@ -51,7 +51,7 @@
         {
             get
             {
-                var thisFullTypeName = this.GetType().FullName;
+                var thisFullTypeName = GetType().FullName;
 
                 if (!reflectionCaching.ContainsKey(thisFullTypeName))
                 {
@@ -66,7 +66,7 @@
         {
             get
             {
-                var thisFullTypeName = this.GetType().FullName;
+                var thisFullTypeName = GetType().FullName;
 
                 if (!reflectionCaching.ContainsKey(thisFullTypeName))
                 {
@@ -83,7 +83,7 @@
                 this,
                 new JsonSerializerSettings
                 {
-                    NullValueHandling = NullValueHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore
                 });
         }
 
@@ -98,7 +98,7 @@
                 specs,
                 new JsonSerializerSettings
                 {
-                    NullValueHandling = NullValueHandling.Ignore,
+                    NullValueHandling = NullValueHandling.Ignore
                 });
         }
 
@@ -166,7 +166,7 @@
                     data = NormalizeArrayTypes(field.FieldType, data, jarray);
                 }
 
-                if (data.GetType() == typeof(JObject) && this.GetType() == typeof(ExecutableActionSpecification))
+                if (data.GetType() == typeof(JObject) && GetType() == typeof(ExecutableActionSpecification))
                 {
                     var jcontainer = data as JObject;
                     var executableActionSpecification = this as ExecutableActionSpecification;
@@ -209,7 +209,7 @@
                     data = NormalizeArrayTypes(property.PropertyType, data, jarray);
                 }
 
-                if (data.GetType() == typeof(JObject) && this.GetType() == typeof(ExecutableActionSpecification))
+                if (data.GetType() == typeof(JObject) && GetType() == typeof(ExecutableActionSpecification))
                 {
                     var jcontainer = data as JObject;
                     var executableActionSpecification = this as ExecutableActionSpecification;
@@ -218,17 +218,17 @@
 
                 try
                 {
-                    property.SetValue(this, data, index: null);
+                    property.SetValue(this, data, null);
                 }
                 catch (ArgumentException)
                 {
                     if (property.PropertyType == typeof(Guid))
                     {
-                        property.SetValue(this, Guid.Parse(data as string), index: null);
+                        property.SetValue(this, Guid.Parse(data as string), null);
                     }
                     else
                     {
-                        property.SetValue(this, Convert.ChangeType(data, property.PropertyType), index: null);
+                        property.SetValue(this, Convert.ChangeType(data, property.PropertyType), null);
                     }
                 }
             }
@@ -270,15 +270,15 @@
             return new ExecutableActionSpecification
                    {
                        Data = this,
-                       DataType = this.GetType().FullName,
+                       DataType = GetType().FullName,
                        Session = session,
-                       ApiKey = apiKey,
+                       ApiKey = apiKey
                    };
         }
 
         private Dictionary<string, object> GetAsDictionary()
         {
-            var propDict = Properties.ToDictionary(x => x.Name, x => x.GetValue(this, index: null));
+            var propDict = Properties.ToDictionary(x => x.Name, x => x.GetValue(this, null));
             var fieldDict = Fields.ToDictionary(x => x.Name, x => x.GetValue(this));
             var dict = propDict.Concat(fieldDict).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             return dict;

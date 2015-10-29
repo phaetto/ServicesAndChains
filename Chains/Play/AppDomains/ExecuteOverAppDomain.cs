@@ -14,7 +14,7 @@
 
         public ExecuteOverAppDomain(IReproducible reproducibleAction)
         {
-            this.specification = reproducibleAction.GetInstanceSpec();
+            specification = reproducibleAction.GetInstanceSpec();
         }
 
         public T Act(AppDomainExecutionChain context)

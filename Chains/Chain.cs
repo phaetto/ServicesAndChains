@@ -8,43 +8,31 @@
     public class Chain<T> : AbstractChain
         where T : Chain<T>
     {
-        public ReturnChainType Do<ReturnChainType>(
-            IChainableAction<T, ReturnChainType> action)
+        public TReturnChainType Do<TReturnChainType>(
+            IChainableAction<T, TReturnChainType> action)
         {
             Check.ArgumentNull(() => action);
 
-            if (OnBeforeExecuteAction != null)
-            {
-                OnBeforeExecuteAction(action);
-            }
+            OnBeforeExecuteAction?.Invoke(action);
 
             var result = action.Act((T)this);
 
-            if (OnAfterExecuteAction != null)
-            {
-                OnAfterExecuteAction(action);
-            }
+            OnAfterExecuteAction?.Invoke(action);
 
             return result;
         }
 
-        public Task<ReturnChainType> Do<ReturnChainType>(
-            IChainableAction<T, Task<ReturnChainType>> action)
+        public Task<TReturnChainType> Do<TReturnChainType>(
+            IChainableAction<T, Task<TReturnChainType>> action)
         {
             Check.ArgumentNull(() => action);
 
-            if (OnBeforeExecuteAction != null)
-            {
-                OnBeforeExecuteAction(action);
-            }
+            OnBeforeExecuteAction?.Invoke(action);
 
             var result = action.Act((T)this).ContinueWith(
                 x =>
                 {
-                    if (OnAfterExecuteAction != null)
-                    {
-                        OnAfterExecuteAction(action);
-                    }
+                    OnAfterExecuteAction?.Invoke(action);
 
                     return x.Result;
                 });
@@ -52,25 +40,19 @@
             return result;
         }
 
-        public Task<ReturnChainType> DoAsync<ReturnChainType>(
-            IChainableAction<T, ReturnChainType> action)
+        public Task<TReturnChainType> DoAsync<TReturnChainType>(
+            IChainableAction<T, TReturnChainType> action)
         {
             Check.ArgumentNull(() => action);
 
-            if (OnBeforeExecuteAction != null)
-            {
-                OnBeforeExecuteAction(action);
-            }
+            OnBeforeExecuteAction?.Invoke(action);
 
             var resultTask = Task.Factory.StartNew(
                 () =>
                 {
                     var result = action.Act((T)this);
 
-                    if (OnAfterExecuteAction != null)
-                    {
-                        OnAfterExecuteAction(action);
-                    }
+                    OnAfterExecuteAction?.Invoke(action);
 
                     return result;
                 });
@@ -78,19 +60,16 @@
             return resultTask;
         }
 
-        public ReturnChainType DoFirst<ReturnChainType>(
-            Func<ReturnChainType, bool> condition,
-            params IChainableAction<T, ReturnChainType>[] actions)
+        public TReturnChainType DoFirst<TReturnChainType>(
+            Func<TReturnChainType, bool> condition,
+            params IChainableAction<T, TReturnChainType>[] actions)
         {
             Check.ArgumentNull(() => condition);
             Check.ArgumentNull(() => actions);
 
             foreach (var action in actions)
             {
-                if (OnBeforeExecuteAction != null)
-                {
-                    OnBeforeExecuteAction(action);
-                }
+                OnBeforeExecuteAction?.Invoke(action);
 
                 var actionResult = action.Act((T)this);
 
@@ -99,20 +78,17 @@
                     continue;
                 }
 
-                if (OnAfterExecuteAction != null)
-                {
-                    OnAfterExecuteAction(action);
-                }
+                OnAfterExecuteAction?.Invoke(action);
 
                 return actionResult;
             }
 
-            return default(ReturnChainType);
+            return default(TReturnChainType);
         }
 
-        public ReturnChainType DoFirst<ReturnChainType>(
-            Func<ReturnChainType, bool> condition,
-            params Func<T, ReturnChainType>[] actions)
+        public TReturnChainType DoFirst<TReturnChainType>(
+            Func<TReturnChainType, bool> condition,
+            params Func<T, TReturnChainType>[] actions)
         {
             Check.ArgumentNull(() => condition);
             Check.ArgumentNull(() => actions);
@@ -126,35 +102,32 @@
                 }
             }
 
-            return default(ReturnChainType);
+            return default(TReturnChainType);
         }
 
-        public ReturnChainType DoFirstNotNull<ReturnChainType>(params IChainableAction<T, ReturnChainType>[] actions)
+        public TReturnChainType DoFirstNotNull<TReturnChainType>(params IChainableAction<T, TReturnChainType>[] actions)
         {
             return DoFirst(x => !Equals(x, null), actions);
         }
 
-        public ReturnChainType DoFirstNotNull<ReturnChainType>(params Func<T, ReturnChainType>[] actions)
+        public TReturnChainType DoFirstNotNull<TReturnChainType>(params Func<T, TReturnChainType>[] actions)
         {
             return DoFirst(x => !Equals(x, null), actions);
         }
 
-        public IEnumerable<ReturnChainType> DoParallelFor<ReturnChainType>(
+        public IEnumerable<TReturnChainType> DoParallelFor<TReturnChainType>(
             int from,
             int to,
-            IChainableAction<T, ReturnChainType> action)
+            IChainableAction<T, TReturnChainType> action)
         {
             Check.ArgumentOutOfRange(from < 0, () => from, "Should be larger than -1.");
             Check.ArgumentOutOfRange(to < 1, () => to, "Should be larger than 0");
             Check.ArgumentOutOfRange(to < from, () => to, "To should be larger than From.");
             Check.ArgumentNull(() => action);
 
-            if (OnBeforeExecuteAction != null)
-            {
-                OnBeforeExecuteAction(action);
-            }
+            OnBeforeExecuteAction?.Invoke(action);
 
-            var results = new ReturnChainType[to - from];
+            var results = new TReturnChainType[to - from];
 
             Parallel.For(
                 from,
@@ -163,17 +136,14 @@
                 {
                     results[number] = action.Act((T)this);
 
-                    if (OnAfterExecuteAction != null)
-                    {
-                        OnAfterExecuteAction(action);
-                    }
+                    OnAfterExecuteAction?.Invoke(action);
                 });
 
             return results;
         }
 
-        public IEnumerable<ReturnChainType> DoParallelFor<ReturnChainType>(
-            IChainableAction<T, ReturnChainType>[] actions)
+        public IEnumerable<TReturnChainType> DoParallelFor<TReturnChainType>(
+            IChainableAction<T, TReturnChainType>[] actions)
         {
             Check.ArgumentNull(() => actions);
 
@@ -185,7 +155,7 @@
                 }
             }
 
-            var results = new ReturnChainType[actions.Length];
+            var results = new TReturnChainType[actions.Length];
 
             Parallel.For(
                 0,
@@ -194,23 +164,20 @@
                 {
                     results[number] = actions[number].Act((T)this);
 
-                    if (OnAfterExecuteAction != null)
-                    {
-                        OnAfterExecuteAction(actions[number]);
-                    }
+                    OnAfterExecuteAction?.Invoke(actions[number]);
                 });
 
             return results;
         }
 
-        public T Aggregate<ContextType>(ContextType context, IChainableAction<ContextType, T> action)
-            where ContextType : Chain<ContextType>
+        public T Aggregate<TContextType>(TContextType context, IChainableAction<TContextType, T> action)
+            where TContextType : Chain<TContextType>
         {
             Check.ArgumentNull(() => action);
 
             var aggregatable = this as IAggreggatable<T>;
 
-            Check.ConditionNotSupported(aggregatable == null, "Aggregation is not supported from the type " + this.GetType().FullName);
+            Check.ConditionNotSupported(aggregatable == null, "Aggregation is not supported from the type " + GetType().FullName);
 
             aggregatable.AggregateToThis(context.Do(action));
 
