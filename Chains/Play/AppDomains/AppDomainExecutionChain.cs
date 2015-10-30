@@ -3,6 +3,7 @@
     using System;
     using System.Globalization;
     using System.Reflection;
+    using Chains.Exceptions;
 
     public sealed class AppDomainExecutionChain : Chain<AppDomainExecutionChain>, IDisposable
     {
@@ -12,15 +13,8 @@
 
         public AppDomainExecutionChain(string appDomainName, string contextName)
         {
-            if (string.IsNullOrEmpty(appDomainName))
-            {
-                throw new ArgumentNullException("appDomainName");
-            }
-
-            if (string.IsNullOrEmpty(contextName))
-            {
-                throw new ArgumentNullException("contextName");
-            }
+            Check.ArgumentNullOrEmpty(() => appDomainName);
+            Check.ArgumentNullOrEmpty(() => contextName);
 
             Domain = AppDomain.CreateDomain(appDomainName, AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
 

@@ -4,6 +4,7 @@ namespace Chains.Play
     using System.Collections.Generic;
     using Chains.Play.Modules;
     using System.Linq;
+    using Chains.Exceptions;
 
     public sealed class ExecutionChain : Chain<ExecutionChain>, IModular
     {
@@ -18,10 +19,7 @@ namespace Chains.Play
 
         public ExecutionChain(dynamic currentContext)
         {
-            if (currentContext == null)
-            {
-                throw new ArgumentNullException("currentContext");
-            }
+            Check.ArgumentNull(() => currentContext);
 
             CurrentContext = currentContext;
 
@@ -30,10 +28,7 @@ namespace Chains.Play
 
         public ExecutionChain(string currentContextTypeName)
         {
-            if (string.IsNullOrEmpty(currentContextTypeName))
-            {
-                throw new ArgumentNullException("currentContextTypeName");
-            }
+            Check.ArgumentNullOrEmpty(() => currentContextTypeName);
 
             CurrentContext = CreateObjectWithParameters(currentContextTypeName);
 
@@ -42,10 +37,7 @@ namespace Chains.Play
 
         public ExecutionChain(Type currentContextType)
         {
-            if (currentContextType == null)
-            {
-                throw new ArgumentNullException("currentContextType");
-            }
+            Check.ArgumentNull(() => currentContextType);
 
             CurrentContext = CreateObjectWithParameters(currentContextType.AssemblyQualifiedName);
 
@@ -54,20 +46,14 @@ namespace Chains.Play
 
         public static object CreateObjectWithParameters(string unqualifiedType, params object[] parameters)
         {
-            if (string.IsNullOrEmpty(unqualifiedType))
-            {
-                throw new ArgumentNullException("unqualifiedType");
-            }
+            Check.ArgumentNullOrEmpty(() => unqualifiedType);
 
             return CreateObjectWithParametersAndInjection(unqualifiedType, parameters);
         }
 
         public static object CreateObjectWithParametersAndInjection(string unqualifiedType, object[] parameters, object[] injectedParameters = null)
         {
-            if (string.IsNullOrEmpty(unqualifiedType))
-            {
-                throw new ArgumentNullException("unqualifiedType");
-            }
+            Check.ArgumentNullOrEmpty(() => unqualifiedType);
 
             if (parameters == null)
             {
@@ -165,10 +151,7 @@ namespace Chains.Play
 
         public static Type FindType(string unqualifiedType)
         {
-            if (string.IsNullOrEmpty(unqualifiedType))
-            {
-                throw new ArgumentNullException("unqualifiedType");
-            }
+            Check.ArgumentNullOrEmpty(() => unqualifiedType);
 
             if (typeCache == null)
             {

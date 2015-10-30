@@ -39,10 +39,7 @@
 
         public bool IsInChain(Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
+            Check.ArgumentNull(() => type);
 
             return ActionList.Any(x => x.GetType() == type);
         }
