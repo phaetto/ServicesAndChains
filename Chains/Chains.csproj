@@ -115,7 +115,6 @@
     <Compile Include="Play\Security\IAuthorizableAction.cs" />
     <Compile Include="Play\Security\Provider\LoginUrlMethod.cs" />
     <Compile Include="Play\Security\Provider\ProviderAuthenticationGateData.cs" />
-    <Compile Include="Play\Security\Provider\Simple\SingleApiKeyRequirement.cs" />
     <Compile Include="Play\SerializableSpecificationExtensions.cs" />
     <Compile Include="Play\DeserializableSpecification.cs" />
     <Compile Include="Play\ExecutableActionSpecification.cs" />
