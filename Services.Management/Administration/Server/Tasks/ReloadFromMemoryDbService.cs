@@ -16,14 +16,12 @@
             {
                 using (var connectionToHashMemoryStorage = context.Do(new OpenConnection()))
                 {
-                    var serializedReports =
-                        connectionToHashMemoryStorage.Do(
-                            new Send<KeyValueData>(
-                                new GetKeyValue(
-                                    new KeyData
-                                    {
-                                        Key = "report-data"
-                                    }))).Value;
+                    var serializedReports = connectionToHashMemoryStorage.Do(
+                        new GetKeyValue(
+                            new KeyData
+                            {
+                                Key = "report-data"
+                            })).Value;
 
                     var previousAdminReportData = Json<Dictionary<string, WorkUnitReportData>>.Deserialize(
                         serializedReports);
