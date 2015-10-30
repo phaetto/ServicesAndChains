@@ -5,7 +5,6 @@ namespace Chains.Play.Installation
     [Serializable]
     public class InstallData : SerializableSpecification
     {
-        public bool Uninstall;
         public string[] Args;
 
         public override int DataStructureVersionNumber => 1;

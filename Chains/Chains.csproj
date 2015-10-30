@@ -88,6 +88,7 @@
     <Compile Include="Play\Debug\BreakDebugger.cs" />
     <Compile Include="Play\Debug\DebugContext.cs" />
     <Compile Include="Play\ExecutionResultContext.cs" />
+    <Compile Include="Play\Installation\Uninstall.cs" />
     <Compile Include="Play\Installation\UninstallService.cs" />
     <Compile Include="Play\Installation\GetTypesFromAssemblyReturnData.cs" />
     <Compile Include="Play\Installation\GetTypesFromAssembly.cs" />

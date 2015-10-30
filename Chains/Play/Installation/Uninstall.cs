@@ -3,10 +3,10 @@ namespace Chains.Play.Installation
     using System.Collections;
     using System.Configuration.Install;
 
-    public class Install : ReproducibleWithData<InstallData>,
+    public class Uninstall : ReproducibleWithData<InstallData>,
         IChainableAction<InstallationContext, InstallationContext>
     {
-        public Install(InstallData data)
+        public Uninstall(InstallData data)
             : base(data)
         {
         }
@@ -21,8 +21,7 @@ namespace Chains.Play.Installation
                     installer.UseNewContext = true;
                     try
                     {
-                        installer.Install(state);
-                        installer.Commit(state);
+                        installer.Uninstall(state);
                     }
                     catch
                     {
