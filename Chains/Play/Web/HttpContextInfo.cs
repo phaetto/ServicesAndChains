@@ -27,17 +27,14 @@
 
         public HttpListenerContext HttpListenerContext => httpListenerContext;
 
-        public NameValueCollection QueryString => httpListenerContext != null
-            ? httpListenerContext.Request.QueryString
-            : (queryStringRequestData ?? httpContext.Request.QueryString);
+        public NameValueCollection QueryString => httpListenerContext?.Request.QueryString ?? (queryStringRequestData ?? httpContext.Request.QueryString);
 
         public NameValueCollection Form
         {
             get
             {
                 // No form for listener - use the imput string and decode only if "application/x-www-form-urlencoded"
-                if (httpListenerContext != null
-                    && httpListenerContext.Request.ContentType != null
+                if (httpListenerContext?.Request.ContentType != null
                     && httpListenerContext.Request.ContentType.ToLowerInvariant().StartsWith(HttpRequest.FormUrlEncodedContentType)
                     && formRequestData.Count == 0)
                 {
@@ -90,46 +87,35 @@
 
         public Stream InputStream => httpListenerContext != null
             ? httpListenerContext.Request.InputStream
-            : (httpContext != null ? httpContext.Request.InputStream : inputStream);
+            : (httpContext?.Request.InputStream ?? inputStream);
 
         public string HttpMethod => httpListenerContext != null
             ? httpListenerContext.Request.HttpMethod
             : (httpMethod ?? httpContext.Request.HttpMethod);
 
-        public string RequestPath => httpListenerContext != null
-            ? httpListenerContext.Request.Url.AbsolutePath
-            : (requestPath ?? httpContext.Request.Path);
+        public string RequestPath => httpListenerContext?.Request.Url.AbsolutePath ?? (requestPath ?? httpContext.Request.Path);
 
-        public string Host => httpListenerContext != null
-            ? httpListenerContext.Request.Url.Host
-            : (host ?? httpContext.Request.Url.Host);
+        public string Host => httpListenerContext?.Request.Url.Host ?? (host ?? httpContext.Request.Url.Host);
 
-        public int Port => httpListenerContext != null
-            ? httpListenerContext.Request.Url.Port
-            : (port > 0 ? port : httpContext.Request.Url.Port);
+        public int Port => httpListenerContext?.Request.Url.Port ?? (port > 0 ? port : httpContext.Request.Url.Port);
 
-        public bool HasSession()
-        {
-            return SessionData != null || httpContext.Session != null;
-        }
+        public bool HasSession() => SessionData != null || httpContext.Session != null;
 
-        public object Session(string name)
-        {
-            return httpContext == null ? SessionData[name] : httpContext.Session[name];
-        }
+        public object Session(string name) => httpContext == null ? SessionData[name] : httpContext.Session[name];
 
         public void Session(string name, object value)
         {
             if (httpContext != null)
+            {
                 httpContext.Session[name] = value;
+            }
             else
+            {
                 SessionData[name] = value;
+            }
         }
 
-        public object Application(string name)
-        {
-            return applicationData != null ? applicationData[name] : httpContext.Application[name];
-        }
+        public object Application(string name) => applicationData != null ? applicationData[name] : httpContext.Application[name];
 
         public void Application(string name, object value)
         {
@@ -153,14 +139,20 @@
         {
             if (httpContext != null)
             {
-                return httpContext.Request.Url.Scheme + "://" + httpContext.Request.Url.Host
-                    + (httpContext.Request.Url.Port != 80 ? ":" + httpContext.Request.Url.Port : "");
+                return string.Format(
+                    "{0}://{1}{2}",
+                    httpContext.Request.Url.Scheme,
+                    httpContext.Request.Url.Host,
+                    (httpContext.Request.Url.Port != 80 ? ":" + httpContext.Request.Url.Port : ""));
             }
 
             if (httpListenerContext != null)
             {
-                return httpListenerContext.Request.Url.Scheme + "://" + httpListenerContext.Request.Url.Host
-                     + (httpListenerContext.Request.Url.Port != 80 ? ":" + httpListenerContext.Request.Url.Port : "");
+                return string.Format(
+                    "{0}://{1}{2}",
+                    httpListenerContext.Request.Url.Scheme,
+                    httpListenerContext.Request.Url.Host,
+                    (httpListenerContext.Request.Url.Port != 80 ? ":" + httpListenerContext.Request.Url.Port : ""));
             }
 
             return "http://" + host + (port != 80 ? ":" + port : "");
@@ -223,12 +215,12 @@
             this.inputStream = inputStream ?? new MemoryStream();
         }
 
-        private void PrepareBaseFolder(string baseFolder)
+        private void PrepareBaseFolder(string baseFolderToPrepare)
         {
-            this.baseFolder = baseFolder ?? AppDomain.CurrentDomain.BaseDirectory;
-            this.baseFolder = this.baseFolder.EndsWith(Path.DirectorySeparatorChar.ToString())
-                ? this.baseFolder.Substring(0, this.baseFolder.Length - 1)
-                : this.baseFolder;
+            baseFolder = baseFolderToPrepare ?? AppDomain.CurrentDomain.BaseDirectory;
+            baseFolder = baseFolder.EndsWith(Path.DirectorySeparatorChar.ToString())
+                ? baseFolder.Substring(0, baseFolder.Length - 1)
+                : baseFolder;
         }
     }
 }
