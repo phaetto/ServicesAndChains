@@ -1,6 +1,5 @@
 ﻿namespace Chains.UnitTests.Persistence
 {
-    using System;
     using Chains.Persistence.Exceptions;
     using Chains.UnitTests.Classes;
     using Chains.UnitTests.Persistence.Classes;
