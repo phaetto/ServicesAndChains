@@ -10,12 +10,6 @@
         public int Version { get; set; }
         public string File { get; set; }
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
     }
 }

@@ -7,12 +7,6 @@ namespace Chains.Play.Installation
     {
         public byte[] Bytes;
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
     }
 }

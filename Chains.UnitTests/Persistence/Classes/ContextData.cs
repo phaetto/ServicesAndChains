@@ -6,13 +6,7 @@
     [Serializable]
     public class ContextData : SerializableSpecificationWithId
     {
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
 
         public string Name { get; set; }
 

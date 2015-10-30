@@ -37,13 +37,7 @@
                 null);
         }
 
-        internal RemoteReplayProxy Proxy
-        {
-            get
-            {
-                return proxy;
-            }
-        }
+        internal RemoteReplayProxy Proxy => proxy;
 
         public void Dispose()
         {

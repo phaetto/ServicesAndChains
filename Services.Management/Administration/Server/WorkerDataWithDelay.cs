@@ -13,12 +13,6 @@
 
         public int TriesLeft = 10;
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
     }
 }

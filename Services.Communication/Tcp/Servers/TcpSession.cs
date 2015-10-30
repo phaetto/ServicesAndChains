@@ -6,13 +6,7 @@ namespace Services.Communication.Tcp.Servers
 
     public class TcpSession : AppSession<TcpSession>
     {
-        public TcpServer Server
-        {
-            get
-            {
-                return (TcpServer)this.AppServer;
-            }
-        }
+        public TcpServer Server => (TcpServer)this.AppServer;
 
         public TcpSession()
         {

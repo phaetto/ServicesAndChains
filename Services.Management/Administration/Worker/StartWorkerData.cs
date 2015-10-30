@@ -24,12 +24,6 @@ namespace Services.Management.Administration.Worker
         public int ReportUpdateIntervalInSeconds = 5;
         public StartWorkerHttpData ContextHttpData;
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 5;
-            }
-        }
+        public override int DataStructureVersionNumber => 5;
     }
 }

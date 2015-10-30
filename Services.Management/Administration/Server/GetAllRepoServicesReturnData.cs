@@ -9,12 +9,6 @@
     {
         public Dictionary<string, List<RepoServicesData>> RepoServices;
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
     }
 }

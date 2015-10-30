@@ -11,12 +11,6 @@ namespace Chains.Play.Installation
         public ServiceAccount Account;
         public bool DelayAutoStart;
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
     }
 }

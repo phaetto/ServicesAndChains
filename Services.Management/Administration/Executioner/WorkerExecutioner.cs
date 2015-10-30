@@ -29,13 +29,7 @@ namespace Services.Management.Administration.Executioner
 
         public object WrappedContext { get; private set; }
 
-        public WorkUnitContext WorkUnitContext
-        {
-            get
-            {
-                return workUnitContext;
-            }
-        }
+        public WorkUnitContext WorkUnitContext => workUnitContext;
 
         public WorkerExecutioner(ExecutionMode executionMode, StartWorkerData workerData, string session = null, string apiKey = null, IProcessExit processExit = null)
         {

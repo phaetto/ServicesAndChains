@@ -32,19 +32,8 @@
             httpServer.Stop();
         }
 
-        public object ServerProvider {
-            get
-            {
-                return httpServer;
-            }
-        }
+        public object ServerProvider => httpServer;
 
-        public ProtocolServerLogic ProtocolServerLogic
-        {
-            get
-            {
-                return protocolServerLogic;
-            }
-        }
+        public ProtocolServerLogic ProtocolServerLogic => protocolServerLogic;
     }
 }

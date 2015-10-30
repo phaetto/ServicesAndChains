@@ -9,12 +9,6 @@
         public string ServiceName { get; set; }
         public int Version { get; set; }
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
     }
 }

@@ -10,12 +10,6 @@
 
         public StartWorkerData[] workerDataArray = new StartWorkerData[10];
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
     }
 }

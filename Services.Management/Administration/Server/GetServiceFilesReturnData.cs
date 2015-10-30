@@ -8,12 +8,6 @@
     {
         public string[] Files { get; set; }
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
     }
 }

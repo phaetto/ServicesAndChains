@@ -14,12 +14,6 @@ namespace Services.Management.Administration.Worker
         public ProcessPerformanceData PerformanceData = new ProcessPerformanceData();
         public int NextUpdateInSeconds = 5;
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
     }
 }

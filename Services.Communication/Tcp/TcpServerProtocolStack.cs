@@ -74,13 +74,7 @@
             }
         }
 
-        public object ServerProvider
-        {
-            get
-            {
-                return tcpServer;
-            }
-        }
+        public object ServerProvider => tcpServer;
 
         public ProtocolServerLogic ProtocolServerLogic { get; private set; }
     }

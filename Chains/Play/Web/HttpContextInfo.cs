@@ -23,31 +23,13 @@
         private Stream inputStream;
         private readonly HttpListenerContext httpListenerContext;
 
-        public HttpContext HttpContext
-        {
-            get
-            {
-                return httpContext;
-            }
-        }
+        public HttpContext HttpContext => httpContext;
 
-        public HttpListenerContext HttpListenerContext
-        {
-            get
-            {
-                return httpListenerContext;
-            }
-        }
+        public HttpListenerContext HttpListenerContext => httpListenerContext;
 
-        public NameValueCollection QueryString
-        {
-            get
-            {
-                return httpListenerContext != null
-                    ? httpListenerContext.Request.QueryString
-                    : (queryStringRequestData ?? httpContext.Request.QueryString);
-            }
-        }
+        public NameValueCollection QueryString => httpListenerContext != null
+            ? httpListenerContext.Request.QueryString
+            : (queryStringRequestData ?? httpContext.Request.QueryString);
 
         public NameValueCollection Form
         {
@@ -79,13 +61,7 @@
             }
         }
 
-        public string this[string name]
-        {
-            get
-            {
-                return Form[name] ?? QueryString[name];
-            }
-        }
+        public string this[string name] => Form[name] ?? QueryString[name];
 
         public HttpCookieCollection Cookies
         {
@@ -112,55 +88,25 @@
             }
         }
 
-        public Stream InputStream
-        {
-            get
-            {
-                return httpListenerContext != null
-                    ? httpListenerContext.Request.InputStream
-                    : (httpContext != null ? httpContext.Request.InputStream : inputStream);
-            }
-        }
+        public Stream InputStream => httpListenerContext != null
+            ? httpListenerContext.Request.InputStream
+            : (httpContext != null ? httpContext.Request.InputStream : inputStream);
 
-        public string HttpMethod
-        {
-            get
-            {
-                return httpListenerContext != null
-                    ? httpListenerContext.Request.HttpMethod
-                    : (httpMethod ?? httpContext.Request.HttpMethod);
-            }
-        }
+        public string HttpMethod => httpListenerContext != null
+            ? httpListenerContext.Request.HttpMethod
+            : (httpMethod ?? httpContext.Request.HttpMethod);
 
-        public string RequestPath
-        {
-            get
-            {
-                return httpListenerContext != null
-                    ? httpListenerContext.Request.Url.AbsolutePath
-                    : (requestPath ?? httpContext.Request.Path);
-            }
-        }
+        public string RequestPath => httpListenerContext != null
+            ? httpListenerContext.Request.Url.AbsolutePath
+            : (requestPath ?? httpContext.Request.Path);
 
-        public string Host
-        {
-            get
-            {
-                return httpListenerContext != null
-                    ? httpListenerContext.Request.Url.Host
-                    : (host ?? httpContext.Request.Url.Host);
-            }
-        }
+        public string Host => httpListenerContext != null
+            ? httpListenerContext.Request.Url.Host
+            : (host ?? httpContext.Request.Url.Host);
 
-        public int Port
-        {
-            get
-            {
-                return httpListenerContext != null
-                    ? httpListenerContext.Request.Url.Port
-                    : (port > 0 ? port : httpContext.Request.Url.Port);
-            }
-        }
+        public int Port => httpListenerContext != null
+            ? httpListenerContext.Request.Url.Port
+            : (port > 0 ? port : httpContext.Request.Url.Port);
 
         public bool HasSession()
         {

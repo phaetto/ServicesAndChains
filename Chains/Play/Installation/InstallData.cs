@@ -8,12 +8,6 @@ namespace Chains.Play.Installation
         public bool Uninstall;
         public string[] Args;
 
-        public override int DataStructureVersionNumber
-        {
-            get
-            {
-                return 1;
-            }
-        }
+        public override int DataStructureVersionNumber => 1;
     }
 }
