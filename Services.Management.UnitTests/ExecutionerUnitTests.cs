@@ -61,8 +61,8 @@
                 AdminHost = AdministrationContext.Parent.Parent.Hostname,
                 AdminPort = AdministrationContext.Parent.Parent.Port,
                 ContextType = typeof(HostedContextForTest).FullName,
-                ContextServerHost = "127.0.0.1",
-                ContextServerPort = 10502,
+                ContextServerHost = "localhost",
+                ContextServerPort = 9100,
                 ContextHttpData = new StartWorkerHttpData
                                   {
                                       Path = "/"
@@ -165,7 +165,7 @@
                 AdminHost = AdministrationContext.Parent.Parent.Hostname,
                 AdminPort = AdministrationContext.Parent.Parent.Port,
                 ContextType = typeof(ContextForTestWithModules).FullName,
-                ContextServerHost = "127.0.0.1",
+                ContextServerHost = "localhost",
                 ContextServerPort = 10504,
                 Id = "test",
                 ContextHttpData = new StartWorkerHttpData

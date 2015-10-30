@@ -17,7 +17,7 @@
         [ClassInitialize]
         public static void WorkUnitTestsInitialize(TestContext testContext)
         {
-            AdministrationContext = new ServerHost("127.0.0.1", 10500).Do(new EnableAdminServer());
+            AdministrationContext = new ServerHost("127.0.0.1", 10600).Do(new EnableAdminServer());
         }
 
         [ClassCleanup]
@@ -39,7 +39,7 @@
                     ServiceName = "test service",
                     ContextType = typeof(ContextForTest).FullName,
                     AdminHost = "localhost",
-                    AdminPort = 10500
+                    AdminPort = 10600
                 }).Do(new ConnectWorkUnitToAdmin()).Do(new StartWorkUnit()))
             {
                 context.Log(lineToLog);
@@ -49,7 +49,7 @@
                 context.CanStop = true;
             }
 
-            using (var context = new Client("localhost", 10500).Do(new OpenConnection()))
+            using (var context = new Client("localhost", 10600).Do(new OpenConnection()))
             {
                 var result = context.Do(new Send<GetReportedDataReturnData>(new GetReportedData()));
 
@@ -69,7 +69,7 @@
                 ServiceName = "test service",
                 ContextType = typeof(ContextForTest).FullName,
                 AdminHost = "localhost",
-                AdminPort = 10500,
+                AdminPort = 10600,
                 Parameters = new object[] { "a", 10, true }
             };
 
