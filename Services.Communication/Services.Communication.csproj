@@ -104,7 +104,7 @@
     <Compile Include="Tcp\Servers\TcpCommand.cs" />
     <Compile Include="Tcp\Servers\TcpServer.cs" />
     <Compile Include="Tcp\Servers\TcpSession.cs" />
-    <Compile Include="Web\HttpServerModule.cs" />
+    <Compile Include="Web\HttpServerRequestHandler.cs" />
     <Compile Include="Web\ServeWebRequest.cs" />
     <Compile Include="Web\HttpClientProtocolStack.cs" />
     <Compile Include="Web\HttpServerProtocolStack.cs" />

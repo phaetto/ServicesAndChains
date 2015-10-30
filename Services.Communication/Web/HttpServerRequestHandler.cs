@@ -46,7 +46,7 @@
             {
                 var httpInfoContext = new HttpContextInfo(context);
 
-                var postJson = string.Empty;
+                string postJson;
                 using (var streamReader = new StreamReader(httpInfoContext.InputStream))
                 {
                     postJson = streamReader.ReadToEnd();
