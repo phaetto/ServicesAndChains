@@ -124,6 +124,7 @@
         }
 
         [TestMethod]
+        [ExpectedException(typeof(SecurityException))]
         public void WorkerExecutioner_WhenWorkerIncludesSecurityModule_ThenModuleIsBeenEnforcedAndExceptionIsThrown()
         {
             var workerDataWithModules = new StartWorkerData
@@ -148,18 +149,15 @@
             {
                 executioner.Execute();
 
-                Test.Throws<SecurityException>(
-                    () =>
-                    {
-                        using (var context = new Client("localhost", 10503).Do(new OpenConnection()))
-                        {
-                            context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
-                        }
-                    });
+                using (var context = new Client("localhost", 10503).Do(new OpenConnection()))
+                {
+                    context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
+                }
             }
         }
 
         [TestMethod]
+        [ExpectedException(typeof(SecurityException))]
         public void WorkerExecutioner_WhenWorkerIsHostedThroughHttpAndSecurityModule_ThenModuleIsBeenEnforcedAndExceptionIsThrown()
         {
             var workerDataWithModules = new StartWorkerData
@@ -188,18 +186,15 @@
             {
                 executioner.Execute();
 
-                Test.Throws<SecurityException>(
-                    () =>
-                    {
-                        using (var context = new Client("localhost", 10504, "/awesome-path").Do(new OpenConnection(protocolType: ProtocolType.Http)))
-                        {
-                            context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
-                        }
-                    });
+                using (var context = new Client("localhost", 10504, "/awesome-path").Do(new OpenConnection(protocolType: ProtocolType.Http)))
+                {
+                    context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
+                }
             }
         }
 
         [TestMethod]
+        [ExpectedException(typeof(SecurityException))]
         public void WorkerExecutioner_WhenWorkerIncludesSecurityModuleAndActionIsNotSecure_ThenModuleIsBeenEnforcedAndExceptionIsThrown()
         {
             var workerDataWithModules = new StartWorkerData
@@ -224,14 +219,10 @@
             {
                 executioner.Execute();
 
-                Test.Throws<SecurityException>(
-                    () =>
-                    {
-                        using (var context = new Client("localhost", 10505).Do(new OpenConnection()))
-                        {
-                            context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
-                        }
-                    });
+                using (var context = new Client("localhost", 10505).Do(new OpenConnection()))
+                {
+                    context.Do(new SecuredAuthorizableActionForTest(new ReproducibleTestData()));
+                }
             }
         }
 

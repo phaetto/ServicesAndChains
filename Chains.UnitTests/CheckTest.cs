@@ -13,9 +13,10 @@
         private const string ExceptionMessage = "Exception string triggered";
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void ArgumentNull_WhenValidatingNull_ThenItThrows()
         {
-            Test.Throws<ArgumentNullException>(() => TestMethod(null));
+            TestMethod(null);
         }
 
         [TestMethod]
@@ -25,9 +26,10 @@
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void ArgumentNull_WhenValidatingConditionMet_ThenItThrows()
         {
-            Test.Throws<ArgumentException>(() => TestMethod(ExceptionPrefix + "something here"));
+            TestMethod(ExceptionPrefix + "something here");
         }
 
         private void TestMethod(string arg)

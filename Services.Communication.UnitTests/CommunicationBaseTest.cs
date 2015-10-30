@@ -404,6 +404,7 @@
         }
 
         [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
         public void TcpServer_WhenClientSendsNotSupportedAction_ThenItDoesNotExecute()
         {
             var testAction = new ReproducibleTestAction2(
@@ -412,16 +413,12 @@
                     ChangeToValue = "over tcp"
                 });
 
-            Test.Throws<NotSupportedException>(
-                () =>
+            using (new ServerHost("127.0.0.1", 15002).Do(new StartListen(typeof(ContextForTest).FullName)))
+            {
+                using (new Client("127.0.0.1", 15002).Do(new OpenConnection()).Do(testAction))
                 {
-                    using (new ServerHost("127.0.0.1", 15002).Do(new StartListen(typeof(ContextForTest).FullName)))
-                    {
-                        using (new Client("127.0.0.1", 15002).Do(new OpenConnection()).Do(testAction))
-                        {
-                        }
-                    }
-                });
+                }
+            }
         }
 
         private void SendMessage()
