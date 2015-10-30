@@ -21,13 +21,13 @@
 
         public void OpenServerConnection(ServerHost context)
         {
-            var name = string.Format("{0}:{1}", context.Parent.Hostname, context.Parent.Port);
+            var name = $"{context.Parent.Hostname}:{context.Parent.Port}";
 
             var serverConfig = new ServerConfig
                                {
                                    Ip = context.Parent.Hostname,
                                    Port = context.Parent.Port,
-                                   Name = string.Format("{0}-{1}", name, Guid.NewGuid()),
+                                   Name = $"{name}-{Guid.NewGuid()}",
                                    Mode = SocketMode.Tcp,
                                    MaxConnectionNumber = 5000,
                                    DisableSessionSnapshot = true,

@@ -91,10 +91,7 @@
                             var responseResult = HttpRequest.DoRequest(
                                 authorizationOptions.LoginUrl,
                                 "post",
-                                string.Format(
-                                    "username={0}&password={1}",
-                                    HttpLoginProviderForTest.UserName,
-                                    HttpLoginProviderForTest.Password),
+                                $"username={HttpLoginProviderForTest.UserName}&password={HttpLoginProviderForTest.Password}",
                                 HttpRequest.FormUrlEncodedContentType);
 
                             Assert.IsFalse(responseResult.HasError);

@@ -38,7 +38,7 @@
                 var arguments = workerExecutioner.GetProcessArguments(ExecutionMode.Worker);
                 if (AbstractChain.IsMono)
                 {
-                    arguments = string.Format("\"{0}\" {1}", fileName, arguments);
+                    arguments = $"\"{fileName}\" {arguments}";
                     fileName = "mono";
                 }
 

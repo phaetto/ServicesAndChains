@@ -177,7 +177,8 @@
 
             var aggregatable = this as IAggreggatable<T>;
 
-            Check.ConditionNotSupported(aggregatable == null, "Aggregation is not supported from the type " + GetType().FullName);
+            Check.ConditionNotSupported(aggregatable == null,
+                $"Aggregation is not supported from the type {GetType().FullName}");
 
             aggregatable.AggregateToThis(context.Do(action));
 

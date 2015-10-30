@@ -71,7 +71,7 @@
 
                 using (var writer = new StreamWriter(socketStream, Encoding.ASCII))
                 {
-                    writer.Write(string.Format("{0} {1}\r\n", command, data));
+                    writer.Write($"{command} {data}\r\n");
                     writer.Flush();
                 }
             }
@@ -91,7 +91,7 @@
 
                 using (var writer = new StreamWriter(socketStream, Encoding.ASCII))
                 {
-                    writer.Write(string.Format("{0} {1}\r\n", command, data));
+                    writer.Write($"{command} {data}\r\n");
                     writer.Flush();
 
                     using (var reader = new StreamReader(socketStream, Encoding.ASCII))

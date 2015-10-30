@@ -42,8 +42,8 @@
         {
             var lastChangedTime = File.GetLastWriteTimeUtc(file);
 
-            workUnitContext.LogLine(string.Format("Service updater started looking at '{0}'", file));
-            workUnitContext.LogLine(string.Format("File has last been updated on '{0}'", lastChangedTime));
+            workUnitContext.LogLine($"Service updater started looking at '{file}'");
+            workUnitContext.LogLine($"File has last been updated on '{lastChangedTime}'");
 
             while (true)
             {

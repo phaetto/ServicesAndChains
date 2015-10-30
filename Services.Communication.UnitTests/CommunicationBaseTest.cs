@@ -429,14 +429,8 @@
                     ChangeToValue = "over tcp"
                 });
 
-            var commandText = string.Format(
-                "TcpCommand {0}{1}",
-                SerializableSpecification.SerializeManyToJson(
-                    new[]
-                    {
-                        testAction.GetInstanceSpec()
-                    }),
-                Environment.NewLine);
+            var commandText =
+                $"TcpCommand {SerializableSpecification.SerializeManyToJson(new[] { testAction.GetInstanceSpec() })}{Environment.NewLine}";
 
             using (var socket = CreateClient(7123))
             {

@@ -16,7 +16,7 @@
 
             var expression = (MemberExpression)action.Body;
             var name = expression.Member.Name;
-            throw new ArgumentNullException(name, message ?? string.Format("Parameter '{0}' is null", name));
+            throw new ArgumentNullException(name, message ?? $"Parameter '{name}' is null");
         }
 
         public static void ArgumentNullOrEmpty(Expression<Func<string>> action, string message = null)
@@ -30,7 +30,7 @@
 
             var expression = (MemberExpression)action.Body;
             var name = expression.Member.Name;
-            throw new ArgumentNullException(name, message ?? string.Format("Parameter '{0}' is null or empty", name));
+            throw new ArgumentNullException(name, message ?? $"Parameter '{name}' is null or empty");
         }
 
         public static void Argument<T>(bool condition, Expression<Func<T>> action, string message)
@@ -42,7 +42,7 @@
 
             var expression = (MemberExpression)action.Body;
             var name = expression.Member.Name;
-            throw new ArgumentException(string.Format("Argument '{0}' error: {1}", name, message), name);
+            throw new ArgumentException($"Argument '{name}' error: {message}", name);
         }
 
         public static void ArgumentOutOfRange<T>(bool condition, Expression<Func<T>> action, string message)
@@ -56,7 +56,7 @@
 
             var expression = (MemberExpression)action.Body;
             var name = expression.Member.Name;
-            throw new ArgumentOutOfRangeException(name, actualValue, string.Format("Argument out of range '{0}': {1}", name, message));
+            throw new ArgumentOutOfRangeException(name, actualValue, $"Argument out of range '{name}': {message}");
         }
 
         public static void ConditionNotSupported(bool condition, string message, Exception baseException = null)

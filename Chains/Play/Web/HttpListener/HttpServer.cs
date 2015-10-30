@@ -189,12 +189,7 @@
                             if (httpListenerContext.Request.Url.Host.ToLowerInvariant() == "localhost")
                             {
                                 HttpResultContext.Error(
-                                    string.Format(
-                                        "<h1>{0}</h1><p>{1}</p><p>{2}</p><p>{3}</p>",
-                                        ex.Message,
-                                        ex.GetType().FullName,
-                                        ex.Source,
-                                        ex.StackTrace)).ApplyOutputToHttpContext(httpListenerContext);
+                                    $"<h1>{ex.Message}</h1><p>{ex.GetType().FullName}</p><p>{ex.Source}</p><p>{ex.StackTrace}</p>").ApplyOutputToHttpContext(httpListenerContext);
                             }
                             else
                             {

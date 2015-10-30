@@ -23,7 +23,7 @@
                 throw new InvalidOperationException("The file data cannot be empty.");
             }
 
-            var tempFile = string.Format("{0}-temp.zip", Data.ServiceName);
+            var tempFile = $"{Data.ServiceName}-temp.zip";
             File.WriteAllBytes(tempFile, Data.FileData);
 
             context.Do(

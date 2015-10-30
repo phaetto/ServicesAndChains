@@ -240,7 +240,7 @@ namespace Services.Management.Administration.Executioner
                     new ProcessStartInfo
                     {
                         FileName = "chmod",
-                        Arguments = string.Format("u+x {0}", "*"),
+                        Arguments = $"u+x {"*"}",
                         WorkingDirectory = folder,
                         UseShellExecute = true
                     });

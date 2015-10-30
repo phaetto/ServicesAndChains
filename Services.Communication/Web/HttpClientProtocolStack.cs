@@ -34,17 +34,17 @@
 
         public void SendStream(string data)
         {
-            var server = "http://" + context.Hostname;
+            var server = $"http://{context.Hostname}";
             if (context.Port != 80)
             {
-                server += ":" + context.Port;
+                server += $":{context.Port}";
             }
 
             var headers = new NameValueCollection();
             headers.Add(HeaderKeyAndValue, HeaderKeyAndValue);
 
             var response = HttpRequest.DoRequest(
-                string.Format("{0}{1}", server, context.Path),
+                $"{server}{context.Path}",
                 "post",
                 data,
                 headers: headers);
@@ -57,13 +57,13 @@
 
         public string SendAndReceiveStream(string data)
         {
-            var server = "http://" + context.Hostname;
+            var server = $"http://{context.Hostname}";
             if (context.Port != 80)
             {
-                server += ":" + context.Port;
+                server += $":{context.Port}";
             }
 
-            var response = HttpRequest.DoRequest(string.Format("{0}{1}", server, context.Path), "post", data);
+            var response = HttpRequest.DoRequest($"{server}{context.Path}", "post", data);
 
             if (response.HasError)
             {

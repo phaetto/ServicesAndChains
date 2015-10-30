@@ -7,10 +7,8 @@
     {
         public void SaveToFile(Exception exception)
         {
-            var filePath = string.Format(
-                "{0}EmergencyLogger.{1}.txt",
-                AppDomain.CurrentDomain.BaseDirectory,
-                DateTime.UtcNow.ToString("yyyy.MM.dd.hh.mm.ss"));
+            var filePath =
+                $"{AppDomain.CurrentDomain.BaseDirectory}EmergencyLogger.{DateTime.UtcNow.ToString("yyyy.MM.dd.hh.mm.ss")}.txt";
 
             var contents = string.Empty;
             while (exception != null)

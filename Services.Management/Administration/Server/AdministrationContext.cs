@@ -124,8 +124,7 @@
             lock (AdministrationData)
             {
                 LogMessageFormatter(
-                    string.Format(
-                        "{0}\n\n{1}\n\n{2}\n\n", exception.Message, exception.GetType().FullName, exception.StackTrace));
+                    $"{exception.Message}\n\n{exception.GetType().FullName}\n\n{exception.StackTrace}\n\n");
             }
         }
 
@@ -174,10 +173,7 @@
 
         private void LogMessageFormatter(string text)
         {
-            var formattedText = string.Format(
-                "{0} (utc) {1}",
-                DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss"),
-                text);
+            var formattedText = $"{DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss")} (utc) {text}";
 
             Console.WriteLine(formattedText);
 
