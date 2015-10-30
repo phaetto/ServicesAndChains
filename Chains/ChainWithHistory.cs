@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Chains.Exceptions;
 
     public class ChainWithHistory<T> : Chain<T>
         where T : Chain<T>
@@ -56,27 +57,24 @@
 
         public Type Get<Type>() where Type : class
         {
-            return ActionList.FirstOrDefault(x => x as Type != null) as Type;
+            return ActionList.FirstOrDefault(x => x is Type) as Type;
         }
 
         public IEnumerable<Type> GetAll<Type>() where Type : class
         {
-            return ActionList.Where(x => x as Type != null)
-                .Select(x => x as Type).ToArray();
+            return ActionList.OfType<Type>().ToArray();
         }
 
         public IChainableAction<ChainType, ReturnChainType> Get<ChainType, ReturnChainType>()
         {
             return ActionList
-                .FirstOrDefault(x => x as IChainableAction<ChainType, ReturnChainType> != null)
+                .FirstOrDefault(x => x is IChainableAction<ChainType, ReturnChainType>)
                 as IChainableAction<ChainType, ReturnChainType>;
         }
 
         public IEnumerable<IChainableAction<ChainType, ReturnChainType>> GetAll<ChainType, ReturnChainType>()
         {
-            return ActionList.Where(x => x as IChainableAction<ChainType, ReturnChainType> != null)
-                .Select(x => x as IChainableAction<ChainType, ReturnChainType>)
-                .ToArray();
+            return ActionList.OfType<IChainableAction<ChainType, ReturnChainType>>().ToArray();
         }
     }
 }
