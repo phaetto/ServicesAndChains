@@ -40,6 +40,44 @@
             return result;
         }
 
+        public IEnumerable<TReturnChainType> Do<TReturnChainType>(
+            IEnumerable<IChainableAction<T, TReturnChainType>> actions)
+        {
+            Check.ArgumentNull(() => actions);
+
+            foreach (var action in actions)
+            {
+                OnBeforeExecuteAction?.Invoke(action);
+
+                var result = action.Act((T) this);
+
+                OnAfterExecuteAction?.Invoke(action);
+
+                yield return result;
+            }
+        }
+
+        public IEnumerable<Task<TReturnChainType>> Do<TReturnChainType>(
+            IEnumerable<IChainableAction<T, Task<TReturnChainType>>> actions)
+        {
+            Check.ArgumentNull(() => actions);
+
+            foreach (var action in actions)
+            {
+                OnBeforeExecuteAction?.Invoke(action);
+
+                var result = action.Act((T)this).ContinueWith(
+                    x =>
+                    {
+                        OnAfterExecuteAction?.Invoke(action);
+
+                        return x.Result;
+                    });
+
+                yield return result;
+            }
+        }
+
         public Task<TReturnChainType> DoAsync<TReturnChainType>(
             IChainableAction<T, TReturnChainType> action)
         {
@@ -58,6 +96,24 @@
                 });
 
             return resultTask;
+        }
+
+        public Task<TReturnChainType> DoAsync<TReturnChainType>(
+            IEnumerable<IChainableAction<T, TReturnChainType>> actions)
+        {
+            Check.ArgumentNull(() => actions);
+
+            return Task.Factory.StartNew(() =>
+                {
+                    var results = Do(actions);
+                    var lastResult = default(TReturnChainType);
+                    foreach (var result in results)
+                    {
+                        lastResult = result;
+                    }
+
+                    return lastResult;
+                });
         }
 
         public TReturnChainType DoFirst<TReturnChainType>(
@@ -113,61 +169,6 @@
         public TReturnChainType DoFirstNotNull<TReturnChainType>(params Func<T, TReturnChainType>[] actions)
         {
             return DoFirst(x => !Equals(x, null), actions);
-        }
-
-        public IEnumerable<TReturnChainType> DoParallelFor<TReturnChainType>(
-            int from,
-            int to,
-            IChainableAction<T, TReturnChainType> action)
-        {
-            Check.ArgumentOutOfRange(from < 0, () => from, "Should be larger than -1.");
-            Check.ArgumentOutOfRange(to < 1, () => to, "Should be larger than 0");
-            Check.ArgumentOutOfRange(to < from, () => to, "To should be larger than From.");
-            Check.ArgumentNull(() => action);
-
-            OnBeforeExecuteAction?.Invoke(action);
-
-            var results = new TReturnChainType[to - from];
-
-            Parallel.For(
-                from,
-                to,
-                (number, state) =>
-                {
-                    results[number] = action.Act((T)this);
-
-                    OnAfterExecuteAction?.Invoke(action);
-                });
-
-            return results;
-        }
-
-        public IEnumerable<TReturnChainType> DoParallelFor<TReturnChainType>(
-            IChainableAction<T, TReturnChainType>[] actions)
-        {
-            Check.ArgumentNull(() => actions);
-
-            if (OnBeforeExecuteAction != null)
-            {
-                foreach (var action in actions)
-                {
-                    OnBeforeExecuteAction(action);
-                }
-            }
-
-            var results = new TReturnChainType[actions.Length];
-
-            Parallel.For(
-                0,
-                actions.Length,
-                (number, state) =>
-                {
-                    results[number] = actions[number].Act((T)this);
-
-                    OnAfterExecuteAction?.Invoke(actions[number]);
-                });
-
-            return results;
         }
 
         public T Aggregate<TContextType>(TContextType context, IChainableAction<TContextType, T> action)

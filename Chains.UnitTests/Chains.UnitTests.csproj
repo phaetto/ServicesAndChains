@@ -97,6 +97,7 @@
     <Compile Include="CheckTest.cs" />
     <Compile Include="ChainAsyncTest.cs" />
     <Compile Include="CreateObjectTests.cs" />
+    <Compile Include="ChainIEnumerableTest.cs" />
     <Compile Include="HttpContextInfoBehavior.cs" />
     <Compile Include="HttpListenerTest.cs" />
     <Compile Include="ModuleTest.cs" />
