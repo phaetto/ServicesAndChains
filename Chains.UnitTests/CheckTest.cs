@@ -2,7 +2,6 @@
 {
     using System;
     using Chains.Exceptions;
-    using Chains.UnitTests.Classes;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
