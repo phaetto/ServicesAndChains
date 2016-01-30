@@ -25,14 +25,14 @@
                 }).ContinueWith(x => Task.Delay(TimeBetweenValueUpdates).ContinueWith(y =>
                 {
                     blockingColection.Add(new ActionForTest("Value 2"));
-                })).ContinueWith(x => Task.Delay(TimeBetweenValueUpdates).ContinueWith(y =>
+                })).Unwrap().ContinueWith(x => Task.Delay(TimeBetweenValueUpdates).ContinueWith(y =>
                 {
                     blockingColection.Add(new ActionForTest("Value 3"));
-                })).ContinueWith(x => Task.Delay(TimeBetweenValueUpdates).ContinueWith(y =>
+                })).Unwrap().ContinueWith(x => Task.Delay(TimeBetweenValueUpdates).ContinueWith(y =>
                 {
                     // Signals that there are no more items
                     blockingColection.CompleteAdding();
-                }));
+                })).Unwrap();
 
             var infiniteStream = contextForTest.Do(blockingColection.GetConsumingEnumerable());
 
