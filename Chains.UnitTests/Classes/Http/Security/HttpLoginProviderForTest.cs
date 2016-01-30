@@ -1,4 +1,4 @@
-﻿namespace Chains.UnitTests.Classes.Security
+﻿namespace Chains.UnitTests.Classes.Http.Security
 {
     using System.Net;
     using Chains.Play.Web;

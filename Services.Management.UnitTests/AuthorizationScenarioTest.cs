@@ -6,6 +6,7 @@
     using Chains.Play.Web;
     using Chains.Play.Web.HttpListener;
     using Chains.UnitTests.Classes;
+    using Chains.UnitTests.Classes.Http.Security;
     using Chains.UnitTests.Classes.Security;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Services.Communication.Protocol;

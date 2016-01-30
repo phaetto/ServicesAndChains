@@ -1,4 +1,4 @@
-﻿namespace Chains.UnitTests.Classes.Security
+﻿namespace Chains.UnitTests.Classes.Http
 {
     using System;
     using System.Net;

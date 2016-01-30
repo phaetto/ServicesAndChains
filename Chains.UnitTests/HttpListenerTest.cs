@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
     using Chains.Play.Web;
     using Chains.Play.Web.HttpListener;
+    using Chains.UnitTests.Classes.Http;
     using Chains.UnitTests.Classes.Security;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
