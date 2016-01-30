@@ -16,7 +16,7 @@
         [SuppressMessage("ReSharper", "UnusedVariable")]
         public void Chain_WhenInfiniteListIsProvided_ThenSuccesfullyAppliesItems()
         {
-            var blockingColection = new BlockingCollection<ActionForTest>(new ConcurrentQueue<ActionForTest>(), 100);
+            var blockingColection = new BlockingCollection<ActionForTest>(new ConcurrentQueue<ActionForTest>(), 10);
             var contextForTest = new ContextForTest();
 
             Task.Delay(10).ContinueWith(x =>
@@ -48,7 +48,7 @@
         [TestMethod]
         public async Task Chain_WhenInfiniteListIsProvidedAsync_ThenSuccesfullyAppliesItems()
         {
-            var blockingColection = new BlockingCollection<ActionForTest>(new ConcurrentQueue<ActionForTest>(), 100);
+            var blockingColection = new BlockingCollection<ActionForTest>(new ConcurrentQueue<ActionForTest>(), 10);
 
             var contextForTest = new ContextForTest();
 
@@ -68,7 +68,7 @@
         [TestMethod]
         public void Chain_WhenInfiniteListIsProvidedAsync_ThenSuccesfullyAppliesItemsInEventLikeMannerRightAfterTheStreamItem()
         {
-            var blockingColection = new BlockingCollection<ActionForTest>(new ConcurrentQueue<ActionForTest>(), 100);
+            var blockingColection = new BlockingCollection<ActionForTest>(new ConcurrentQueue<ActionForTest>(), 10);
 
             var contextForTest = new ContextForTest();
 
