@@ -10,11 +10,11 @@
 
         public const string Password = "1234";
 
-        public readonly string output;
+        public readonly string Output;
 
         public HttpLoginProviderForTest(string output, HttpServer server)
         {
-            this.output = output;
+            this.Output = output;
 
             server.AddPath("/login/");
         }
@@ -27,7 +27,7 @@
 
                 if (contextInfo.Form["username"] == UserName && contextInfo.Form["password"] == Password)
                 {
-                    new HttpResultContext(output).ApplyOutputToHttpContext(contextInfo);
+                    new HttpResultContext(Output).ApplyOutputToHttpContext(contextInfo);
 
                     return true;
                 }
