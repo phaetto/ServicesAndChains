@@ -16,7 +16,7 @@ namespace Services.Communication.DataStructures.Queues.Reliable
                                             {
                                                 Specification = actionSpecification,
                                                 DateIssued = DateTime.UtcNow,
-                                                Id = context.random.Next(int.MaxValue)
+                                                Id = context.Random.Next(int.MaxValue)
                                             };
                     context.UnacknowledgedQueuedItems.Add(unacknowledgeItem);
 

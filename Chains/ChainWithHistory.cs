@@ -10,10 +10,10 @@
     {
         public ChainWithHistory()
         {
-            OnAfterExecuteAction = onBeforeExecute;
+            OnAfterExecuteAction = OnBeforeExecute;
         }
 
-        private void onBeforeExecute(object action)
+        private void OnBeforeExecute(object action)
         {
             AddToHistory(action);
         }
@@ -45,36 +45,36 @@
             return ActionList.Any(x => x.GetType() == type);
         }
 
-        public bool IsInChain<Type>()
+        public bool IsInChain<TYpe>()
         {
-            return IsInChain(typeof(Type));
+            return IsInChain(typeof(TYpe));
         }
 
-        public bool IsInChain<ChainType, ReturnChainType>()
+        public bool IsInChain<TChainType, TReturnChainType>()
         {
-            return IsInChain(typeof(IChainableAction<ChainType, ReturnChainType>));
+            return IsInChain(typeof(IChainableAction<TChainType, TReturnChainType>));
         }
 
-        public Type Get<Type>() where Type : class
+        public TYpe Get<TYpe>() where TYpe : class
         {
-            return ActionList.FirstOrDefault(x => x is Type) as Type;
+            return ActionList.FirstOrDefault(x => x is TYpe) as TYpe;
         }
 
-        public IEnumerable<Type> GetAll<Type>() where Type : class
+        public IEnumerable<TYpe> GetAll<TYpe>() where TYpe : class
         {
-            return ActionList.OfType<Type>().ToArray();
+            return ActionList.OfType<TYpe>().ToArray();
         }
 
-        public IChainableAction<ChainType, ReturnChainType> Get<ChainType, ReturnChainType>()
+        public IChainableAction<TChainType, TReturnChainType> Get<TChainType, TReturnChainType>()
         {
             return ActionList
-                .FirstOrDefault(x => x is IChainableAction<ChainType, ReturnChainType>)
-                as IChainableAction<ChainType, ReturnChainType>;
+                .FirstOrDefault(x => x is IChainableAction<TChainType, TReturnChainType>)
+                as IChainableAction<TChainType, TReturnChainType>;
         }
 
-        public IEnumerable<IChainableAction<ChainType, ReturnChainType>> GetAll<ChainType, ReturnChainType>()
+        public IEnumerable<IChainableAction<TChainType, TReturnChainType>> GetAll<TChainType, TReturnChainType>()
         {
-            return ActionList.OfType<IChainableAction<ChainType, ReturnChainType>>().ToArray();
+            return ActionList.OfType<IChainableAction<TChainType, TReturnChainType>>().ToArray();
         }
     }
 }

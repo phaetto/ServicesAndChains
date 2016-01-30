@@ -19,7 +19,7 @@
             var result = (ContextForTest)player.CurrentContext;
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.contextVariable, "value 3");
+            Assert.AreEqual(result.ContextVariable, "value 3");
         }
 
         [TestMethod]
@@ -35,7 +35,7 @@
 
             var result = (ContextForTest)player.CurrentContext;
 
-            Assert.AreEqual(result.contextVariable, "value 3");
+            Assert.AreEqual(result.ContextVariable, "value 3");
         }
 
         [TestMethod]
@@ -59,7 +59,7 @@
 
             var result = (ContextForTest)player.CurrentContext;
 
-            Assert.AreEqual(result.contextVariable, "changed value");
+            Assert.AreEqual(result.ContextVariable, "changed value");
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@
 
             var result = (ContextForTest)player.CurrentContext;
 
-            Assert.AreEqual(result.contextVariable, "new value");
+            Assert.AreEqual(result.ContextVariable, "new value");
         }
 
         [TestMethod]

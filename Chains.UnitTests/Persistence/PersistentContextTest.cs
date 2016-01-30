@@ -19,8 +19,8 @@
                                                 .Do(new ChangeNameAction("Name 3"));
 
             // Emulates a concurrency failure
-            CustomPersistentStore<ContextData>.memoryStoreDateTimes[persistentTestContext.Data.Id] =
-                CustomPersistentStore<ContextData>.memoryStoreDateTimes[persistentTestContext.Data.Id].AddSeconds(10);
+            CustomPersistentStore<ContextData>.MemoryStoreDateTimes[persistentTestContext.Data.Id] =
+                CustomPersistentStore<ContextData>.MemoryStoreDateTimes[persistentTestContext.Data.Id].AddSeconds(10);
 
             Test.Throws<DataIntegrityViolationException>(() => persistentTestContext.Do(new ChangeNameAction("Another Name")));
 

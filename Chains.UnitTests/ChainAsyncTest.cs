@@ -15,13 +15,13 @@
                         .Do(new ActionForTestAsync("value 2"))
                         .Do(new ActionForTestAsync("value 3"));
 
-            Assert.AreEqual(result.contextVariable, "value 3");
+            Assert.AreEqual(result.ContextVariable, "value 3");
 
             await result.Do(new ActionForTestAsync("value 4"))
                       .Do(new ActionForTestAsync("value 5"))
                       .Do(new ActionForTestAsync("value 6"));
 
-            Assert.AreEqual(result.contextVariable, "value 6");
+            Assert.AreEqual(result.ContextVariable, "value 6");
         }
 
         [TestMethod]
@@ -32,13 +32,13 @@
                         .Do(new ActionForTest("value 2"))
                         .Do(new ActionForTestAsync("value 3"));
 
-            Assert.AreEqual(result.contextVariable, "value 3");
+            Assert.AreEqual(result.ContextVariable, "value 3");
 
             await result.Do(new ActionForTest("value 4"))
                       .Do(new ActionForTestAsync("value 5"))
                       .Do(new ActionForTest("value 6"));
 
-            Assert.AreEqual(result.contextVariable, "value 6");
+            Assert.AreEqual(result.ContextVariable, "value 6");
         }
 
         [TestMethod]
@@ -49,13 +49,13 @@
                         .DoAsync(new ActionForTest("value 2"))
                         .DoAsync(new ActionForTest("value 3"));
 
-            Assert.AreEqual(result.contextVariable, "value 3");
+            Assert.AreEqual(result.ContextVariable, "value 3");
 
             await result.DoAsync(new ActionForTest("value 4"))
                       .DoAsync(new ActionForTest("value 5"))
                       .DoAsync(new ActionForTest("value 6"));
 
-            Assert.AreEqual(result.contextVariable, "value 6");
+            Assert.AreEqual(result.ContextVariable, "value 6");
         }
 
         [TestMethod]
@@ -66,13 +66,13 @@
                         .Do(new ActionForTest("value 2"))
                         .DoAsync(new ActionForTest("value 3"));
 
-            Assert.AreEqual(result.contextVariable, "value 3");
+            Assert.AreEqual(result.ContextVariable, "value 3");
 
             await result.Do(new ActionForTest("value 4"))
                       .DoAsync(new ActionForTest("value 5"))
                       .Do(new ActionForTest("value 6"));
 
-            Assert.AreEqual(result.contextVariable, "value 6");
+            Assert.AreEqual(result.ContextVariable, "value 6");
         }
 
         [TestMethod]
@@ -83,13 +83,13 @@
                         .Do(new ActionForTestAsync("value 2"))
                         .Do(new ActionForTest("value 3"));
 
-            Assert.AreEqual(result.contextVariable, "value 3");
+            Assert.AreEqual(result.ContextVariable, "value 3");
 
             await result.Do(new ActionForTestAsync("value 4"))
                       .DoAsync(new ActionForTest("value 5"))
                       .Do(new ActionForTest("value 6"));
 
-            Assert.AreEqual(result.contextVariable, "value 6");
+            Assert.AreEqual(result.ContextVariable, "value 6");
         }
 
         [TestMethod]
@@ -113,13 +113,13 @@
             Task.WaitAll(task);
 
             Assert.IsFalse(context.HasBeenChecked);
-            Assert.AreEqual("value 3", context.contextVariable);
+            Assert.AreEqual("value 3", context.ContextVariable);
 
             context = await context.Do(new ActionForTest("value 4"))
                       .Do(new ActionForTestAsync("value 5"))
                       .Do(new ActionForTest("value 6"));
 
-            Assert.AreEqual("value 6", context.contextVariable);
+            Assert.AreEqual("value 6", context.ContextVariable);
 
             await loopTask;
 

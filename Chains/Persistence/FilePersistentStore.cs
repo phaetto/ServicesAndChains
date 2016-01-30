@@ -8,28 +8,28 @@
     public class FilePersistentStore<T> : IPersistentStore<T>
         where T : SerializableSpecificationWithId, new()
     {
-        public readonly string folder;
-        public readonly string directory;
+        public readonly string Folder;
+        public readonly string Directory;
 
         public FilePersistentStore(string folder)
         {
-            this.folder = folder;
-            directory = folder + Path.DirectorySeparatorChar + typeof(T).FullName;
+            this.Folder = folder;
+            Directory = folder + Path.DirectorySeparatorChar + typeof(T).FullName;
 
-            if (!Directory.Exists(directory))
+            if (!System.IO.Directory.Exists(Directory))
             {
-                Directory.CreateDirectory(directory);
+                System.IO.Directory.CreateDirectory(Directory);
             }
         }
 
         private string GetFilePath(T data)
         {
-            return directory + Path.DirectorySeparatorChar + data.Id + ".jsonlist";
+            return Directory + Path.DirectorySeparatorChar + data.Id + ".jsonlist";
         }
 
         private string GetSnapshotFilePath(T data)
         {
-            return directory + Path.DirectorySeparatorChar + data.Id + ".json";
+            return Directory + Path.DirectorySeparatorChar + data.Id + ".json";
         }
 
         public bool SnapshotExists(T data)

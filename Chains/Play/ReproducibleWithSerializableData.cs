@@ -4,20 +4,20 @@
     using System.Runtime.Serialization;
     using Chains.Play.Security;
 
-    public abstract class ReproducibleWithSerializableData<DataType> : IReproducible
+    public abstract class ReproducibleWithSerializableData<TDataType> : IReproducible
     {
-        public DataType Data { get; set; }
+        public TDataType Data { get; set; }
 
         static ReproducibleWithSerializableData()
         {
-            if (!typeof(DataType).IsSerializable && !typeof(ISerializable).IsAssignableFrom(typeof(DataType)))
+            if (!typeof(TDataType).IsSerializable && !typeof(ISerializable).IsAssignableFrom(typeof(TDataType)))
             {
                 throw new InvalidOperationException(
                     "A serializable Type is required to use ReproducibleAction::DataType");
             }
         }
 
-        protected ReproducibleWithSerializableData(DataType data)
+        protected ReproducibleWithSerializableData(TDataType data)
         {
             Data = data;
         }

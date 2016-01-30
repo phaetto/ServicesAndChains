@@ -32,7 +32,7 @@
                         Session = ValidSession
                     }));
 
-            Assert.AreEqual("to-value", executionChain.CurrentContext.contextVariable);
+            Assert.AreEqual("to-value", executionChain.CurrentContext.ContextVariable);
         }
 
         [TestMethod]
@@ -73,7 +73,7 @@
                             ChangeToValue = "to-value"
                         })));
 
-            Assert.AreEqual("to-value", executionChain.CurrentContext.contextVariable);
+            Assert.AreEqual("to-value", executionChain.CurrentContext.ContextVariable);
         }
 
         [TestMethod]
@@ -144,7 +144,7 @@
                         }));
             }
 
-            Assert.AreEqual("to-value", executionChain.CurrentContext.contextVariable);
+            Assert.AreEqual("to-value", executionChain.CurrentContext.ContextVariable);
         }
     }
 }

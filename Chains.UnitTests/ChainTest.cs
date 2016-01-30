@@ -14,14 +14,14 @@
                                     .Do(new ActionForTest("value 2"))
                                     .Do(new ActionForTest("value 3"));
 
-            Assert.AreEqual(result.contextVariable, "value 3");
+            Assert.AreEqual(result.ContextVariable, "value 3");
 
             result =
                 result.Do(new ActionForTest("value 4"))
                       .Do(new ActionForTest("value 5"))
                       .Do(new ActionForTest("value 6"));
 
-            Assert.AreEqual(result.contextVariable, "value 6");
+            Assert.AreEqual(result.ContextVariable, "value 6");
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@
             var result = new ContextForTest().Do<ContextForTest>(new ActionThatPlaysInTwoContexts("value"));
 
             Assert.IsNotNull(result);
-            Assert.AreEqual("value", result.contextVariable);
+            Assert.AreEqual("value", result.ContextVariable);
         }
 
         [TestMethod]
@@ -46,7 +46,7 @@
                 ?.Do(new ActionForTest("value 5"))
                 ?.Do(new ActionForTest("value 6"));
 
-            Assert.AreEqual(result.contextVariable, "value 3");
+            Assert.AreEqual(result.ContextVariable, "value 3");
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@
                     x => x.Do(new ActionForTest("4"))?.Do(new ActionForTestReturnsNull()),
                     x => x.Do(new ActionForTest("5"))?.Do(new ActionForTestReturnsNull()));
 
-            Assert.AreEqual("5", result.contextVariable);
+            Assert.AreEqual("5", result.ContextVariable);
         }
     }
 }

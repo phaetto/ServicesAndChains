@@ -11,12 +11,12 @@
     {
         private readonly DateTime previousServerDateTimeStarted;
 
-        public readonly int waitDelayInMilliseconds;
+        public readonly int WaitDelayInMilliseconds;
 
         public WaitUntilNewAdminServerIsUp(DateTime previousServerDateTimeStarted, int waitDelayInMilliseconds = 5000)
         {
             this.previousServerDateTimeStarted = previousServerDateTimeStarted;
-            this.waitDelayInMilliseconds = waitDelayInMilliseconds;
+            this.WaitDelayInMilliseconds = waitDelayInMilliseconds;
         }
 
         public ClientConnectionContext Act(ClientConnectionContext context)
@@ -39,7 +39,7 @@
                 {
                 }
 
-                Thread.Sleep(waitDelayInMilliseconds);
+                Thread.Sleep(WaitDelayInMilliseconds);
             }
         }
     }

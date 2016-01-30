@@ -1,7 +1,7 @@
 ﻿namespace Chains
 {
-    public interface IChainableAction<in ChainType, out ReturnChainType>
+    public interface IChainableAction<in TChainType, out TReturnChainType>
     {
-        ReturnChainType Act(ChainType context);
+        TReturnChainType Act(TChainType context);
     }
 }

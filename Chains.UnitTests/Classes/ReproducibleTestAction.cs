@@ -13,7 +13,7 @@
 
         public override ReproducibleTestData Act(ContextForTest context)
         {
-            context.contextVariable = Data.ChangeToValue;
+            context.ContextVariable = Data.ChangeToValue;
             return Data;
         }
     }

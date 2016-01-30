@@ -42,7 +42,7 @@
                 // Called each time an item gets in
             }
 
-            Assert.AreEqual("Value 3", contextForTest.contextVariable);
+            Assert.AreEqual("Value 3", contextForTest.ContextVariable);
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@
             blockingColection.CompleteAdding();
             await task;
 
-            Assert.AreEqual("Value 3", contextForTest.contextVariable);
+            Assert.AreEqual("Value 3", contextForTest.ContextVariable);
         }
 
         [TestMethod]
@@ -78,17 +78,17 @@
             blockingColection.Add(new ActionForTest("Value 1"));
 
             Thread.Sleep(TimeBetweenValueUpdates);
-            Assert.AreEqual("Value 1", contextForTest.contextVariable);
+            Assert.AreEqual("Value 1", contextForTest.ContextVariable);
 
             blockingColection.Add(new ActionForTest("Value 2"));
 
             Thread.Sleep(TimeBetweenValueUpdates);
-            Assert.AreEqual("Value 2", contextForTest.contextVariable);
+            Assert.AreEqual("Value 2", contextForTest.ContextVariable);
 
             blockingColection.Add(new ActionForTest("Value 3"));
 
             Thread.Sleep(TimeBetweenValueUpdates);
-            Assert.AreEqual("Value 3", contextForTest.contextVariable);
+            Assert.AreEqual("Value 3", contextForTest.ContextVariable);
         }
     }
 }

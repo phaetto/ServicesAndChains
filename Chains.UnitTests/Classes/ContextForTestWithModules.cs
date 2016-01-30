@@ -5,7 +5,7 @@
 
     public class ContextForTestWithModules : Chain<ContextForTestWithModules>, IModular
     {
-        public string contextVariable = null;
+        public string ContextVariable = null;
 
         public ContextForTestWithModules()
         {

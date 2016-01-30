@@ -8,7 +8,7 @@
     {
         public List<StartWorkerData> WorkerData = new List<StartWorkerData>();
 
-        public StartWorkerData[] workerDataArray = new StartWorkerData[10];
+        public StartWorkerData[] WorkerDataArray = new StartWorkerData[10];
 
         public override int DataStructureVersionNumber => 1;
     }

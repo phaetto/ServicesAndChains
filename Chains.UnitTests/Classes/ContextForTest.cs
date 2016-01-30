@@ -2,7 +2,7 @@
 {
     public class ContextForTest : Chain<ContextForTest>
     {
-        public string contextVariable = null;
+        public string ContextVariable = null;
 
         public bool HasBeenChecked = false;
     }

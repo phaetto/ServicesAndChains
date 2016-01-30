@@ -116,7 +116,7 @@
                         }
                     }
 
-                    Assert.AreEqual("to-value", (worker.WrappedContext as SecuredContextForTest).contextVariable);
+                    Assert.AreEqual("to-value", (worker.WrappedContext as SecuredContextForTest).ContextVariable);
                 }
             }
         }

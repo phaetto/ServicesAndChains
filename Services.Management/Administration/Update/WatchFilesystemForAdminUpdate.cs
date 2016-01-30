@@ -14,11 +14,11 @@
         IDisposable,
         IWorkerEvents
     {
-        public readonly Thread checkThread = null;
+        public readonly Thread CheckThread = null;
 
-        public readonly int secondsChecking;
+        public readonly int SecondsChecking;
 
-        public readonly string file;
+        public readonly string File;
 
         private ClientConnectionContext adminServer;
 
@@ -26,26 +26,26 @@
 
         public WatchFilesystemForAdminUpdate(string file, int secondsChecking = 60, WorkUnitContext workUnitContext = null)
         {
-            this.file = file;
-            this.secondsChecking = secondsChecking;
+            this.File = file;
+            this.SecondsChecking = secondsChecking;
             this.workUnitContext = workUnitContext;
-            checkThread = new Thread(CheckFileSystemThread);
+            CheckThread = new Thread(CheckFileSystemThread);
         }
 
         private void CheckFileSystemThread()
         {
-            var lastChangedTime = File.GetLastWriteTimeUtc(file);
+            var lastChangedTime = System.IO.File.GetLastWriteTimeUtc(File);
 
-            workUnitContext.LogLine($"Updater started looking at '{file}'");
+            workUnitContext.LogLine($"Updater started looking at '{File}'");
             workUnitContext.LogLine($"File has last been updated on '{lastChangedTime}'");
 
             var serverDateTimeStarted = DateTime.MinValue;
 
             while (true)
             {
-                Thread.Sleep(secondsChecking * 1000);
+                Thread.Sleep(SecondsChecking * 1000);
 
-                var currentFileTime = File.GetLastWriteTimeUtc(file);
+                var currentFileTime = System.IO.File.GetLastWriteTimeUtc(File);
 
                 if (currentFileTime > lastChangedTime)
                 {
@@ -57,7 +57,7 @@
 
                         adminServer.Do(
                             new Send(
-                                new ApplyAdminUpdate(Path.GetDirectoryName(file))
+                                new ApplyAdminUpdate(Path.GetDirectoryName(File))
                                 {
                                     ApiKey = workUnitContext.ApiKey,
                                     Session = workUnitContext.Session
@@ -83,7 +83,7 @@
                                    new WorkerDataWithDelay
                                    {
                                        WorkerData = workUnitContext.WorkerData,
-                                       DelayInSeconds = secondsChecking
+                                       DelayInSeconds = SecondsChecking
                                    })
                                {
                                    ApiKey = workUnitContext.ApiKey,
@@ -105,7 +105,7 @@
 
             try
             {
-                checkThread.Abort();
+                CheckThread.Abort();
             }
             catch
             {
@@ -118,12 +118,12 @@
                 new Client(workUnitContext.WorkerData.AdminHost, workUnitContext.WorkerData.AdminPort).Do(
                     new OpenConnection());
 
-            checkThread.Start();
+            CheckThread.Start();
         }
 
         public void OnStop()
         {
-            checkThread.Abort();
+            CheckThread.Abort();
         }
     }
 }

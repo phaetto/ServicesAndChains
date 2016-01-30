@@ -124,7 +124,7 @@
                     var result = executioner.WrappedContext as ContextForTestWithEvents;
 
                     Assert.AreEqual(WorkUnitState.Stopping, executioner.WorkUnitContext.State);
-                    Assert.AreEqual(ContextForTestWithEvents.SuccessfullyStoppedMessage, result.contextVariable);
+                    Assert.AreEqual(ContextForTestWithEvents.SuccessfullyStoppedMessage, result.ContextVariable);
                 }
             }
         }
@@ -159,7 +159,7 @@
                     var result = executioner.WrappedContext as DisposableContextForTest;
 
                     Assert.AreEqual(WorkUnitState.Stopping, executioner.WorkUnitContext.State);
-                    Assert.AreEqual(DisposableContextForTest.SuccessfullyStoppedMessage, result.contextVariable);
+                    Assert.AreEqual(DisposableContextForTest.SuccessfullyStoppedMessage, result.ContextVariable);
                 }
             }
         }

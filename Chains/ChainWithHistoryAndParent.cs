@@ -1,24 +1,24 @@
 ﻿namespace Chains
 {
-    public class ChainWithHistoryAndParent<T, ParentType> : ChainWithHistory<T>
+    public class ChainWithHistoryAndParent<T, TParentType> : ChainWithHistory<T>
         where T : Chain<T>
-        where ParentType : AbstractChain
+        where TParentType : AbstractChain
     {
-        public readonly ParentType Parent;
+        public readonly TParentType Parent;
 
-        public ChainWithHistoryAndParent(ParentType chain)
+        public ChainWithHistoryAndParent(TParentType chain)
         {
             Parent = chain;
         }
 
-        public static implicit operator ChainWithParent<T, ParentType>(ChainWithHistoryAndParent<T, ParentType> chainWithHistoryAndParent)
+        public static implicit operator ChainWithParent<T, TParentType>(ChainWithHistoryAndParent<T, TParentType> chainWithHistoryAndParent)
         {
-            return new ChainWithParent<T, ParentType>(chainWithHistoryAndParent.Parent);
+            return new ChainWithParent<T, TParentType>(chainWithHistoryAndParent.Parent);
         }
 
-        public static implicit operator ChainWithHistoryAndParent<T, ParentType>(ChainWithParent<T, ParentType> chainWithParent)
+        public static implicit operator ChainWithHistoryAndParent<T, TParentType>(ChainWithParent<T, TParentType> chainWithParent)
         {
-            return new ChainWithHistoryAndParent<T, ParentType>(chainWithParent.Parent);
+            return new ChainWithHistoryAndParent<T, TParentType>(chainWithParent.Parent);
         }
     }
 }

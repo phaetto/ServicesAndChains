@@ -23,7 +23,7 @@
 
         public abstract int DataStructureVersionNumber { get; }
 
-        private void populateFieldsAndProperties()
+        private void PopulateFieldsAndProperties()
         {
             var entry = new FieldsAndPropertiesForClass
                         {
@@ -55,7 +55,7 @@
 
                 if (!reflectionCaching.ContainsKey(thisFullTypeName))
                 {
-                    populateFieldsAndProperties();
+                    PopulateFieldsAndProperties();
                 }
 
                 return reflectionCaching[thisFullTypeName].properties;
@@ -70,7 +70,7 @@
 
                 if (!reflectionCaching.ContainsKey(thisFullTypeName))
                 {
-                    populateFieldsAndProperties();
+                    PopulateFieldsAndProperties();
                 }
 
                 return reflectionCaching[thisFullTypeName].fields;
