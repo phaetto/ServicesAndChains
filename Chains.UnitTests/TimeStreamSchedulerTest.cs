@@ -27,10 +27,8 @@
 
                 Assert.IsTrue(infiniteStream.MoveNext());
 
-                Assert.IsTrue(timeStreamScheduler.IsIdle);
+                Assert.AreEqual("timer hit", contextForTest.ContextVariable);
             }
-
-            Assert.AreEqual("timer hit", contextForTest.ContextVariable);
         }
 
         [TestMethod]
@@ -156,7 +154,9 @@
                 timeStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 50, TimerScheduledCallType.Once, cancellationTokenSource.Token);
                 timeStreamScheduler.ScheduleActionCall(new ActionForTestAsync("timer hit (async)"), 10, TimerScheduledCallType.Recurrent);
 
-                var enumerationTask = Task.Factory.StartNew(() =>
+#pragma warning disable 4014
+                Task.Factory.StartNew(() =>
+#pragma warning restore 4014
                     {
                         var infiniteStream =
                             contextForTest.Do(timeStreamScheduler.AsStream<ActionForTest>())
@@ -165,7 +165,7 @@
                         Assert.IsTrue(infiniteStream.MoveNext());
 
                         // This should block - and get false
-                        Assert.IsFalse(infiniteStream.MoveNext());
+                        Test.Throws<OperationCanceledException>(() => infiniteStream.MoveNext());
                     });
 
                 await Task.Delay(70).ContinueWith(x =>
