@@ -35,6 +35,9 @@
                     return previousAdminReportData;
                 }
             }
+            catch (KeyNotFoundException)
+            {
+            }
             catch (SocketException)
             {
             }
