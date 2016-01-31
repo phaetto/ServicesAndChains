@@ -64,28 +64,28 @@
             return Data;
         }
 
-        internal static void CopyFilesWithoutRepoAndServices(AdministrationContext context, string SourcePath, string DestinationPath)
+        internal static void CopyFilesWithoutRepoAndServices(AdministrationContext context, string sourcePath, string destinationPath)
         {
-            if (!Directory.Exists(SourcePath))
+            if (!Directory.Exists(sourcePath))
             {
-                throw new DirectoryNotFoundException("Source directory '" + SourcePath + "' does not exists");
+                throw new DirectoryNotFoundException("Source directory '" + sourcePath + "' does not exists");
             }
 
-            var allDirectories = Directory.GetDirectories(SourcePath, "*", SearchOption.AllDirectories);
+            var allDirectories = Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories);
             foreach (var dirPath in allDirectories)
             {
                 if (!dirPath.StartsWith(context.RepositoryFolder) && !dirPath.StartsWith(context.ServicesFolder))
                 {
-                    Directory.CreateDirectory(dirPath.Replace(SourcePath, DestinationPath));
+                    Directory.CreateDirectory(dirPath.Replace(sourcePath, destinationPath));
                 }
             }
 
-            var allFiles = Directory.GetFiles(SourcePath, "*.*", SearchOption.AllDirectories);
+            var allFiles = Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories);
             foreach (var file in allFiles)
             {
                 if (!file.StartsWith(context.RepositoryFolder) && !file.StartsWith(context.ServicesFolder))
                 {
-                    var newFile = file.Replace(SourcePath, DestinationPath);
+                    var newFile = file.Replace(sourcePath, destinationPath);
 
                     if (File.Exists(newFile))
                     {
@@ -97,28 +97,28 @@
             }
         }
 
-        internal static void CopyFiles(string SourcePath, string DestinationPath)
+        internal static void CopyFiles(string sourcePath, string destinationPath)
         {
-            if (!Directory.Exists(SourcePath))
+            if (!Directory.Exists(sourcePath))
             {
-                throw new DirectoryNotFoundException("Source directory '" + SourcePath + "' does not exists");
+                throw new DirectoryNotFoundException("Source directory '" + sourcePath + "' does not exists");
             }
 
-            if (!Directory.Exists(DestinationPath))
+            if (!Directory.Exists(destinationPath))
             {
-                Directory.CreateDirectory(DestinationPath);
+                Directory.CreateDirectory(destinationPath);
             }
 
-            var allDirectories = Directory.GetDirectories(SourcePath, "*", SearchOption.AllDirectories);
+            var allDirectories = Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories);
             foreach (var dirPath in allDirectories)
             {
-                Directory.CreateDirectory(dirPath.Replace(SourcePath, DestinationPath));
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, destinationPath));
             }
 
-            var allFiles = Directory.GetFiles(SourcePath, "*.*", SearchOption.AllDirectories);
+            var allFiles = Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories);
             foreach (var file in allFiles)
             {
-                var newFile = file.Replace(SourcePath, DestinationPath);
+                var newFile = file.Replace(sourcePath, destinationPath);
 
                 if (File.Exists(newFile))
                 {

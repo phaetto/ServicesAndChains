@@ -1,9 +1,9 @@
 ﻿namespace Chains.Play
 {
-    public abstract class ReproducibleWithData<DataType> : ReproducibleWithSerializableData<DataType>
-        where DataType : SerializableSpecification, new()
+    public abstract class ReproducibleWithData<TDataType> : ReproducibleWithSerializableData<TDataType>
+        where TDataType : SerializableSpecification, new()
     {
-        protected ReproducibleWithData(DataType data) : base(data)
+        protected ReproducibleWithData(TDataType data) : base(data)
         {
         }
     }

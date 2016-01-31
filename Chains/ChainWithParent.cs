@@ -1,12 +1,12 @@
 ﻿namespace Chains
 {
-    public class ChainWithParent<T, ParentType> : Chain<T>
+    public class ChainWithParent<T, TParentType> : Chain<T>
         where T : Chain<T>
-        where ParentType : AbstractChain
+        where TParentType : AbstractChain
     {
-        public readonly ParentType Parent;
+        public readonly TParentType Parent;
 
-        public ChainWithParent(ParentType chain)
+        public ChainWithParent(TParentType chain)
         {
             Parent = chain;
         }

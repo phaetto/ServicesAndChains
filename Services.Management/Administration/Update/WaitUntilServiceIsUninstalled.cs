@@ -12,12 +12,12 @@ namespace Services.Management.Administration.Update
     {
         private readonly string serviceName;
 
-        public readonly int waitDelayInMilliseconds;
+        public readonly int WaitDelayInMilliseconds;
 
         public WaitUntilServiceIsUninstalled(string serviceName, int waitDelayInMilliseconds = 5000)
         {
             this.serviceName = serviceName;
-            this.waitDelayInMilliseconds = waitDelayInMilliseconds;
+            this.WaitDelayInMilliseconds = waitDelayInMilliseconds;
         }
 
         public ClientConnectionContext Act(ClientConnectionContext context)
@@ -35,7 +35,7 @@ namespace Services.Management.Administration.Update
                     return context;
                 }
 
-                Thread.Sleep(waitDelayInMilliseconds);
+                Thread.Sleep(WaitDelayInMilliseconds);
             }
         }
 

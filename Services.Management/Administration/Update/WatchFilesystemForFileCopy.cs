@@ -13,13 +13,13 @@
         IDisposable,
         IWorkerEvents
     {
-        public readonly int secondsChecking;
+        public readonly int SecondsChecking;
 
-        public readonly string file;
+        public readonly string File;
 
-        public readonly string executionerMainFile;
+        public readonly string ExecutionerMainFile;
 
-        public readonly string targetFolder;
+        public readonly string TargetFolder;
 
         private ClientConnectionContext adminServer;
 
@@ -30,28 +30,28 @@
         public WatchFilesystemForFileCopy(
             string targetFolder, string file, string executionerMainFile, int secondsChecking = 60, WorkUnitContext workUnitContext = null)
         {
-            this.file = file;
-            this.secondsChecking = secondsChecking;
-            this.executionerMainFile = executionerMainFile;
-            this.targetFolder = targetFolder;
+            this.File = file;
+            this.SecondsChecking = secondsChecking;
+            this.ExecutionerMainFile = executionerMainFile;
+            this.TargetFolder = targetFolder;
             this.workUnitContext = workUnitContext;
             ThreadPool.QueueUserWorkItem(CheckFileSystemThread);
         }
 
         private void CheckFileSystemThread(object state)
         {
-            var lastChangedTime = File.GetLastWriteTimeUtc(file);
+            var lastChangedTime = System.IO.File.GetLastWriteTimeUtc(File);
 
-            workUnitContext.LogLine($"Service updater started looking at '{file}'");
+            workUnitContext.LogLine($"Service updater started looking at '{File}'");
             workUnitContext.LogLine($"File has last been updated on '{lastChangedTime}'");
 
             while (true)
             {
-                var currentFileTime = File.GetLastWriteTimeUtc(file);
+                var currentFileTime = System.IO.File.GetLastWriteTimeUtc(File);
 
                 if (currentFileTime > lastChangedTime)
                 {
-                    workUnitContext.LogLine("Updating folder '" + targetFolder + "' by copying files...");
+                    workUnitContext.LogLine("Updating folder '" + TargetFolder + "' by copying files...");
                     try
                     {
                         adminServer.Do(
@@ -59,8 +59,8 @@
                                 new CopyFilesToFolder(
                                     new CopyFilesToFolderData
                                     {
-                                        FolderToUpdate = targetFolder,
-                                        File = file
+                                        FolderToUpdate = TargetFolder,
+                                        File = File
                                     })
                                 {
                                     ApiKey = workUnitContext.ApiKey,
@@ -68,7 +68,7 @@
                                 }));
 
                         workUnitContext.LogLine(
-                            "Update finished for '" + targetFolder + "' at " + DateTime.UtcNow.ToString() + " (utc)");
+                            "Update finished for '" + TargetFolder + "' at " + DateTime.UtcNow.ToString() + " (utc)");
                         lastChangedTime = currentFileTime;
                     }
                     catch (SocketException)
@@ -81,7 +81,7 @@
                     }
                 }
 
-                Thread.Sleep(secondsChecking * 1000);
+                Thread.Sleep(SecondsChecking * 1000);
             }
         }
 
@@ -110,7 +110,7 @@
                         .Do(new OpenConnection());
 
                 checkIfThisProcessIsUpdated = new CheckIfThisProcessIsUpdated(
-                    executionerMainFile, secondsChecking, adminServer, workUnitContext);
+                    ExecutionerMainFile, SecondsChecking, adminServer, workUnitContext);
                 checkIfThisProcessIsUpdated.OnStart();
             }
         }

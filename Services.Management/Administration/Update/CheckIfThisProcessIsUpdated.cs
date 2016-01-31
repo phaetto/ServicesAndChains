@@ -14,9 +14,9 @@
         IDisposable,
         IWorkerEvents
     {
-        public readonly int secondsChecking;
+        public readonly int SecondsChecking;
 
-        public readonly string executionerMainFile;
+        public readonly string ExecutionerMainFile;
 
         private ClientConnectionContext adminServer;
 
@@ -26,20 +26,20 @@
             string executionerMainFile, int secondsChecking = 60, ClientConnectionContext clientConnectionContext = null, WorkUnitContext workUnitContext = null)
         {
             adminServer = clientConnectionContext;
-            this.secondsChecking = secondsChecking;
-            this.executionerMainFile = executionerMainFile;
+            this.SecondsChecking = secondsChecking;
+            this.ExecutionerMainFile = executionerMainFile;
             this.workUnitContext = workUnitContext;
             ThreadPool.QueueUserWorkItem(CheckForThisServiceUpdateThread);
         }
 
         private void CheckForThisServiceUpdateThread(object state)
         {
-            var lastChangedTime = File.GetLastWriteTimeUtc(executionerMainFile);
-            workUnitContext.LogLine("Listening for new updates at '" + executionerMainFile + "'...");
+            var lastChangedTime = File.GetLastWriteTimeUtc(ExecutionerMainFile);
+            workUnitContext.LogLine("Listening for new updates at '" + ExecutionerMainFile + "'...");
 
             while (true)
             {
-                var currentFileTime = File.GetLastWriteTimeUtc(executionerMainFile);
+                var currentFileTime = File.GetLastWriteTimeUtc(ExecutionerMainFile);
 
                 if (currentFileTime > lastChangedTime)
                 {
@@ -52,7 +52,7 @@
                                     new WorkerDataWithDelay
                                     {
                                         WorkerData = workUnitContext.WorkerData,
-                                        DelayInSeconds = secondsChecking
+                                        DelayInSeconds = SecondsChecking
                                     })
                                 {
                                     ApiKey = workUnitContext.ApiKey,
@@ -72,7 +72,7 @@
                     }
                 }
 
-                Thread.Sleep(secondsChecking * 1000);
+                Thread.Sleep(SecondsChecking * 1000);
             }
         }
 

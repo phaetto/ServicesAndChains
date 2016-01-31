@@ -1,4 +1,4 @@
-﻿namespace Chains.UnitTests.Classes.Security
+﻿namespace Chains.UnitTests.Classes.Http
 {
     using System;
     using System.Net;
@@ -6,11 +6,11 @@
 
     public class HttpContextForTestWithError : Chain<HttpContextForTestWithError>, IHttpRequestHandler
     {
-        public readonly string output;
+        public readonly string Output;
 
         public HttpContextForTestWithError(string output)
         {
-            this.output = output;
+            this.Output = output;
         }
 
         public bool ResolveRequest(HttpListenerContext context)

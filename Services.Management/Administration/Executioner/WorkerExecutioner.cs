@@ -269,41 +269,41 @@ namespace Services.Management.Administration.Executioner
             Dispose();
         }
 
-        private static void CopyFiles(string SourcePath, string DestinationPath)
+        private static void CopyFiles(string sourcePath, string destinationPath)
         {
-            if (SourcePath[SourcePath.Length - 1] != Path.DirectorySeparatorChar)
+            if (sourcePath[sourcePath.Length - 1] != Path.DirectorySeparatorChar)
             {
-                SourcePath += Path.DirectorySeparatorChar;
+                sourcePath += Path.DirectorySeparatorChar;
             }
 
-            if (DestinationPath[DestinationPath.Length - 1] != Path.DirectorySeparatorChar)
+            if (destinationPath[destinationPath.Length - 1] != Path.DirectorySeparatorChar)
             {
-                DestinationPath += Path.DirectorySeparatorChar;
+                destinationPath += Path.DirectorySeparatorChar;
             }
 
-            if (!Directory.Exists(SourcePath))
+            if (!Directory.Exists(sourcePath))
             {
                 throw new DirectoryNotFoundException(
-                    "Source directory '" + SourcePath + "' does not exists");
+                    "Source directory '" + sourcePath + "' does not exists");
             }
 
-            var filesToDelete = Directory.GetFiles(DestinationPath, "*", SearchOption.TopDirectoryOnly);
+            var filesToDelete = Directory.GetFiles(destinationPath, "*", SearchOption.TopDirectoryOnly);
 
             foreach (var file in filesToDelete)
             {
                 File.Delete(file);
             }
 
-            var allDirectories = Directory.GetDirectories(SourcePath, "*", SearchOption.AllDirectories);
+            var allDirectories = Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories);
             foreach (string dirPath in allDirectories)
             {
-                Directory.CreateDirectory(dirPath.Replace(SourcePath, DestinationPath));
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, destinationPath));
             }
 
-            var allFiles = Directory.GetFiles(SourcePath, "*.*", SearchOption.AllDirectories);
+            var allFiles = Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories);
             foreach (string file in allFiles)
             {
-                var newFile = file.Replace(SourcePath, DestinationPath);
+                var newFile = file.Replace(sourcePath, destinationPath);
 
                 if (File.Exists(newFile))
                 {

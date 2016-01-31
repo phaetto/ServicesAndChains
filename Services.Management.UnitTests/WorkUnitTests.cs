@@ -95,7 +95,7 @@
             var deserializedData =
                 DeserializableSpecification<ComplexSerializable>.DeserializeFromJson(serializableData);
 
-            Assert.AreEqual(data.workerDataArray.Length, deserializedData.workerDataArray.Length);
+            Assert.AreEqual(data.WorkerDataArray.Length, deserializedData.WorkerDataArray.Length);
         }
     }
 }

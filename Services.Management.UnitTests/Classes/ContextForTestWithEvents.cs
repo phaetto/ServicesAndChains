@@ -7,7 +7,7 @@
     {
         public const string SuccessfullyStoppedMessage = "Stopped";
 
-        public string contextVariable = null;
+        public string ContextVariable = null;
 
         public void OnStart()
         {
@@ -15,7 +15,7 @@
 
         public void OnStop()
         {
-            contextVariable = SuccessfullyStoppedMessage;
+            ContextVariable = SuccessfullyStoppedMessage;
         }
     }
 }

@@ -11,7 +11,7 @@
 
         public ContextForTest Act(ContextForTest context)
         {
-            context.contextVariable = ValueToChangeTo;
+            context.ContextVariable = ValueToChangeTo;
             return context;
         }
     }

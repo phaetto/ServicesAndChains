@@ -7,6 +7,7 @@
     using Chains.Play.Web;
     using Chains.Play.Web.HttpListener;
     using Chains.UnitTests.Classes;
+    using Chains.UnitTests.Classes.Http.Security;
     using Chains.UnitTests.Classes.Security;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -31,7 +32,7 @@
                         Session = ValidSession
                     }));
 
-            Assert.AreEqual("to-value", executionChain.CurrentContext.contextVariable);
+            Assert.AreEqual("to-value", executionChain.CurrentContext.ContextVariable);
         }
 
         [TestMethod]
@@ -72,7 +73,7 @@
                             ChangeToValue = "to-value"
                         })));
 
-            Assert.AreEqual("to-value", executionChain.CurrentContext.contextVariable);
+            Assert.AreEqual("to-value", executionChain.CurrentContext.ContextVariable);
         }
 
         [TestMethod]
@@ -143,7 +144,7 @@
                         }));
             }
 
-            Assert.AreEqual("to-value", executionChain.CurrentContext.contextVariable);
+            Assert.AreEqual("to-value", executionChain.CurrentContext.ContextVariable);
         }
     }
 }

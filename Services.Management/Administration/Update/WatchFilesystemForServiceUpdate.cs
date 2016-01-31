@@ -13,13 +13,13 @@
         IDisposable,
         IWorkerEvents
     {
-        public readonly int secondsChecking;
+        public readonly int SecondsChecking;
 
-        public readonly string file;
+        public readonly string File;
 
-        public readonly string executionerMainFile;
+        public readonly string ExecutionerMainFile;
 
-        public readonly string serviceName;
+        public readonly string ServiceName;
 
         private ClientConnectionContext adminServer;
 
@@ -30,28 +30,28 @@
         public WatchFilesystemForServiceUpdate(
             string serviceName, string file, string executionerMainFile, int secondsChecking = 60, WorkUnitContext workUnitContext = null)
         {
-            this.file = file;
-            this.secondsChecking = secondsChecking;
-            this.executionerMainFile = executionerMainFile;
-            this.serviceName = serviceName;
+            this.File = file;
+            this.SecondsChecking = secondsChecking;
+            this.ExecutionerMainFile = executionerMainFile;
+            this.ServiceName = serviceName;
             this.workUnitContext = workUnitContext;
             ThreadPool.QueueUserWorkItem(CheckFileSystemThread);
         }
 
         private void CheckFileSystemThread(object state)
         {
-            var lastChangedTime = File.GetLastWriteTimeUtc(file);
+            var lastChangedTime = System.IO.File.GetLastWriteTimeUtc(File);
 
-            workUnitContext.LogLine($"Service updater started looking at '{file}'");
+            workUnitContext.LogLine($"Service updater started looking at '{File}'");
             workUnitContext.LogLine($"File has last been updated on '{lastChangedTime}'");
 
             while (true)
             {
-                var currentFileTime = File.GetLastWriteTimeUtc(file);
+                var currentFileTime = System.IO.File.GetLastWriteTimeUtc(File);
 
                 if (currentFileTime > lastChangedTime)
                 {
-                    workUnitContext.LogLine("Updating service '" + serviceName + "' with a new version...");
+                    workUnitContext.LogLine("Updating service '" + ServiceName + "' with a new version...");
                     try
                     {
                         adminServer.Do(
@@ -59,12 +59,12 @@
                                 new ApplyServiceVersionUpdate(
                                     new UpdateWorkUnitData
                                     {
-                                        UpdateFolderOrFile = Path.GetDirectoryName(file),
-                                        ServiceName = serviceName
+                                        UpdateFolderOrFile = Path.GetDirectoryName(File),
+                                        ServiceName = ServiceName
                                     })));
 
                         workUnitContext.LogLine(
-                            "Update finished for '" + serviceName + "' at " + DateTime.UtcNow.ToString() + " (utc)");
+                            "Update finished for '" + ServiceName + "' at " + DateTime.UtcNow.ToString() + " (utc)");
                         lastChangedTime = currentFileTime;
                     }
                     catch (SocketException)
@@ -77,7 +77,7 @@
                     }
                 }
 
-                Thread.Sleep(secondsChecking * 1000);
+                Thread.Sleep(SecondsChecking * 1000);
             }
         }
 
@@ -99,7 +99,7 @@
                     new OpenConnection());
 
             checkIfThisProcessIsUpdated = new CheckIfThisProcessIsUpdated(
-                executionerMainFile, secondsChecking, adminServer, workUnitContext);
+                ExecutionerMainFile, SecondsChecking, adminServer, workUnitContext);
             checkIfThisProcessIsUpdated.OnStart();
         }
 

@@ -2,6 +2,6 @@
 {
     public class ContextForTest2 : Chain<ContextForTest2>
     {
-        public string contextVariable = null;
+        public string ContextVariable = null;
     }
 }

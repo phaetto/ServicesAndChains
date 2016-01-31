@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Chains.UnitTests
 {
@@ -84,7 +83,7 @@ namespace Chains.UnitTests
                 }) as WantedClass;
 
             Assert.IsNotNull(createdObject);
-            Assert.AreEqual("default", createdObject.astring);
+            Assert.AreEqual("default", createdObject.Astring);
             Assert.IsInstanceOfType(createdObject, typeof(WantedClass));
             Assert.IsNull(createdObject.InjectedClass);
         }
@@ -99,36 +98,36 @@ namespace Chains.UnitTests
 
         public class WantedClass
         {
-            public readonly bool abool;
-            public readonly string astring;
-            public readonly string[] astrings;
+            public readonly bool Abool;
+            public readonly string Astring;
+            public readonly string[] Astrings;
             public readonly InjectedClass InjectedClass;
             public readonly InjectedClass2 InjectedClass2;
 
             public WantedClass(bool abool, string[] astrings, InjectedClass injectedClass)
             {
-                this.abool = abool;
-                this.astrings = astrings;
+                this.Abool = abool;
+                this.Astrings = astrings;
                 InjectedClass = injectedClass;
             }
 
             public WantedClass(bool abool, string astring = "default")
             {
-                this.abool = abool;
-                this.astring = astring;
+                this.Abool = abool;
+                this.Astring = astring;
             }
 
             public WantedClass(bool abool, string astring, InjectedClass injectedClass)
             {
-                this.abool = abool;
-                this.astring = astring;
+                this.Abool = abool;
+                this.Astring = astring;
                 InjectedClass = injectedClass;
             }
 
             public WantedClass(bool abool, string astring, InjectedClass injectedClass = null, InjectedClass2 injectedClass2 = null)
             {
-                this.abool = abool;
-                this.astring = astring;
+                this.Abool = abool;
+                this.Astring = astring;
                 InjectedClass = injectedClass;
                 this.InjectedClass2 = injectedClass2;
             }

@@ -8,7 +8,7 @@
     {
         public string DomainName;
         public string ChangeToValue;
-        public string[] stringArray;
+        public string[] StringArray;
 
         public override int DataStructureVersionNumber => 1;
     }

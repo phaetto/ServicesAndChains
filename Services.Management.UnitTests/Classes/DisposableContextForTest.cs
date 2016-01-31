@@ -7,11 +7,11 @@
     {
         public const string SuccessfullyStoppedMessage = "Disposed";
 
-        public string contextVariable = null;
+        public string ContextVariable = null;
 
         public void Dispose()
         {
-            contextVariable = SuccessfullyStoppedMessage;
+            ContextVariable = SuccessfullyStoppedMessage;
         }
     }
 }

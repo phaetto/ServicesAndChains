@@ -6,11 +6,11 @@
 
     public sealed class WaitUntilServerIsUp : IChainableAction<ClientConnectionContext, ClientConnectionContext>
     {
-        public readonly int waitDelayInMilliseconds;
+        public readonly int WaitDelayInMilliseconds;
 
         public WaitUntilServerIsUp(int waitDelayInMilliseconds = 5000)
         {
-            this.waitDelayInMilliseconds = waitDelayInMilliseconds;
+            this.WaitDelayInMilliseconds = waitDelayInMilliseconds;
         }
 
         public ClientConnectionContext Act(ClientConnectionContext context)
@@ -27,7 +27,7 @@
                 {
                 }
 
-                Thread.Sleep(waitDelayInMilliseconds);
+                Thread.Sleep(WaitDelayInMilliseconds);
             }
         }
     }

@@ -12,7 +12,7 @@ namespace Chains.Play.Web
     public class HttpResultContextBase<T> : Chain<T>, IAggreggatable<T>
         where T : HttpResultContextBase<T>
     {
-        private const string html404DefaultBody = "<html><body><h1>{0}</h1><p>{1}</p></body></html>";
+        private const string Html404DefaultBody = "<html><body><h1>{0}</h1><p>{1}</p></body></html>";
 
         public readonly int StatusCode;
         public readonly string StatusText;
@@ -43,7 +43,7 @@ namespace Chains.Play.Web
             StatusCode = statusCode;
             ResponseText.Append(
                 string.IsNullOrWhiteSpace(resultText) && statusCode == 404
-                    ? string.Format(html404DefaultBody, statusText, statusCode)
+                    ? string.Format(Html404DefaultBody, statusText, statusCode)
                     : resultText);
         }
 

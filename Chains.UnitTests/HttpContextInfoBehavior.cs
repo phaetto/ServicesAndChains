@@ -1,4 +1,4 @@
-﻿namespace xLibrary.UnitTests
+﻿namespace Chains.UnitTests
 {
     using System;
     using Chains.Play.Web;

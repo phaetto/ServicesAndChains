@@ -52,7 +52,7 @@
                            {
                                ChangeToValue = "value 1",
                                DomainName = "domain 1",
-                               stringArray = new[]
+                               StringArray = new[]
                                              {
                                                  "stuff 1",
                                                  "stuff 2",

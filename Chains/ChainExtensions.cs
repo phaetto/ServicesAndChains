@@ -4,12 +4,12 @@
 
     public static class ChainExtensions
     {
-        public static ReturnChainType DoIf<T, ReturnChainType>(
+        public static TReturnChainType DoIf<T, TReturnChainType>(
             this T context,
             Func<T, bool> predicate,
-            IChainableAction<T, ReturnChainType> action)
+            IChainableAction<T, TReturnChainType> action)
             where T : Chain<T>
-            where ReturnChainType : class
+            where TReturnChainType : class
         {
             return predicate(context) ? context.Do(action) : null;
         }

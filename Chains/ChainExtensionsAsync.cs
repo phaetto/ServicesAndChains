@@ -4,25 +4,25 @@
 
     public static class ChainExtensionsAsync
     {
-        public static Task<ReturnChainType> Do<T, ReturnChainType>(
+        public static Task<TReturnChainType> Do<T, TReturnChainType>(
             this Task<T> context,
-            IChainableAction<T, Task<ReturnChainType>> action)
+            IChainableAction<T, Task<TReturnChainType>> action)
             where T : Chain<T>
         {
             return context.ContinueWith(x => x.Result.Do(action)).Unwrap();
         }
 
-        public static Task<ReturnChainType> Do<T, ReturnChainType>(
+        public static Task<TReturnChainType> Do<T, TReturnChainType>(
             this Task<T> context,
-            IChainableAction<T, ReturnChainType> action)
+            IChainableAction<T, TReturnChainType> action)
             where T : Chain<T>
         {
             return context.ContinueWith(x => x.Result.Do(action));
         }
 
-        public static Task<ReturnChainType> DoAsync<T, ReturnChainType>(
+        public static Task<TReturnChainType> DoAsync<T, TReturnChainType>(
             this Task<T> context,
-            IChainableAction<T, ReturnChainType> action)
+            IChainableAction<T, TReturnChainType> action)
             where T : Chain<T>
         {
             return context.ContinueWith(x => x.Result.Do(action));

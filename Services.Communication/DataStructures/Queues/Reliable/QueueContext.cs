@@ -15,14 +15,14 @@ namespace Services.Communication.DataStructures.Queues.Reliable
 
         public readonly object UnacknowledgedQueuedItemsLock = new object();
 
-        internal Random random = new Random();
+        internal Random Random = new Random();
 
-        private Thread AcknowledgeThread;
+        private Thread acknowledgeThread;
 
         public QueueContext()
         {
-            AcknowledgeThread = new Thread(AcknowledgeThreadExecution);
-            AcknowledgeThread.Start();
+            acknowledgeThread = new Thread(AcknowledgeThreadExecution);
+            acknowledgeThread.Start();
         }
 
         private void AcknowledgeThreadExecution()
@@ -48,7 +48,7 @@ namespace Services.Communication.DataStructures.Queues.Reliable
 
         public void Dispose()
         {
-            AcknowledgeThread.Abort();
+            acknowledgeThread.Abort();
         }
     }
 }

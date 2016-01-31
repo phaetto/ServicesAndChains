@@ -10,7 +10,7 @@
 
     public class TcpClientProtocolStack : IClientProtocolStack
     {
-        private Socket ClientSocket;
+        private Socket clientSocket;
 
         public void OpenClientConnection(Client context)
         {
@@ -18,25 +18,25 @@
                 ? IPAddress.Loopback.ToString()
                 : context.Hostname;
 
-            ClientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            ClientSocket.Connect(hostname, context.Port);
+            clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            clientSocket.Connect(hostname, context.Port);
         }
 
         public void CloseClientConnection()
         {
-            if (ClientSocket == null)
+            if (clientSocket == null)
             {
                 return;
             }
 
             try
             {
-                ClientSocket.Close();
-                ClientSocket.Dispose();
+                clientSocket.Close();
+                clientSocket.Dispose();
             }
             finally
             {
-                ClientSocket = null;
+                clientSocket = null;
             }
         }
 
@@ -59,12 +59,12 @@
 
         private void InternalSendStream(string data, string command = "TcpCommandWithNoResponse")
         {
-            if (!(ClientSocket.Poll(0, SelectMode.SelectWrite) && ClientSocket.Available == 0))
+            if (!(clientSocket.Poll(0, SelectMode.SelectWrite) && clientSocket.Available == 0))
             {
                 throw new SocketException((int)SocketError.ConnectionAborted);
             }
 
-            using (var socketStream = new NetworkStream(ClientSocket))
+            using (var socketStream = new NetworkStream(clientSocket))
             {
                 socketStream.ReadTimeout = 60 * 1000;
                 socketStream.WriteTimeout = 60 * 1000;
@@ -79,12 +79,12 @@
 
         private string InternalSendAndReceiveStream(string data, string command = "TcpCommand")
         {
-            if (ClientSocket == null || !(ClientSocket.Poll(0, SelectMode.SelectWrite) && ClientSocket.Available == 0))
+            if (clientSocket == null || !(clientSocket.Poll(0, SelectMode.SelectWrite) && clientSocket.Available == 0))
             {
                 throw new SocketException((int)SocketError.ConnectionAborted);
             }
 
-            using (var socketStream = new NetworkStream(ClientSocket))
+            using (var socketStream = new NetworkStream(clientSocket))
             {
                 socketStream.ReadTimeout = 60 * 1000;
                 socketStream.WriteTimeout = 60 * 1000;

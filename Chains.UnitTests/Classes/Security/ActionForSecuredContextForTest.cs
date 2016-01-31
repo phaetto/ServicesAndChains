@@ -11,7 +11,7 @@
 
         public SecuredContextForTest Act(SecuredContextForTest context)
         {
-            context.contextVariable = Data.ChangeToValue;
+            context.ContextVariable = Data.ChangeToValue;
             return context;
         }
     }

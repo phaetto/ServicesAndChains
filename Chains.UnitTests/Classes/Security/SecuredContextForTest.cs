@@ -5,7 +5,7 @@
 
     public class SecuredContextForTest : Chain<SecuredContextForTest>, IModular
     {
-        public string contextVariable = null;
+        public string ContextVariable = null;
 
         public SecuredContextForTest()
         {

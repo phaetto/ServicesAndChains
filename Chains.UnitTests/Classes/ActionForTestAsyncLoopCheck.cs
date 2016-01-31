@@ -13,7 +13,7 @@
 
         public Task<ContextForTest> Act(ContextForTest context)
         {
-            if (ValueToCheckTo == context.contextVariable)
+            if (ValueToCheckTo == context.ContextVariable)
             {
                 context.HasBeenChecked = true;
                 return Task.FromResult(context);

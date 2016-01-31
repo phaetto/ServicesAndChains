@@ -13,12 +13,12 @@ namespace Services.Management.Administration.Update
     {
         private readonly string serviceId;
 
-        public readonly int waitDelayInMilliseconds;
+        public readonly int WaitDelayInMilliseconds;
 
         public WaitUntilServiceIsDown(string serviceId, int waitDelayInMilliseconds = 5000)
         {
             this.serviceId = serviceId;
-            this.waitDelayInMilliseconds = waitDelayInMilliseconds;
+            this.WaitDelayInMilliseconds = waitDelayInMilliseconds;
         }
 
         public ClientConnectionContext Act(ClientConnectionContext context)
@@ -37,7 +37,7 @@ namespace Services.Management.Administration.Update
                     return context;
                 }
 
-                Thread.Sleep(waitDelayInMilliseconds);
+                Thread.Sleep(WaitDelayInMilliseconds);
             }
         }
 

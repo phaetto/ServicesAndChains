@@ -134,6 +134,12 @@
     <Compile Include="Play\Reproducible.cs" />
     <Compile Include="Play\ReproducibleWithSerializableData.cs" />
     <Compile Include="Play\SerializableSpecification.cs" />
+    <Compile Include="Play\Streams\Publisher.cs" />
+    <Compile Include="Play\Streams\PublisherSubscription.cs" />
+    <Compile Include="Play\Streams\EventStream.cs" />
+    <Compile Include="Play\Streams\Timer\TimerScheduledCallType.cs" />
+    <Compile Include="Play\Streams\Timer\TimerScheduledCall.cs" />
+    <Compile Include="Play\Streams\Timer\TimeStreamScheduler.cs" />
     <Compile Include="Play\Web\Client.cs" />
     <Compile Include="Play\Web\HttpListener\HttpServer.cs" />
     <Compile Include="Play\Web\HttpListener\IHttpRequestHandler.cs" />
@@ -151,6 +157,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

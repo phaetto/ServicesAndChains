@@ -13,13 +13,13 @@
 
         public ContextForTest Act(ContextForTest context)
         {
-            context.contextVariable = ValueToChangeTo;
+            context.ContextVariable = ValueToChangeTo;
             return context;
         }
 
         public ContextForTest2 Act(ContextForTest2 context)
         {
-            context.contextVariable = ValueToChangeTo;
+            context.ContextVariable = ValueToChangeTo;
             return context;
         }
     }

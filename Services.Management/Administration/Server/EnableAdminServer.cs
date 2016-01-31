@@ -11,14 +11,14 @@
 
     public sealed class EnableAdminServer : IChainableAction<ServerHost, AdministrationContext>
     {
-        public readonly Func<ExecutableActionSpecification[], bool> onBeforeExecute;
-        public readonly Action<dynamic> onAfterExecute;
+        public readonly Func<ExecutableActionSpecification[], bool> OnBeforeExecute;
+        public readonly Action<dynamic> OnAfterExecute;
         public readonly string HostProcessName;
 
         public EnableAdminServer(Func<ExecutableActionSpecification[], bool> onBeforeExecute = null, Action<dynamic> onAfterExecute = null, string hostProcessName = null)
         {
-            this.onBeforeExecute = onBeforeExecute;
-            this.onAfterExecute = onAfterExecute;
+            this.OnBeforeExecute = onBeforeExecute;
+            this.OnAfterExecute = onAfterExecute;
             HostProcessName = hostProcessName;
         }
 
@@ -34,8 +34,8 @@
             adminContext.AdminServer =
                         new ServerHost(context.Parent.Hostname, context.Parent.Port).Do(
                             new StartListen(adminContext,
-                                onBeforeExecute: onBeforeExecute,
-                                onAfterExecute: onAfterExecute));
+                                onBeforeExecute: OnBeforeExecute,
+                                onAfterExecute: OnAfterExecute));
 
             adminContext.AdminTasksThread = new Thread(
                 () =>

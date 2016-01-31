@@ -1,4 +1,4 @@
-﻿namespace Chains.UnitTests.Classes.Security
+﻿namespace Chains.UnitTests.Classes.Http
 {
     using System.Net;
     using Chains.Play.Web;
@@ -6,16 +6,16 @@
 
     public class HttpContextForTest : Chain<HttpContextForTest>, IHttpRequestHandler
     {
-        public readonly string output;
+        public readonly string Output;
 
         public HttpContextForTest(string output)
         {
-            this.output = output;
+            this.Output = output;
         }
 
         public bool ResolveRequest(HttpListenerContext context)
         {
-            new HttpResultContext(output).ApplyOutputToHttpContext(context);
+            new HttpResultContext(Output).ApplyOutputToHttpContext(context);
 
             return true;
         }

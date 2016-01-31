@@ -16,7 +16,7 @@
             return Task.Delay(300).ContinueWith(
                 x =>
                 {
-                    context.contextVariable = ValueToChangeTo;
+                    context.ContextVariable = ValueToChangeTo;
 
                     return context;
                 });
