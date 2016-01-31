@@ -32,6 +32,26 @@
         }
 
         [TestMethod]
+        [ExpectedException(typeof(OperationCanceledException))]
+        public void TimeStreamScheduler_WhenCancelling_ThenShouldThrow()
+        {
+            var contextForTest = new ContextForTest();
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            using (var timeStreamScheduler = new TimeStreamScheduler())
+            {
+                var infiniteStream = contextForTest.Do(timeStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource.Token)).GetEnumerator();
+
+                Task.Delay(50).ContinueWith(x =>
+                    {
+                        cancellationTokenSource.Cancel();
+                    });
+
+                infiniteStream.MoveNext();
+            }
+        }
+
+        [TestMethod]
         public void TimeStreamScheduler_WhenSchedulingAndCancelling_ThenNoEventHasRun()
         {
             var contextForTest = new ContextForTest();
