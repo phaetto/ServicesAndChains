@@ -98,6 +98,11 @@
                     // From mscorlib
                     yield break;
                 }
+                catch (OperationCanceledException)
+                {
+                    // From task library
+                    yield break;
+                }
 
                 if (cancellationToken.IsCancellationRequested)
                 {

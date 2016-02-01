@@ -32,8 +32,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(OperationCanceledException))]
-        public void timerStreamScheduler_WhenCancelling_ThenShouldThrow()
+        public void timerStreamScheduler_WhenCancelling_ThenShouldReturnGracefully()
         {
             var contextForTest = new ContextForTest();
             var cancellationTokenSource = new CancellationTokenSource();
@@ -185,7 +184,7 @@
                         Assert.IsTrue(infiniteStream.MoveNext());
 
                         // This should block - and get false
-                        Test.Throws<OperationCanceledException>(() => infiniteStream.MoveNext());
+                        Assert.IsFalse(infiniteStream.MoveNext());
                     });
 
                 await Task.Delay(70).ContinueWith(x =>
