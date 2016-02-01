@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Threading;
 
-    public sealed class TimeStreamScheduler : Publisher
+    public sealed class TimerStreamScheduler : Publisher
     {
         private const int StartNeverTimerValue = Timeout.Infinite;
 
@@ -23,7 +23,7 @@
 
         public bool IsIdle => lastRunIntervalInMilliseconds == TimerIdle;
 
-        public TimeStreamScheduler()
+        public TimerStreamScheduler()
         {
             this.timer = new Timer(
                 TimerCallback,

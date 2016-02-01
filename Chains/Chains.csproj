@@ -139,7 +139,7 @@
     <Compile Include="Play\Streams\EventStream.cs" />
     <Compile Include="Play\Streams\Timer\TimerScheduledCallType.cs" />
     <Compile Include="Play\Streams\Timer\TimerScheduledCall.cs" />
-    <Compile Include="Play\Streams\Timer\TimeStreamScheduler.cs" />
+    <Compile Include="Play\Streams\Timer\TimerStreamScheduler.cs" />
     <Compile Include="Play\Web\Client.cs" />
     <Compile Include="Play\Web\HttpListener\HttpServer.cs" />
     <Compile Include="Play\Web\HttpListener\IHttpRequestHandler.cs" />

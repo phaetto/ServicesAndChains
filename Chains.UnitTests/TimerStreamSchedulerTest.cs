@@ -10,20 +10,20 @@
 
     [TestClass]
     [SuppressMessage("ReSharper", "MethodSupportsCancellation")]
-    public class TimeStreamSchedulerTest
+    public class TimerStreamSchedulerTest
     {
         [TestMethod]
-        public void TimeStreamScheduler_WhenSchedulingOneFutureCallback_ThenOneEventIsReturned()
+        public void timerStreamScheduler_WhenSchedulingOneFutureCallback_ThenOneEventIsReturned()
         {
             var contextForTest = new ContextForTest();
 
-            using (var timeStreamScheduler = new TimeStreamScheduler())
+            using (var timerStreamScheduler = new TimerStreamScheduler())
             {
-                Assert.IsTrue(timeStreamScheduler.IsIdle);
+                Assert.IsTrue(timerStreamScheduler.IsIdle);
 
-                timeStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 100, TimerScheduledCallType.Once);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 100, TimerScheduledCallType.Once);
 
-                var infiniteStream = contextForTest.Do(timeStreamScheduler.AsStream<ActionForTest>()).GetEnumerator();
+                var infiniteStream = contextForTest.Do(timerStreamScheduler.AsStream<ActionForTest>()).GetEnumerator();
 
                 Assert.IsTrue(infiniteStream.MoveNext());
 
@@ -33,14 +33,14 @@
 
         [TestMethod]
         [ExpectedException(typeof(OperationCanceledException))]
-        public void TimeStreamScheduler_WhenCancelling_ThenShouldThrow()
+        public void timerStreamScheduler_WhenCancelling_ThenShouldThrow()
         {
             var contextForTest = new ContextForTest();
             var cancellationTokenSource = new CancellationTokenSource();
 
-            using (var timeStreamScheduler = new TimeStreamScheduler())
+            using (var timerStreamScheduler = new TimerStreamScheduler())
             {
-                var infiniteStream = contextForTest.Do(timeStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource.Token)).GetEnumerator();
+                var infiniteStream = contextForTest.Do(timerStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource.Token)).GetEnumerator();
 
                 Task.Delay(50).ContinueWith(x =>
                     {
@@ -52,18 +52,18 @@
         }
 
         [TestMethod]
-        public void TimeStreamScheduler_WhenSchedulingAndCancelling_ThenNoEventHasRun()
+        public void timerStreamScheduler_WhenSchedulingAndCancelling_ThenNoEventHasRun()
         {
             var contextForTest = new ContextForTest();
             var cancellationTokenSource = new CancellationTokenSource();
-            using (var timeStreamScheduler = new TimeStreamScheduler())
+            using (var timerStreamScheduler = new TimerStreamScheduler())
             {
-                timeStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 100, TimerScheduledCallType.Once);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 100, TimerScheduledCallType.Once);
 
                 Task.Delay(10).ContinueWith(x =>
                     {
                         var infiniteStream =
-                            contextForTest.Do(timeStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource.Token))
+                            contextForTest.Do(timerStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource.Token))
                                 .GetEnumerator();
 
                         Assert.IsFalse(infiniteStream.MoveNext());
@@ -76,23 +76,23 @@
         }
 
         [TestMethod]
-        public async Task TimeStreamScheduler_WhenSchedulingANumberOfEventsAndCancelling_ThenExactNumberOfEventsAreRunning()
+        public async Task timerStreamScheduler_WhenSchedulingANumberOfEventsAndCancelling_ThenExactNumberOfEventsAreRunning()
         {
             var contextForTest = new ContextForTest();
             var contextForTest2 = new ContextForTest();
             var cancellationTokenSource = new CancellationTokenSource();
             var cancellationTokenSource2 = new CancellationTokenSource();
-            using (var timeStreamScheduler = new TimeStreamScheduler())
+            using (var timerStreamScheduler = new TimerStreamScheduler())
             {
 #pragma warning disable 4014
-                contextForTest.DoAsync(timeStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource.Token));
-                contextForTest2.DoAsync(timeStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource2.Token));
+                contextForTest.DoAsync(timerStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource.Token));
+                contextForTest2.DoAsync(timerStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource2.Token));
 #pragma warning restore 4014
 
-                timeStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 1"), 10, TimerScheduledCallType.Once);
-                timeStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 2"), 20, TimerScheduledCallType.Once);
-                timeStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 3"), 30, TimerScheduledCallType.Once);
-                timeStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 4"), 40, TimerScheduledCallType.Once);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 1"), 10, TimerScheduledCallType.Once);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 2"), 20, TimerScheduledCallType.Once);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 3"), 30, TimerScheduledCallType.Once);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 4"), 40, TimerScheduledCallType.Once);
 
                 await Task.Delay(25).ContinueWith(x =>
                     {
@@ -113,18 +113,18 @@
         }
 
         [TestMethod]
-        public async Task TimeStreamScheduler_WhenSchedulingRecurrentEventsAndCancellingSubscription_ThenExactNumberOfEventsAreRunning()
+        public async Task timerStreamScheduler_WhenSchedulingRecurrentEventsAndCancellingSubscription_ThenExactNumberOfEventsAreRunning()
         {
             var contextForTest = new ContextForTest();
             var cancellationTokenSource = new CancellationTokenSource();
-            using (var timeStreamScheduler = new TimeStreamScheduler())
+            using (var timerStreamScheduler = new TimerStreamScheduler())
             {
-                timeStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 10, TimerScheduledCallType.Recurrent);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 10, TimerScheduledCallType.Recurrent);
 
                 await Task.Factory.StartNew(() =>
                     {
                         var infiniteStream =
-                            contextForTest.Do(timeStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource.Token))
+                            contextForTest.Do(timerStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource.Token))
                                 .GetEnumerator();
 
                         Assert.IsTrue(infiniteStream.MoveNext());
@@ -139,18 +139,18 @@
         }
 
         [TestMethod]
-        public async Task TimeStreamScheduler_WhenSchedulingRecurrentEventsAndCancellingEvent_ThenEventIsCancelled()
+        public async Task timerStreamScheduler_WhenSchedulingRecurrentEventsAndCancellingEvent_ThenEventIsCancelled()
         {
             var contextForTest = new ContextForTest();
             var cancellationTokenSource = new CancellationTokenSource();
-            using (var timeStreamScheduler = new TimeStreamScheduler())
+            using (var timerStreamScheduler = new TimerStreamScheduler())
             {
-                timeStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 10, TimerScheduledCallType.Recurrent, cancellationTokenSource.Token);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 10, TimerScheduledCallType.Recurrent, cancellationTokenSource.Token);
 
                 await Task.Factory.StartNew(() =>
                 {
                     var infiniteStream =
-                        contextForTest.Do(timeStreamScheduler.AsStream<ActionForTest>())
+                        contextForTest.Do(timerStreamScheduler.AsStream<ActionForTest>())
                             .GetEnumerator();
 
                     Assert.IsTrue(infiniteStream.MoveNext());
@@ -165,21 +165,21 @@
         }
 
         [TestMethod]
-        public async Task TimeStreamScheduler_WhenSchedulingDifferentEvents_ThenEventsAreFilteredCorrectly()
+        public async Task timerStreamScheduler_WhenSchedulingDifferentEvents_ThenEventsAreFilteredCorrectly()
         {
             var contextForTest = new ContextForTest();
             var cancellationTokenSource = new CancellationTokenSource();
-            using (var timeStreamScheduler = new TimeStreamScheduler())
+            using (var timerStreamScheduler = new TimerStreamScheduler())
             {
-                timeStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 50, TimerScheduledCallType.Once, cancellationTokenSource.Token);
-                timeStreamScheduler.ScheduleActionCall(new ActionForTestAsync("timer hit (async)"), 10, TimerScheduledCallType.Recurrent);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 50, TimerScheduledCallType.Once, cancellationTokenSource.Token);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTestAsync("timer hit (async)"), 10, TimerScheduledCallType.Recurrent);
 
 #pragma warning disable 4014
                 Task.Factory.StartNew(() =>
 #pragma warning restore 4014
                     {
                         var infiniteStream =
-                            contextForTest.Do(timeStreamScheduler.AsStream<ActionForTest>())
+                            contextForTest.Do(timerStreamScheduler.AsStream<ActionForTest>())
                                 .GetEnumerator();
 
                         Assert.IsTrue(infiniteStream.MoveNext());
