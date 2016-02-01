@@ -40,12 +40,13 @@
             adminContext.AdminTasksThread = new Thread(
                 () =>
                 {
-                    while (!adminContext.IsClosing)
+                    var beginAdminLoopStream = adminContext.TimerStreamScheduler.AsStream<BeginAdminLoop>(adminContext.AdminCancellationTokenSource.Token);
+                    foreach (var newAdminContext in adminContext.Do(beginAdminLoopStream))
                     {
-                        Thread.Sleep(5000);
                     }
                 });
 
+            adminContext.AdminTasksThread.IsBackground = false;
             adminContext.AdminTasksThread.Start();
 
             adminContext.Do(new BeginAdminLoop(previousAdminReportData == null));

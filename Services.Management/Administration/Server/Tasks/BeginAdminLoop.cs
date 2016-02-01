@@ -1,10 +1,12 @@
 ﻿namespace Services.Management.Administration.Server.Tasks
 {
-    using System.Threading.Tasks;
     using Chains;
+    using Chains.Play.Streams.Timer;
 
-    public sealed class BeginAdminLoop : IChainableAction<AdministrationContext, Task<AdministrationContext>>
+    public sealed class BeginAdminLoop : IChainableAction<AdministrationContext, AdministrationContext>
     {
+        public const int IntervalInMilliseconds = 1000;
+
         private readonly bool hasJustStarted;
 
         public BeginAdminLoop(bool hasJustStarted)
@@ -12,17 +14,22 @@
             this.hasJustStarted = hasJustStarted;
         }
 
-        public Task<AdministrationContext> Act(AdministrationContext context)
+        public AdministrationContext Act(AdministrationContext context)
         {
             if (hasJustStarted)
             {
                 context.Do(new CleanUpAdminReports()).Do(new StartServicesExtensionsWellKnownService());
-                return TaskEx.DelayWithCarbageCollection(1000).ContinueWith(x => context.Do(new BeginAdminLoop(false))).Unwrap();
+                context.TimerStreamScheduler.ScheduleActionCall(new BeginAdminLoop(false), IntervalInMilliseconds,
+                    TimerScheduledCallType.Once);
+
+                return context;
             }
 
             context.Do(new CleanUpAdminReports());
 
-            return TaskEx.DelayWithCarbageCollection(1000).ContinueWith(x => context.Do(this)).Unwrap();
+            context.TimerStreamScheduler.ScheduleActionCall(this, IntervalInMilliseconds, TimerScheduledCallType.Once);
+
+            return context;
         }
     }
 }

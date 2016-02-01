@@ -7,6 +7,7 @@
     using System.Threading;
     using Chains;
     using Chains.Play.Modules;
+    using Chains.Play.Streams.Timer;
     using Chains.Play.Web;
     using Services.Communication.Protocol;
     using Services.Management.Administration.Server.LastWellKnownConfiguration;
@@ -26,6 +27,8 @@
         public readonly string DataFolder;
         public readonly string HostProcessName;
 
+        public readonly TimerStreamScheduler TimerStreamScheduler = new TimerStreamScheduler();
+
         public AdministrationData AdministrationData = new AdministrationData();
 
         public List<AbstractChain> Modules { get; set; }
@@ -34,9 +37,11 @@
 
         public ServerConnectionContext AdminServer { get; set; }
 
+        public CancellationTokenSource AdminCancellationTokenSource => adminCancellationTokenSource;
+
         internal readonly LastWellKnownConfigurationContext LastWellKnownConfigurationContext;
 
-        internal bool IsClosing = false;
+        private CancellationTokenSource adminCancellationTokenSource = new CancellationTokenSource();
 
         public AdministrationContext(
             string hostname,
@@ -149,7 +154,7 @@
             if (AdminServer != null)
                 AdminServer.Close();
 
-            IsClosing = true;
+            adminCancellationTokenSource.Cancel();
         }
 
         public void Dispose()
@@ -169,6 +174,8 @@
             catch
             {
             }
+
+            TimerStreamScheduler.Dispose();
         }
 
         private void LogMessageFormatter(string text)
