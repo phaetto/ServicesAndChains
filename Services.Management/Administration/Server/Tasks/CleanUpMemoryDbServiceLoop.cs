@@ -1,15 +1,17 @@
 ﻿namespace Services.Management.Administration.Server.Tasks
 {
     using System.Net.Sockets;
-    using System.Threading.Tasks;
     using Chains;
+    using Chains.Play.Streams.Timer;
     using Chains.Play.Web;
     using Services.Communication.Protocol;
     using Services.Management.Administration.Worker;
 
-    public sealed class CleanUpMemoryDbServiceLoop : IChainableAction<AdministrationContext, Task<AdministrationContext>>
+    public sealed class CleanUpMemoryDbServiceLoop : IChainableAction<AdministrationContext, AdministrationContext>
     {
-        public Task<AdministrationContext> Act(AdministrationContext context)
+        public const int IntervalInMilliseconds = 1000;
+
+        public AdministrationContext Act(AdministrationContext context)
         {
             var reports = context.Do(new GetReportedData()).Reports;
 
@@ -18,7 +20,8 @@
                 using (new Client("127.0.0.1", 51234).Do(new OpenConnection()))
                 {
                     context.Do(new StopWorkerProcess(AdministrationContext.ReloadingMemoryDbServiceName));
-                    return TaskEx.DelayWithCarbageCollection(1000).ContinueWith(x => context.Do(this)).Unwrap();
+                    context.TimerStreamScheduler.ScheduleActionCall(this, IntervalInMilliseconds, TimerScheduledCallType.Once);
+                    return context;
                 }
             }
             catch (SocketException)
@@ -30,10 +33,11 @@
             if (reports.ContainsKey(AdministrationContext.ReloadingMemoryDbServiceName)
                     && reports[AdministrationContext.ReloadingMemoryDbServiceName].WorkerState != WorkUnitState.Stopping)
             {
-                return TaskEx.DelayWithCarbageCollection(1000).ContinueWith(x => context.Do(this)).Unwrap();
+                context.TimerStreamScheduler.ScheduleActionCall(this, IntervalInMilliseconds, TimerScheduledCallType.Once);
+                return context;
             }
 
-            return TaskEx.FromResult(context.Do(new DeleteWorkerProcessEntry(AdministrationContext.ReloadingMemoryDbServiceName)));
+            return context.Do(new DeleteWorkerProcessEntry(AdministrationContext.ReloadingMemoryDbServiceName));
         }
     }
 }

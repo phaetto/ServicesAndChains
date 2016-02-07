@@ -40,9 +40,18 @@
             adminContext.AdminTasksThread = new Thread(
                 () =>
                 {
-                    var beginAdminLoopStream = adminContext.TimerStreamScheduler.AsStream<BeginAdminLoop>(adminContext.AdminCancellationTokenSource.Token);
-                    foreach (var newAdminContext in adminContext.Do(beginAdminLoopStream))
+                    var enumerableStream = adminContext.TimerStreamScheduler.AsStream(adminContext.AdminCancellationTokenSource.Token);
+                    foreach (var actionItem in enumerableStream)
                     {
+                        if (actionItem is IChainableAction<AdministrationContext, AdministrationContext>)
+                        {
+                            adminContext.Do(actionItem as IChainableAction<AdministrationContext, AdministrationContext>);
+                        }
+
+                        if (actionItem is IChainableAction<LastWellKnownConfigurationContext, LastWellKnownConfigurationContext>)
+                        {
+                            adminContext.LastWellKnownConfigurationContext.Do(actionItem as IChainableAction<LastWellKnownConfigurationContext, LastWellKnownConfigurationContext>);
+                        }
                     }
                 });
 

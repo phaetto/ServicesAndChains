@@ -2,13 +2,16 @@
 {
     using System;
     using System.Diagnostics;
-    using System.Threading.Tasks;
     using Chains;
+    using Chains.Play.Streams.Timer;
     using Services.Management.Administration.Worker;
 
-    public sealed class BeginLastWellKnownConfigurationLoop : IChainableAction<LastWellKnownConfigurationContext, Task<LastWellKnownConfigurationContext>>
+    public sealed class BeginLastWellKnownConfigurationLoop : IChainableAction<LastWellKnownConfigurationContext, LastWellKnownConfigurationContext>
     {
-        public Task<LastWellKnownConfigurationContext> Act(LastWellKnownConfigurationContext context)
+        public const int NoWorkTodoIntervalInMilliseconds = 5000;
+        public const int IntervalInMilliseconds = 1000;
+
+        public LastWellKnownConfigurationContext Act(LastWellKnownConfigurationContext context)
         {
             string serviceIdToProcess;
             if (context.ServicesToCreateSnapshotConcurrentQueue.TryDequeue(out serviceIdToProcess))
@@ -83,10 +86,12 @@
 
             if (serviceIdToProcess == null && serviceStartedData == null)
             {
-                return TaskEx.DelayWithCarbageCollection(5000).ContinueWith(x => context.Do(this)).Unwrap();
+                context.TimerStreamScheduler.ScheduleActionCall(this, NoWorkTodoIntervalInMilliseconds, TimerScheduledCallType.Once);
+                return context;
             }
 
-            return TaskEx.DelayWithCarbageCollection(1000).ContinueWith(x => context.Do(this)).Unwrap();
+            context.TimerStreamScheduler.ScheduleActionCall(this, IntervalInMilliseconds, TimerScheduledCallType.Once);
+            return context;
         }
     }
 }
