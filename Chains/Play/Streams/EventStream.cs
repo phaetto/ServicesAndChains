@@ -111,7 +111,7 @@
 
                 var item = iterator.Current;
 
-                if (requestedSpecificType != null && item.GetType() != requestedSpecificType)
+                if (requestedSpecificType != null && !SupportsType(item.GetType(), requestedSpecificType))
                 {
                     continue;
                 }
@@ -119,6 +119,13 @@
                 yield return item;
 
             } while (hasAnyMore);
+        }
+
+        private bool SupportsType(Type itemType, Type requestedType)
+        {
+            return itemType == requestedType
+                   || itemType.IsSubclassOf(requestedType)
+                   || itemType.GetInterface(requestedType.FullName) != null;
         }
     }
 }
