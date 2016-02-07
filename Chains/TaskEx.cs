@@ -18,25 +18,5 @@
             new Timer(_ => taskCompletionSource.SetResult(null)).Change(milliseconds, -1);
             return taskCompletionSource.Task;
         }
-
-        public static Task DelayWithCarbageCollection(int milliseconds)
-        {
-            var taskCompletionSource = new DelayTaskCompletionSource();
-
-            taskCompletionSource.Timer = new Timer(
-                DelayTimerCallback,
-                taskCompletionSource,
-                milliseconds,
-                Timeout.Infinite);
-
-            return taskCompletionSource.Task;
-        }
-
-        private static void DelayTimerCallback(object state)
-        {
-            var taskCompletionSource = (DelayTaskCompletionSource)state;
-            taskCompletionSource.SetResult(true);
-            taskCompletionSource.Dispose();
-        }
     }
 }

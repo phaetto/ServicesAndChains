@@ -71,7 +71,6 @@
     <Compile Include="ChainWithHistoryAndParent.cs" />
     <Compile Include="ChainWithParent.cs" />
     <Compile Include="ChainExtensionsAsync.cs" />
-    <Compile Include="DelayedTaskCompletionSource.cs" />
     <Compile Include="Exceptions\Check.cs" />
     <Compile Include="IAggreggatable.cs" />
     <Compile Include="IChainableAction.cs" />
