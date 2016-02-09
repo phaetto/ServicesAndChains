@@ -78,9 +78,17 @@
                 }
                 catch (ArgumentException)
                 {
-                    // Process do not exists, that indicates failure - restore and start another service
-                    context.Do(new RestoreLastKnownConfiguration(serviceStartedData.WorkerData));
-                    context.Parent.Do(new StartWorkerProcessWithoutPreparing(serviceStartedData.WorkerData, 10));
+                    try
+                    {
+                        // Process do not exists, that indicates failure - restore and start another service
+                        context.Do(new RestoreLastKnownConfiguration(serviceStartedData.WorkerData));
+                        context.Parent.Do(new StartWorkerProcessWithoutPreparing(serviceStartedData.WorkerData, 10));
+                    }
+                    catch (InvalidOperationException exception)
+                    {
+                        // Could not be revived
+                        context.Parent.LogException(exception);
+                    }
                 }
             }
 

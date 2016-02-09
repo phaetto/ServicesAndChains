@@ -35,7 +35,7 @@
 
                 if (version == 1)
                 {
-                    throw new InvalidOperationException("There was no available last well know configuration version to restore.");
+                    throw new InvalidOperationException("There was no available last well-known configuration version to restore.");
                 }
             }
 
