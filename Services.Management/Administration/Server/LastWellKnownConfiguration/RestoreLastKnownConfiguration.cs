@@ -22,13 +22,13 @@
                                   + workerData.Version + Path.DirectorySeparatorChar + workerData.Id
                                   + Path.DirectorySeparatorChar;
 
-            for (var n = workerData.Version; n > 0; --n)
+            for (var version = workerData.Version; version > 0; --version)
             {
                 dataLwkcFolder = context.Parent.DataFolder + LastWellKnownConfigurationContext.ConfigurationFolderName
                                  + Path.DirectorySeparatorChar
                                  + LastWellKnownConfigurationContext.AssemblyBlendingFolderName
                                  + Path.DirectorySeparatorChar + workerData.ServiceName + Path.DirectorySeparatorChar
-                                 + workerData.Version + Path.DirectorySeparatorChar
+                                 + version + Path.DirectorySeparatorChar
                                  + CreateLastWellKnownConfigurationSnapshot.RemoveTypeSuffix(workerData.ContextType)
                                  + Path.DirectorySeparatorChar;
 
@@ -37,7 +37,7 @@
                     break;
                 }
 
-                if (n == 1)
+                if (version == 1)
                 {
                     throw new InvalidOperationException("There was no available last well know configuration version to restore.");
                 }
