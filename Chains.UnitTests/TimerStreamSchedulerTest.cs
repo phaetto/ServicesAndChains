@@ -88,12 +88,12 @@
                 contextForTest2.DoAsync(timerStreamScheduler.AsStream<ActionForTest>(cancellationTokenSource2.Token));
 #pragma warning restore 4014
 
-                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 1"), 10, TimerScheduledCallType.Once);
-                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 2"), 20, TimerScheduledCallType.Once);
-                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 3"), 30, TimerScheduledCallType.Once);
-                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 4"), 40, TimerScheduledCallType.Once);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 1"), 20, TimerScheduledCallType.Once);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 2"), 40, TimerScheduledCallType.Once);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 3"), 60, TimerScheduledCallType.Once);
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit 4"), 80, TimerScheduledCallType.Once);
 
-                await Task.Delay(25).ContinueWith(x =>
+                await Task.Delay(50).ContinueWith(x =>
                     {
                         // Cancel after the 2nd event
                         cancellationTokenSource.Cancel();
@@ -187,7 +187,7 @@
                         Assert.IsFalse(infiniteStream.MoveNext());
                     });
 
-                await Task.Delay(70).ContinueWith(x =>
+                await Task.Delay(100).ContinueWith(x =>
                     {
                         // Cancel after everything has finished
                         cancellationTokenSource.Cancel();

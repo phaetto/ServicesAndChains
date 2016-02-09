@@ -1,5 +1,6 @@
 ﻿namespace Chains.Play.Streams.Timer
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading;
 
@@ -21,6 +22,8 @@
 
         private int lastRunIntervalInMilliseconds = TimerIdle;
 
+        private int timeInMillisecondsWhenStarted = Environment.TickCount;
+
         public bool IsIdle => lastRunIntervalInMilliseconds == TimerIdle;
 
         public TimerStreamScheduler()
@@ -39,8 +42,25 @@
 
         public void ScheduleActionCall(object action, int intervalInMilliseconds, TimerScheduledCallType timerScheduledCallType, CancellationToken cancellationToken)
         {
+            var elapsedMilliseconds = 0;
+
+            if (lastRunIntervalInMilliseconds != TimerIdle)
+            {
+                elapsedMilliseconds = Environment.TickCount - timeInMillisecondsWhenStarted;
+            }
+
             lock (scheduledActionsSyncObject)
             {
+                foreach (var timerScheduledCall in scheduledActions)
+                {
+                    timerScheduledCall.NextScheduledTimeToRunInMilliseconds -= elapsedMilliseconds;
+
+                    if (timerScheduledCall.NextScheduledTimeToRunInMilliseconds < 0)
+                    {
+                        timerScheduledCall.NextScheduledTimeToRunInMilliseconds = 0;
+                    }
+                }
+
                 scheduledActions.Add(new TimerScheduledCall(intervalInMilliseconds)
                     {
                         TimerScheduledCallType = timerScheduledCallType,
@@ -50,10 +70,7 @@
                 });
             }
 
-            if (lastRunIntervalInMilliseconds == TimerIdle)
-            {
-                TimerStartLogic();
-            }
+            TimerStartLogic();
         }
 
         private int FindNextScheduleTime()
@@ -63,7 +80,8 @@
                 var minimumScheduledTimeToRun = int.MaxValue;
                 foreach (var timerScheduledCall in scheduledActions)
                 {
-                    if (minimumScheduledTimeToRun > timerScheduledCall.NextScheduledTimeToRunInMilliseconds)
+                    if (minimumScheduledTimeToRun > timerScheduledCall.NextScheduledTimeToRunInMilliseconds
+                        && !timerScheduledCall.CancellationToken.IsCancellationRequested)
                     {
                         minimumScheduledTimeToRun = timerScheduledCall.NextScheduledTimeToRunInMilliseconds;
                     }
@@ -137,9 +155,16 @@
         {
             lastRunIntervalInMilliseconds = FindNextScheduleTime();
 
+            if (lastRunIntervalInMilliseconds == 0)
+            {
+                TimerCallback(null);
+                return;
+            }
+
             if (lastRunIntervalInMilliseconds != TimerIdle)
             {
                 timer.Change(lastRunIntervalInMilliseconds, PeriodicCallbackDisabled);
+                timeInMillisecondsWhenStarted = Environment.TickCount;
             }
         }
 
