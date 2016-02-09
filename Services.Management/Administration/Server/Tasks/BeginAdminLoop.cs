@@ -25,9 +25,9 @@
                 return context;
             }
 
-            context.Do(new CleanUpAdminReports());
+            context.TimerStreamScheduler.ScheduleActionCall(new CleanUpAdminReports(), IntervalInMilliseconds, TimerScheduledCallType.Recurrent);
 
-            context.TimerStreamScheduler.ScheduleActionCall(this, IntervalInMilliseconds, TimerScheduledCallType.Once);
+            context.Do(new CleanUpAdminReports());
 
             return context;
         }
