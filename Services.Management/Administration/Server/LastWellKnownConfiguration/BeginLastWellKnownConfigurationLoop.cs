@@ -86,8 +86,13 @@
                     }
                     catch (InvalidOperationException exception)
                     {
-                        // Could not be revived
+                        // Could not be revived - o lwkc found
                         context.Parent.LogException(exception);
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        // That means that the process might runs with another id now. Requeue
+                        context.ServicesThatHaveStartedConcurrentQueue.Enqueue(serviceStartedData);
                     }
                 }
             }

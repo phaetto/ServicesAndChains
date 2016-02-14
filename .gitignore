@@ -20,3 +20,4 @@ reports/
 buildartifacts/*
 options.xml
 version.txt
+.vs/
