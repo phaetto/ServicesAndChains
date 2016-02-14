@@ -46,11 +46,19 @@
 
             workerExecutioner.SetUpPermissionsForMonoOnFolder(Data);
 
+            var fileName = Data + Path.DirectorySeparatorChar + processName;
+            var arguments = workerExecutioner.GetProcessArguments(ExecutionMode.UpdateAdministrationServer);
+            if (AbstractChain.IsMono)
+            {
+                arguments = $"\"{fileName}\" {arguments}";
+                fileName = "mono";
+            }
+
             Process.Start(
                 new ProcessStartInfo
                 {
-                    FileName = Data + Path.DirectorySeparatorChar + processName,
-                    Arguments = workerExecutioner.GetProcessArguments(ExecutionMode.UpdateAdministrationServer),
+                    FileName = fileName,
+                    Arguments = arguments,
                     WorkingDirectory = Data,
                     UseShellExecute = true,
                     CreateNoWindow = true,
