@@ -230,13 +230,18 @@ namespace Services.Management.Administration.Executioner
 
             try
             {
+                if (!folder.EndsWith("/"))
+                {
+                    folder += Path.DirectorySeparatorChar;
+                }
+
                 var chmodProcess = Process.Start(
                     new ProcessStartInfo
                     {
                         FileName = "chmod",
-                        Arguments = $"u+x {"*"}",
+                        Arguments = $"u+x {folder}*",
                         WorkingDirectory = folder,
-                        UseShellExecute = true
+                        UseShellExecute = false
                     });
 
                 chmodProcess.WaitForExit();
