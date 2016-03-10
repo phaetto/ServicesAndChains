@@ -54,7 +54,7 @@
                         FileName = fileName,
                         Arguments = arguments,
                         WorkingDirectory = destinationPath,
-                        UseShellExecute = true,
+                        UseShellExecute = !AbstractChain.IsMono,
                         CreateNoWindow = true,
                         RedirectStandardInput = false,
                         RedirectStandardOutput = false,

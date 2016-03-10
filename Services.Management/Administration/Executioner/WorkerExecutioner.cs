@@ -87,7 +87,7 @@ namespace Services.Management.Administration.Executioner
                                 FileName = WorkerData.DllPath,
                                 Arguments = GetProcessArguments(ExecutionMode.AdministrationServer),
                                 WorkingDirectory = Path.GetDirectoryName(WorkerData.DllPath),
-                                UseShellExecute = true
+                                UseShellExecute = !AbstractChain.IsMono
                             });
                         break;
                     }
