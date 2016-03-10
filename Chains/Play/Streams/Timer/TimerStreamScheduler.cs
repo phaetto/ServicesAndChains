@@ -92,6 +92,11 @@
                     return TimerIdle;
                 }
 
+                if (minimumScheduledTimeToRun < 0)
+                {
+                    return 0;
+                }
+
                 return minimumScheduledTimeToRun;
             }
         }
