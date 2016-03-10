@@ -246,8 +246,9 @@ namespace Services.Management.Administration.Executioner
 
                 chmodProcess.WaitForExit();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine($"Error while setting up permissions on folder using chmod: {exception.Message}");
             }
         }
 
