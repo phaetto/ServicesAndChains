@@ -238,8 +238,8 @@ namespace Services.Management.Administration.Executioner
                 var chmodProcess = Process.Start(
                     new ProcessStartInfo
                     {
-                        FileName = "chmod",
-                        Arguments = $"u+x {folder}*",
+                        FileName = $"chmod",
+                        Arguments = $"-R u+x \"{folder}\"",
                         WorkingDirectory = folder,
                         UseShellExecute = false
                     });
