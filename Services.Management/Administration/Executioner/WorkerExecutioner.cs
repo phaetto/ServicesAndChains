@@ -266,6 +266,7 @@ namespace Services.Management.Administration.Executioner
             }
             catch
             {
+                // If this fails then probably the workUnitContext might not be up and running
             }
         }
 

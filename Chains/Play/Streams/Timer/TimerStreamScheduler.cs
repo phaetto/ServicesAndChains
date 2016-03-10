@@ -62,11 +62,11 @@
                 }
 
                 scheduledActions.Add(new TimerScheduledCall(intervalInMilliseconds)
-                    {
-                        TimerScheduledCallType = timerScheduledCallType,
-                        ActionToRepeat = action,
-                        NextScheduledTimeToRunInMilliseconds = intervalInMilliseconds,
-                        CancellationToken = cancellationToken,
+                {
+                    TimerScheduledCallType = timerScheduledCallType,
+                    ActionToRepeat = action,
+                    NextScheduledTimeToRunInMilliseconds = intervalInMilliseconds,
+                    CancellationToken = cancellationToken,
                 });
             }
 
