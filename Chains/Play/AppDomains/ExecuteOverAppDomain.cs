@@ -12,7 +12,11 @@
             this.specification = specification;
         }
 
-        public ExecuteOverAppDomain(IReproducible reproducibleAction)
+        public ExecuteOverAppDomain(IRemotable remotableAction) : this(remotableAction as IReproducible)
+        {
+        }
+
+        protected ExecuteOverAppDomain(IReproducible reproducibleAction)
         {
             specification = reproducibleAction.GetInstanceSpec();
         }
