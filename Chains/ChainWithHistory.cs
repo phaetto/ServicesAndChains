@@ -8,14 +8,10 @@
     public class ChainWithHistory<T> : Chain<T>
         where T : Chain<T>
     {
-        public ChainWithHistory()
-        {
-            OnAfterExecuteAction = OnBeforeExecute;
-        }
-
-        private void OnBeforeExecute(object action)
+        protected override TReturnChainType InvokeAct<TReturnChainType>(IChainableAction<T, TReturnChainType> action)
         {
             AddToHistory(action);
+            return base.InvokeAct(action);
         }
 
         protected readonly object ListLock = new object();
