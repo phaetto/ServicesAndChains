@@ -2,40 +2,24 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Chains.Exceptions;
 
     public class Chain<T> : AbstractChain
         where T : Chain<T>
     {
+        protected virtual TReturnChainType InvokeAct<TReturnChainType>(IChainableAction<T, TReturnChainType> action)
+        {
+            return action.Act((T) this);
+        }
+
         public TReturnChainType Do<TReturnChainType>(
             IChainableAction<T, TReturnChainType> action)
         {
             Check.ArgumentNull(() => action);
 
-            OnBeforeExecuteAction?.Invoke(action);
-
-            var result = action.Act((T)this);
-
-            OnAfterExecuteAction?.Invoke(action);
-
-            return result;
-        }
-
-        public Task<TReturnChainType> Do<TReturnChainType>(
-            IChainableAction<T, Task<TReturnChainType>> action)
-        {
-            Check.ArgumentNull(() => action);
-
-            OnBeforeExecuteAction?.Invoke(action);
-
-            var result = action.Act((T)this).ContinueWith(
-                x =>
-                {
-                    OnAfterExecuteAction?.Invoke(action);
-
-                    return x.Result;
-                });
+            var result = InvokeAct(action);
 
             return result;
         }
@@ -45,37 +29,8 @@
         {
             Check.ArgumentNull(() => actions);
 
-            foreach (var action in actions)
-            {
-                OnBeforeExecuteAction?.Invoke(action);
-
-                var result = action.Act((T) this);
-
-                OnAfterExecuteAction?.Invoke(action);
-
-                yield return result;
-            }
-        }
-
-        public IEnumerable<Task<TReturnChainType>> Do<TReturnChainType>(
-            IEnumerable<IChainableAction<T, Task<TReturnChainType>>> actions)
-        {
-            Check.ArgumentNull(() => actions);
-
-            foreach (var action in actions)
-            {
-                OnBeforeExecuteAction?.Invoke(action);
-
-                var result = action.Act((T)this).ContinueWith(
-                    x =>
-                    {
-                        OnAfterExecuteAction?.Invoke(action);
-
-                        return x.Result;
-                    });
-
-                yield return result;
-            }
+            // Yields the results
+            return actions.Select(InvokeAct);
         }
 
         public Task<TReturnChainType> DoAsync<TReturnChainType>(
@@ -83,19 +38,7 @@
         {
             Check.ArgumentNull(() => action);
 
-            OnBeforeExecuteAction?.Invoke(action);
-
-            var resultTask = Task.Factory.StartNew(
-                () =>
-                {
-                    var result = action.Act((T)this);
-
-                    OnAfterExecuteAction?.Invoke(action);
-
-                    return result;
-                });
-
-            return resultTask;
+            return Task.Factory.StartNew(() => InvokeAct(action));
         }
 
         public Task<TReturnChainType> DoAsync<TReturnChainType>(
@@ -125,16 +68,12 @@
 
             foreach (var action in actions)
             {
-                OnBeforeExecuteAction?.Invoke(action);
-
-                var actionResult = action.Act((T)this);
+                var actionResult = InvokeAct(action);
 
                 if (!condition(actionResult))
                 {
                     continue;
                 }
-
-                OnAfterExecuteAction?.Invoke(action);
 
                 return actionResult;
             }

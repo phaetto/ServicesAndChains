@@ -12,6 +12,10 @@
 
         private readonly IPersistentStore<TData> persistentStore;
 
+        private bool isReExecutingActionsInternally;
+
+        public TData Data { get; private set; }
+
         protected IncrementallyPersistentChain(IPersistentStore<TData> persistentStore)
             : this(new TData
                    {
@@ -26,13 +30,25 @@
             Data = data;
             this.persistentStore = persistentStore;
 
-            OnAfterExecuteAction = OnAfterExecute;
-            OnBeforeExecuteAction = OnBeforeExecute;
-
             CheckIfNeedsToBeLoaded();
         }
 
-        public TData Data { get; private set; }
+        protected override TReturnChainType InvokeAct<TReturnChainType>(IChainableAction<T, TReturnChainType> action)
+        {
+            if (!isReExecutingActionsInternally)
+            {
+                OnBeforeExecute(action);
+            }
+
+            var result = base.InvokeAct(action);
+
+            if (!isReExecutingActionsInternally)
+            {
+                OnAfterExecute(action);
+            }
+
+            return result;
+        }
 
         private void OnBeforeExecute(object action)
         {
@@ -88,8 +104,7 @@
 
                 var executionChain = new ExecutionChain(this);
 
-                OnAfterExecuteAction = null;
-                OnBeforeExecuteAction = null;
+                isReExecutingActionsInternally = true;
 
                 foreach (var action in actions)
                 {
@@ -98,8 +113,7 @@
 
                 persistentStore.SaveSnapshot(Data);
 
-                OnAfterExecuteAction = OnAfterExecute;
-                OnBeforeExecuteAction = OnBeforeExecute;
+                isReExecutingActionsInternally = false;
 
                 mediaLastUpdateTime = lastUpdatedElementtype;
             }

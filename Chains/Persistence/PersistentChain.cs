@@ -21,7 +21,6 @@
         {
             Data = data;
             this.persistentStore = persistentStore;
-            OnAfterExecuteAction = OnAfterExecute;
 
             if (!persistentStore.SnapshotExists(Data))
             {
@@ -37,11 +36,15 @@
             }
         }
 
-        public TData Data { get; private set; }
-
-        private void OnAfterExecute(object action)
+        protected override TReturnChainType InvokeAct<TReturnChainType>(IChainableAction<T, TReturnChainType> action)
         {
+            var result = base.InvokeAct(action);
+
             persistentStore.SaveSnapshot(Data);
+
+            return result;
         }
+
+        public TData Data { get; private set; }
     }
 }
