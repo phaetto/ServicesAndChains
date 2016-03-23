@@ -13,14 +13,14 @@
 
         public ExecuteActionAndGetResult(dynamic chainableAction)
         {
-            Check.ArgumentNull(() => chainableAction);
+            Check.ArgumentNull(chainableAction, nameof(chainableAction));
 
             this.chainableAction = chainableAction;
         }
 
         public ExecuteActionAndGetResult(string chainableActionTypeName, params object[] arguments)
         {
-            Check.ArgumentNullOrEmpty(() => chainableActionTypeName);
+            Check.ArgumentNullOrEmpty(chainableActionTypeName, nameof(chainableActionTypeName));
 
             chainableAction = ExecutionChain.CreateObjectWithParameters(chainableActionTypeName, arguments);
         }

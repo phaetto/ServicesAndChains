@@ -17,7 +17,7 @@
         public TReturnChainType Do<TReturnChainType>(
             IChainableAction<T, TReturnChainType> action)
         {
-            Check.ArgumentNull(() => action);
+            Check.ArgumentNull(action, nameof(action));
 
             var result = InvokeAct(action);
 
@@ -27,7 +27,7 @@
         public IEnumerable<TReturnChainType> Do<TReturnChainType>(
             IEnumerable<IChainableAction<T, TReturnChainType>> actions)
         {
-            Check.ArgumentNull(() => actions);
+            Check.ArgumentNull(actions, nameof(actions));
 
             // Yields the results
             return actions.Select(InvokeAct);
@@ -36,7 +36,7 @@
         public Task<TReturnChainType> DoAsync<TReturnChainType>(
             IChainableAction<T, TReturnChainType> action)
         {
-            Check.ArgumentNull(() => action);
+            Check.ArgumentNull(action, nameof(action));
 
             return Task.Factory.StartNew(() => InvokeAct(action));
         }
@@ -44,7 +44,7 @@
         public Task<TReturnChainType> DoAsync<TReturnChainType>(
             IEnumerable<IChainableAction<T, TReturnChainType>> actions)
         {
-            Check.ArgumentNull(() => actions);
+            Check.ArgumentNull(actions, nameof(actions));
 
             return Task.Factory.StartNew(() =>
                 {
@@ -63,8 +63,8 @@
             Func<TReturnChainType, bool> condition,
             params IChainableAction<T, TReturnChainType>[] actions)
         {
-            Check.ArgumentNull(() => condition);
-            Check.ArgumentNull(() => actions);
+            Check.ArgumentNull(condition, nameof(condition));
+            Check.ArgumentNull(actions, nameof(actions));
 
             foreach (var action in actions)
             {
@@ -85,8 +85,8 @@
             Func<TReturnChainType, bool> condition,
             params Func<T, TReturnChainType>[] actions)
         {
-            Check.ArgumentNull(() => condition);
-            Check.ArgumentNull(() => actions);
+            Check.ArgumentNull(condition, nameof(condition));
+            Check.ArgumentNull(actions, nameof(actions));
 
             foreach (var action in actions)
             {
@@ -113,7 +113,7 @@
         public T Aggregate<TContextType>(TContextType context, IChainableAction<TContextType, T> action)
             where TContextType : Chain<TContextType>
         {
-            Check.ArgumentNull(() => action);
+            Check.ArgumentNull(action, nameof(action));
 
             var aggregatable = this as IAggreggatable<T>;
 

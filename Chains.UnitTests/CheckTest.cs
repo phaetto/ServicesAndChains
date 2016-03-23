@@ -33,8 +33,8 @@
 
         private void TestMethod(string arg)
         {
-            Check.ArgumentNull(() => arg);
-            Check.Argument(arg.StartsWith(ExceptionPrefix), () => arg, ExceptionMessage);
+            Check.ArgumentNull(arg, nameof(arg));
+            Check.Argument(arg.StartsWith(ExceptionPrefix), nameof(arg), ExceptionMessage);
         }
     }
 }
