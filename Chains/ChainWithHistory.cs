@@ -36,14 +36,14 @@
 
         public bool IsInChain(Type type)
         {
-            Check.ArgumentNull(() => type);
+            Check.ArgumentNull(type, nameof(type));
 
             return ActionList.Any(x => x.GetType() == type);
         }
 
-        public bool IsInChain<TYpe>()
+        public bool IsInChain<TActionType>()
         {
-            return IsInChain(typeof(TYpe));
+            return IsInChain(typeof(TActionType));
         }
 
         public bool IsInChain<TChainType, TReturnChainType>()
@@ -51,14 +51,14 @@
             return IsInChain(typeof(IChainableAction<TChainType, TReturnChainType>));
         }
 
-        public TYpe Get<TYpe>() where TYpe : class
+        public TActionType Get<TActionType>() where TActionType : class
         {
-            return ActionList.FirstOrDefault(x => x is TYpe) as TYpe;
+            return ActionList.FirstOrDefault(x => x is TActionType) as TActionType;
         }
 
-        public IEnumerable<TYpe> GetAll<TYpe>() where TYpe : class
+        public IEnumerable<TActionType> GetAll<TActionType>() where TActionType : class
         {
-            return ActionList.OfType<TYpe>().ToArray();
+            return ActionList.OfType<TActionType>().ToArray();
         }
 
         public IChainableAction<TChainType, TReturnChainType> Get<TChainType, TReturnChainType>()

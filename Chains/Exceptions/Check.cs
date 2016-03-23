@@ -5,57 +5,43 @@
 
     public static class Check
     {
-        public static void ArgumentNull<T>(Expression<Func<T>> action, string message = null)
+        public static void ArgumentNull(object testObject, string name, string message = null)
         {
-            var testObject = action.Compile()();
-
             if (!Equals(testObject, null))
             {
                 return;
             }
 
-            var expression = (MemberExpression)action.Body;
-            var name = expression.Member.Name;
             throw new ArgumentNullException(name, message ?? $"Parameter '{name}' is null");
         }
 
-        public static void ArgumentNullOrEmpty(Expression<Func<string>> action, string message = null)
+        public static void ArgumentNullOrEmpty(string testString, string name, string message = null)
         {
-            var testObject = action.Compile()();
-
-            if (!string.IsNullOrEmpty(testObject))
+            if (!string.IsNullOrEmpty(testString))
             {
                 return;
             }
 
-            var expression = (MemberExpression)action.Body;
-            var name = expression.Member.Name;
             throw new ArgumentNullException(name, message ?? $"Parameter '{name}' is null or empty");
         }
 
-        public static void Argument<T>(bool condition, Expression<Func<T>> action, string message)
+        public static void Argument(bool condition, string name, string message)
         {
             if (!condition)
             {
                 return;
             }
 
-            var expression = (MemberExpression)action.Body;
-            var name = expression.Member.Name;
             throw new ArgumentException($"Argument '{name}' error: {message}", name);
         }
 
-        public static void ArgumentOutOfRange<T>(bool condition, Expression<Func<T>> action, string message)
+        public static void ArgumentOutOfRange(bool condition, object actualValue, string name, string message)
         {
             if (!condition)
             {
                 return;
             }
 
-            var actualValue = action.Compile()();
-
-            var expression = (MemberExpression)action.Body;
-            var name = expression.Member.Name;
             throw new ArgumentOutOfRangeException(name, actualValue, $"Argument out of range '{name}': {message}");
         }
 

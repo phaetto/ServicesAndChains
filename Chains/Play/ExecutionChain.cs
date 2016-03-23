@@ -19,7 +19,7 @@ namespace Chains.Play
 
         public ExecutionChain(dynamic currentContext)
         {
-            Check.ArgumentNull(() => currentContext);
+            Check.ArgumentNull(currentContext, nameof(currentContext));
 
             CurrentContext = currentContext;
 
@@ -28,7 +28,7 @@ namespace Chains.Play
 
         public ExecutionChain(string currentContextTypeName)
         {
-            Check.ArgumentNullOrEmpty(() => currentContextTypeName);
+            Check.ArgumentNullOrEmpty(currentContextTypeName, nameof(currentContextTypeName));
 
             CurrentContext = CreateObjectWithParameters(currentContextTypeName);
 
@@ -37,7 +37,7 @@ namespace Chains.Play
 
         public ExecutionChain(Type currentContextType)
         {
-            Check.ArgumentNull(() => currentContextType);
+            Check.ArgumentNull(currentContextType, nameof(currentContextType));
 
             CurrentContext = CreateObjectWithParameters(currentContextType.AssemblyQualifiedName);
 
@@ -46,14 +46,14 @@ namespace Chains.Play
 
         public static object CreateObjectWithParameters(string unqualifiedType, params object[] parameters)
         {
-            Check.ArgumentNullOrEmpty(() => unqualifiedType);
+            Check.ArgumentNullOrEmpty(unqualifiedType, nameof(unqualifiedType));
 
             return CreateObjectWithParametersAndInjection(unqualifiedType, parameters);
         }
 
         public static object CreateObjectWithParametersAndInjection(string unqualifiedType, object[] parameters, object[] injectedParameters = null)
         {
-            Check.ArgumentNullOrEmpty(() => unqualifiedType);
+            Check.ArgumentNullOrEmpty(unqualifiedType, nameof(unqualifiedType));
 
             if (parameters == null)
             {
@@ -151,7 +151,7 @@ namespace Chains.Play
 
         public static Type FindType(string unqualifiedType)
         {
-            Check.ArgumentNullOrEmpty(() => unqualifiedType);
+            Check.ArgumentNullOrEmpty(unqualifiedType, nameof(unqualifiedType));
 
             if (typeCache == null)
             {

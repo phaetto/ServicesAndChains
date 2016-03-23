@@ -13,8 +13,8 @@
 
         public AppDomainExecutionChain(string appDomainName, string contextName)
         {
-            Check.ArgumentNullOrEmpty(() => appDomainName);
-            Check.ArgumentNullOrEmpty(() => contextName);
+            Check.ArgumentNullOrEmpty(appDomainName, nameof(appDomainName));
+            Check.ArgumentNullOrEmpty(contextName, nameof(contextName));
 
             Domain = AppDomain.CreateDomain(appDomainName, AppDomain.CurrentDomain.Evidence, AppDomain.CurrentDomain.SetupInformation);
 
