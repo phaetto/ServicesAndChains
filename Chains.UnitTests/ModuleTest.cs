@@ -42,25 +42,14 @@
         }
 
         [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
         public void Module_WhenCallIsNotSupportedFromTheMainClassOrModules_ThenExceptionIsThrown()
         {
-            Exception exception = null;
+            var executionChain = new ExecutionChain(new ContextForTestWithModules());
 
-            try
-            {
-                var executionChain = new ExecutionChain(new ContextForTestWithModules());
+            executionChain.Do(new ExecuteAction(new ReproducibleTestAction(new ReproducibleTestData())));
 
-                executionChain.Do(new ExecuteAction(new ReproducibleTestAction(new ReproducibleTestData())));
-
-                Assert.Fail("Execution of action should have thrown an error.");
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-            }
-
-            Assert.IsNotNull(exception);
-            Assert.IsInstanceOfType(exception, typeof(NotSupportedException));
+            Assert.Fail("Execution of action should have thrown an error.");
         }
     }
 }
