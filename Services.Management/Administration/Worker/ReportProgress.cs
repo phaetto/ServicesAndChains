@@ -17,7 +17,7 @@ namespace Services.Management.Administration.Worker
         {
             var key = Data.StartData.Id;
 
-            if ((!context.ReportData.ContainsKey(key) || context.ReportData[key].WorkerState == WorkUnitState.Stopping))
+            if (!context.ReportData.ContainsKey(key) || context.ReportData[key].WorkerState == WorkUnitState.Stopping)
             {
                 context.LastWellKnownConfigurationContext.Do(new EnqueueService(key));
             }

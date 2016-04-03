@@ -103,10 +103,7 @@ namespace Services.Management.Administration.Executioner
 
                         WrappedContext = CreateHostedContext(workUnitContext);
 
-                        if (workUnitContext.ContextServer != null)
-                        {
-                            workUnitContext.ContextServer.Do(new DelaySetHostedObject(WrappedContext));
-                        }
+                        workUnitContext.ContextServer?.Do(new DelaySetHostedObject(WrappedContext));
 
                         workUnitContext.Do(new ConnectHostedObject(WrappedContext)).Do(new StartWorkUnit());
 

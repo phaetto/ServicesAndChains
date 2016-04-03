@@ -2,8 +2,6 @@ namespace Services.Management.Administration.Worker
 {
     using System;
     using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
     using System.Threading;
     using Chains;
     using Services.Communication.Protocol;
@@ -16,10 +14,10 @@ namespace Services.Management.Administration.Worker
         public readonly string Session;
         public readonly string ApiKey;
         public readonly ReportProgressData ProgressData = new ReportProgressData();
+        public readonly DateTime TimeStarted = DateTime.UtcNow;
 
         private readonly IProcessExit processExit;
 
-        public DateTime TimeStarted { get; set; }
         public WorkUnitState State { get; set; }
         public ClientConnectionContext AdminServer { get; set; }
         public ServerConnectionContext ContextServer { get; set; }

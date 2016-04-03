@@ -10,8 +10,6 @@ namespace Services.Management.Administration.Worker
         {   
             context.State = WorkUnitState.Running;
 
-            context.TimeStarted = DateTime.UtcNow;
-
             context.ReportThread = new Thread(context.ReportToAdminThread);
             context.ReportThread.Start();
 
