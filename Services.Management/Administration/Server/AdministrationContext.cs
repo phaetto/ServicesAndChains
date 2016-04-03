@@ -78,7 +78,7 @@
 
             this.DataFolder =
                 Path.GetFullPath(
-                    Directory.GetCurrentDirectory() + System.IO.Path.DirectorySeparatorChar + ".."
+                    Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + ".."
                     + Path.DirectorySeparatorChar + DataFolderName) + Path.DirectorySeparatorChar;
 
             if (!Directory.Exists(this.RepositoryFolder))
@@ -180,7 +180,7 @@
 
         private void LogMessageFormatter(string text)
         {
-            var formattedText = $"{DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss")} (utc) {text}";
+            var formattedText = $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")} (utc) {text}";
 
             Console.WriteLine(formattedText);
 

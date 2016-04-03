@@ -164,7 +164,7 @@ namespace Services.Management.Administration.Worker
         private void LogMessageFormatter(string text)
         {
             ProgressData.AdditionalLog =
-                $"{DateTime.UtcNow.ToString("yyyy-MM-dd hh:mm:ss")} (utc) {text}{ProgressData.AdditionalLog}";
+                $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")} (utc) {text}{ProgressData.AdditionalLog}";
         }
 
         internal void ReportToAdminThread()
