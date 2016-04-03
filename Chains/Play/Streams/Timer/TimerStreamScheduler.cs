@@ -116,40 +116,36 @@
                     {
                         schedulesCancelled.Add(timerScheduledCall);
                     }
-                    else if (timerScheduledCall.NextScheduledTimeToRunInMilliseconds <= MinimumIntervalToStartApplyingActionInMilliseconds)
+                    else if (timerScheduledCall.NextScheduledTimeToRunInMilliseconds <=
+                             MinimumIntervalToStartApplyingActionInMilliseconds)
                     {
                         schedulesActivated.Add(timerScheduledCall);
                     }
                 }
-            }
 
-            lock (scheduledActionsSyncObject)
-            {
                 foreach (var timerScheduledCallCancelled in schedulesCancelled)
                 {
                     scheduledActions.Remove(timerScheduledCallCancelled);
                 }
-            }
 
-            foreach (var timerScheduledCallActivated in schedulesActivated)
-            {
-                if (timerScheduledCallActivated.CancellationToken.IsCancellationRequested)
+                foreach (var timerScheduledCallActivated in schedulesActivated)
                 {
-                    continue;
-                }
+                    if (timerScheduledCallActivated.CancellationToken.IsCancellationRequested)
+                    {
+                        continue;
+                    }
 
-                Publish(timerScheduledCallActivated.ActionToRepeat);
+                    Publish(timerScheduledCallActivated.ActionToRepeat);
 
-                if (timerScheduledCallActivated.TimerScheduledCallType == TimerScheduledCallType.Once)
-                {
-                    lock (scheduledActionsSyncObject)
+                    if (timerScheduledCallActivated.TimerScheduledCallType == TimerScheduledCallType.Once)
                     {
                         scheduledActions.Remove(timerScheduledCallActivated);
                     }
-                }
-                else
-                {
-                    timerScheduledCallActivated.NextScheduledTimeToRunInMilliseconds = timerScheduledCallActivated.TimeToRunInMilliseconds;
+                    else
+                    {
+                        timerScheduledCallActivated.NextScheduledTimeToRunInMilliseconds =
+                            timerScheduledCallActivated.TimeToRunInMilliseconds;
+                    }
                 }
             }
 

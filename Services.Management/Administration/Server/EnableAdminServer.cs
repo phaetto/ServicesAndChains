@@ -67,8 +67,6 @@
 
             adminContext.LastWellKnownConfigurationContext.Do(new BeginLastWellKnownConfigurationLoop());
 
-            adminContext.Do(new RemoveWellKnownStartedServicesLoop());
-
             return adminContext;
         }
     }

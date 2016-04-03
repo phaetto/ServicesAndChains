@@ -16,26 +16,29 @@
             string serviceIdToProcess;
             if (context.ServicesToCreateSnapshotConcurrentQueue.TryDequeue(out serviceIdToProcess))
             {
-                var workerData = context.Parent.ReportData[serviceIdToProcess];
+                if (context.Parent.ReportData.ContainsKey(serviceIdToProcess))
+                {
+                    var workerData = context.Parent.ReportData[serviceIdToProcess];
 
-                if (workerData == null || workerData.WorkerState != WorkUnitState.Running)
-                {
-                    // Wait until the service gets running, or the process fails.
-                    context.ServicesToCreateSnapshotConcurrentQueue.Enqueue(serviceIdToProcess);
-                }
-                else
-                {
-                    // Service must be up and contacted recently
-                    // Must have a respectable uptime
-                    var minimumTimeInSeconds = workerData.StartData.ReportUpdateIntervalInSeconds * 6;
-                    if (workerData.WorkerState == WorkUnitState.Running
-                        && workerData.Uptime.TotalSeconds > minimumTimeInSeconds)
+                    if (workerData == null || workerData.WorkerState != WorkUnitState.Running)
                     {
-                        context.Do(new CreateLastWellKnownConfigurationSnapshot(serviceIdToProcess));
+                        // Wait until the service gets running, or the process fails.
+                        context.ServicesToCreateSnapshotConcurrentQueue.Enqueue(serviceIdToProcess);
                     }
                     else
                     {
-                        context.ServicesToCreateSnapshotConcurrentQueue.Enqueue(serviceIdToProcess);
+                        // Service must be up and contacted recently
+                        // Must have a respectable uptime
+                        var minimumTimeInSeconds = workerData.StartData.ReportUpdateIntervalInSeconds*6;
+                        if (workerData.WorkerState == WorkUnitState.Running
+                            && workerData.Uptime.TotalSeconds > minimumTimeInSeconds)
+                        {
+                            context.Do(new CreateLastWellKnownConfigurationSnapshot(serviceIdToProcess));
+                        }
+                        else
+                        {
+                            context.ServicesToCreateSnapshotConcurrentQueue.Enqueue(serviceIdToProcess);
+                        }
                     }
                 }
             }

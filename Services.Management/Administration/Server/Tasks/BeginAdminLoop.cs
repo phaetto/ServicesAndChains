@@ -6,6 +6,7 @@
     public sealed class BeginAdminLoop : IChainableAction<AdministrationContext, AdministrationContext>
     {
         public const int IntervalInMilliseconds = 1000;
+        public const int NinetySecondsIntervalInMilliseconds = 90 * 1000;
 
         private readonly bool hasJustStarted;
 
@@ -19,7 +20,11 @@
             if (hasJustStarted)
             {
                 context.Do(new CleanUpAdminReports()).Do(new StartServicesExtensionsWellKnownService());
+
                 context.TimerStreamScheduler.ScheduleActionCall(new BeginAdminLoop(false), IntervalInMilliseconds,
+                    TimerScheduledCallType.Once);
+
+                context.TimerStreamScheduler.ScheduleActionCall(new RemoveWellKnownStartedServicesLoop(), NinetySecondsIntervalInMilliseconds,
                     TimerScheduledCallType.Once);
 
                 return context;
