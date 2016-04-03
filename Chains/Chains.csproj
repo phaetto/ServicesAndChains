@@ -62,6 +62,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractChain.cs" />
@@ -140,6 +141,11 @@
     <Compile Include="Play\Streams\Timer\TimerScheduledCall.cs" />
     <Compile Include="Play\Streams\Timer\TimerStreamScheduler.cs" />
     <Compile Include="Play\Web\Client.cs" />
+    <Compile Include="Play\Web\HttpListener\Handlers\DefaultFileHttpHandler.cs" />
+    <Compile Include="Play\Web\HttpListener\Handlers\FileSystemHttpRequestHandler.cs" />
+    <Compile Include="Play\Web\HttpListener\HttpHandlerBase.cs" />
+    <Compile Include="Play\Web\HttpListener\HttpRestHandler.cs" />
+    <Compile Include="Play\Web\HttpListener\Handlers\RedirectHttpHandler.cs" />
     <Compile Include="Play\Web\HttpListener\HttpServer.cs" />
     <Compile Include="Play\Web\HttpListener\IHttpRequestHandler.cs" />
     <Compile Include="Play\Web\HttpResultContextBase.cs" />
