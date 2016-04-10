@@ -1,5 +1,6 @@
 ﻿namespace Chains.UnitTests
 {
+    using System.Collections.Generic;
     using Chains.Play;
     using Chains.UnitTests.Classes;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -81,6 +82,19 @@
             Assert.AreEqual("domain 2", deserializedData[1].DomainName);
             Assert.AreEqual("value 3", deserializedData[2].ChangeToValue);
             Assert.AreEqual("domain 3", deserializedData[2].DomainName);
+        }
+
+        [TestMethod]
+        public void DeserializableSpecification_WhenDeserializingComplexExceptionData_ThenItSucceeds()
+        {
+            var jsonData =
+                "{\"DataType\":\"System.Collections.Generic.KeyNotFoundException\",\"Data\":{\"ClassName\":\"System.Collections.Generic.KeyNotFoundException\",\"Message\":\"The given key was not present in the dictionary.\",\"InnerException\":null,\"HelpURL\":null,\"StackTraceString\":\"at System.Collections.Generic.Dictionary`2 < string, string>.get_Item(string) < 0x001b8 >\nat Services.Communication.DataStructures.NameValue.GetKeyValue.Act(Services.Communication.DataStructures.NameValue.HashContext) < 0x0004f >\nat Chains.Chain`1 < Services.Communication.DataStructures.NameValue.HashContext >.InvokeAct<Services.Communication.DataStructures.NameValue.KeyValueData>(Chains.IChainableAction`2 < Services.Communication.DataStructures.NameValue.HashContext, Services.Communication.DataStructures.NameValue.KeyValueData >) < 0x0005f >\nat Chains.Chain`1 < Services.Communication.DataStructures.NameValue.HashContext >.Do<Services.Communication.DataStructures.NameValue.KeyValueData>(Chains.IChainableAction`2 < Services.Communication.DataStructures.NameValue.HashContext, Services.Communication.DataStructures.NameValue.KeyValueData >) < 0x00063 >\nat(wrapper dynamic - method) object.CallSite.Target(System.Runtime.CompilerServices.Closure, System.Runtime.CompilerServices.CallSite, object, object) < 0x0010f >\nat Chains.Play.ExecuteActionAndGetResult.Act(Chains.Play.ExecutionChain) < 0x005a3 >\nat Chains.Chain`1 < Chains.Play.ExecutionChain >.InvokeAct<Chains.Play.ExecutionResultContext>(Chains.IChainableAction`2 < Chains.Play.ExecutionChain, Chains.Play.ExecutionResultContext >) < 0x0005f >\nat Chains.Chain`1 < Chains.Play.ExecutionChain >.Do<Chains.Play.ExecutionResultContext>(Chains.IChainableAction`2 < Chains.Play.ExecutionChain, Chains.Play.ExecutionResultContext >) < 0x00063 >\nat Chains.Play.ExecuteActionFromSpecification.Act(Chains.Play.ExecutionChain) < 0x0005f >\nat Chains.Chain`1 < Chains.Play.ExecutionChain >.InvokeAct<Chains.Play.ExecutionResultContext>(Chains.IChainableAction`2 < Chains.Play.ExecutionChain, Chains.Play.ExecutionResultContext >) < 0x0005f >\nat Chains.Chain`1 < Chains.Play.ExecutionChain >.Do<Chains.Play.ExecutionResultContext>(Chains.IChainableAction`2 < Chains.Play.ExecutionChain, Chains.Play.ExecutionResultContext >) < 0x00063 >\nat Services.Communication.Protocol.ProtocolServerLogic.ApplyDataOnExecutionChain(Chains.Play.ExecutionChain, Chains.Play.ExecutableActionSpecification[]) < 0x00083 >\nat Services.Communication.Protocol.ProtocolServerLogic.ApplyDataAndReturn(Chains.Play.ExecutionChain, Chains.Play.ExecutableActionSpecification[], bool) < 0x000e3 >\n\",\"RemoteStackTraceString\":null,\"RemoteStackIndex\":0,\"HResult\":-2146233087,\"Source\":\"mscorlib\",\"ExceptionMethod\":null,\"Data\":null},\"DataStructureVersionNumber\":1}";
+
+            var deserializedData =
+                DeserializableSpecification<ExecutableActionSpecification>.DeserializeFromJson(jsonData);
+
+            Assert.IsNotNull(deserializedData);
+            Assert.IsInstanceOfType(deserializedData.Data, typeof(KeyNotFoundException));
         }
     }
 }

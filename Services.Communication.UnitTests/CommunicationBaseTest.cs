@@ -1,6 +1,7 @@
 ﻿namespace Services.Communication.UnitTests
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Net;
     using System.Net.Sockets;
@@ -12,6 +13,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Services.Communication.Protocol;
     using Services.Communication.Tcp.Servers;
+    using Services.Communication.UnitTests.Classes;
     using SuperSocket.SocketBase.Config;
     using ProtocolType = System.Net.Sockets.ProtocolType;
 
@@ -418,6 +420,31 @@
                 using (new Client("127.0.0.1", 15002).Do(new OpenConnection()).Do(testAction))
                 {
                 }
+            }
+        }
+
+        [TestMethod]
+        public void TcpServer_WhenServerCreatesAnError_ThenTheErrorIsCorrectlyPropagated()
+        {
+            var testAction = new ReproducibleTestActionWithError(
+                new ReproducibleTestData
+                {
+                    ChangeToValue = "over tcp"
+                });
+
+            try
+            {
+                using (new ServerHost("127.0.0.1", 15002).Do(new StartListen(typeof(ContextForTest2).FullName)))
+                {
+                    using (new Client("127.0.0.1", 15002).Do(new OpenConnection()).Do(testAction))
+                    {
+                    }
+                }
+            }
+            catch (KeyNotFoundException expectedException)
+            {
+                Assert.AreEqual(ReproducibleTestActionWithError.ExceptionText, expectedException.Message);
+                Assert.AreEqual(ReproducibleTestActionWithError.InnerExceptionText, expectedException.InnerException.Message);
             }
         }
 

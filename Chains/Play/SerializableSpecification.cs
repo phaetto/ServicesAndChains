@@ -170,7 +170,16 @@
                 {
                     var jcontainer = data as JObject;
                     var executableActionSpecification = this as ExecutableActionSpecification;
-                    data = jcontainer.ToObject(ExecutionChain.FindType(executableActionSpecification.DataType));
+                    try
+                    {
+                        data = jcontainer.ToObject(ExecutionChain.FindType(executableActionSpecification.DataType));
+                    }
+                    catch (InvalidCastException) when(AbstractChain.IsMono)
+                    {
+                        // Known problem with mono and ISerializable
+                        // TODO: should manualy fix the ISerializable?
+                        throw;
+                    }
                 }
 
                 try
