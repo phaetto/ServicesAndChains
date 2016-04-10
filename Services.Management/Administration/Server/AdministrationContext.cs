@@ -41,7 +41,7 @@
 
         internal readonly LastWellKnownConfigurationContext LastWellKnownConfigurationContext;
 
-        private CancellationTokenSource adminCancellationTokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource adminCancellationTokenSource = new CancellationTokenSource();
 
         public AdministrationContext(
             string hostname,
@@ -151,10 +151,10 @@
 
         public void Close()
         {
+            adminCancellationTokenSource.Cancel();
+
             if (AdminServer != null)
                 AdminServer.Close();
-
-            adminCancellationTokenSource.Cancel();
         }
 
         public void Dispose()

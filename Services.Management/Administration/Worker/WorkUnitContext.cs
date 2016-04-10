@@ -123,7 +123,7 @@ namespace Services.Management.Administration.Worker
         {
             lock (ProgressData)
             {
-                LogMessageFormatter(message);
+                LogMessageFormatter(message, false);
             }
         }
 
@@ -131,7 +131,7 @@ namespace Services.Management.Administration.Worker
         {
             lock (ProgressData)
             {
-                LogMessageFormatter(string.Format(message, arguments));
+                LogMessageFormatter(string.Format(message, arguments), false);
             }
         }
 
@@ -147,7 +147,7 @@ namespace Services.Management.Administration.Worker
         {
             lock (ProgressData)
             {
-                LogMessageFormatter(message + Environment.NewLine);
+                LogMessageFormatter(message + Environment.NewLine, true);
             }
         }
 
@@ -155,14 +155,15 @@ namespace Services.Management.Administration.Worker
         {
             lock (ProgressData)
             {
-                LogMessageFormatter(string.Format(message, arguments) + Environment.NewLine);
+                LogMessageFormatter(string.Format(message, arguments) + Environment.NewLine, true);
             }
         }
 
-        private void LogMessageFormatter(string text)
+        private void LogMessageFormatter(string text, bool withTime)
         {
             ProgressData.AdditionalLog =
-                $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")} (utc) {text}{ProgressData.AdditionalLog}";
+                (withTime ? $"{DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")} (utc)" : string.Empty)
+                + $" {text}{ProgressData.AdditionalLog}";
         }
 
         internal void ReportToAdminThread()

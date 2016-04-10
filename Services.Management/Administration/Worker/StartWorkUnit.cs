@@ -1,6 +1,5 @@
 namespace Services.Management.Administration.Worker
 {
-    using System;
     using System.Threading;
     using Chains;
 
