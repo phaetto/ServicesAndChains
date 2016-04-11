@@ -4,10 +4,15 @@ namespace Chains.Play
     using System.Collections.Generic;
     using Chains.Play.Modules;
     using System.Linq;
+    using System.Reflection;
     using Chains.Exceptions;
 
     public sealed class ExecutionChain : Chain<ExecutionChain>, IModular
     {
+        private const BindingFlags ConstructorBindingFlags =
+            BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance
+            | BindingFlags.Public;
+
         [ThreadStatic]
         private static Dictionary<string, Type> typeCache;
 
@@ -67,14 +72,14 @@ namespace Chains.Play
 
         public static object CreateObjectWithParametersAndInjection(Type type, object[] parameters, object[] injectedParameters = null)
         {
-            var constructors = type.GetConstructors().OrderByDescending(x => x.GetParameters().Length);
+            var constructors = type.GetConstructors(ConstructorBindingFlags).OrderByDescending(x => x.GetParameters().Length);
             foreach (var constructor in constructors)
             {
                 try
                 {
                     var constructorParameters = constructor.GetParameters();
                     var totalParametersCheck = parameters.Length
-                        + (injectedParameters != null ? injectedParameters.Length : 0);
+                        + (injectedParameters?.Length ?? 0);
 
                     if (constructorParameters.Length <= totalParametersCheck)
                     {

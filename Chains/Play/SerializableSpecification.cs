@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -18,7 +19,7 @@
             public IEnumerable<PropertyInfo> properties;
         }
 
-        private static Dictionary<string, FieldsAndPropertiesForClass> reflectionCaching =
+        private static readonly Dictionary<string, FieldsAndPropertiesForClass> ReflectionCaching =
             new Dictionary<string, FieldsAndPropertiesForClass>();
 
         public abstract int DataStructureVersionNumber { get; }
@@ -41,9 +42,9 @@
                                 .ToList()
                         };
 
-            lock (reflectionCaching)
+            lock (ReflectionCaching)
             {
-                reflectionCaching[GetType().FullName] = entry;
+                ReflectionCaching[GetType().FullName] = entry;
             }
         }
 
@@ -53,12 +54,12 @@
             {
                 var thisFullTypeName = GetType().FullName;
 
-                if (!reflectionCaching.ContainsKey(thisFullTypeName))
+                if (!ReflectionCaching.ContainsKey(thisFullTypeName))
                 {
                     PopulateFieldsAndProperties();
                 }
 
-                return reflectionCaching[thisFullTypeName].properties;
+                return ReflectionCaching[thisFullTypeName].properties;
             }
         }
 
@@ -68,12 +69,12 @@
             {
                 var thisFullTypeName = GetType().FullName;
 
-                if (!reflectionCaching.ContainsKey(thisFullTypeName))
+                if (!ReflectionCaching.ContainsKey(thisFullTypeName))
                 {
                     PopulateFieldsAndProperties();
                 }
 
-                return reflectionCaching[thisFullTypeName].fields;
+                return ReflectionCaching[thisFullTypeName].fields;
             }
         }
 
@@ -170,15 +171,28 @@
                 {
                     var jcontainer = data as JObject;
                     var executableActionSpecification = this as ExecutableActionSpecification;
-                    try
+
+                    var dataType = ExecutionChain.FindType(executableActionSpecification.DataType);
+
+                    if (dataType.GetInterface(typeof(ISerializable).FullName) != null)
                     {
-                        data = jcontainer.ToObject(ExecutionChain.FindType(executableActionSpecification.DataType));
+                        var serializationInfo = new SerializationInfo(dataType,
+                            new JsonFormatterConverter(new JsonSerializer()));
+
+                        foreach (var keyValuePair in jcontainer)
+                        {
+                            serializationInfo.AddValue(keyValuePair.Key, keyValuePair.Value);
+                        }
+
+                        data = ExecutionChain.CreateObjectWithParametersAndInjection(dataType, new object[]
+                        {
+                            serializationInfo,
+                            new StreamingContext(),
+                        });
                     }
-                    catch (InvalidCastException) when(AbstractChain.IsMono)
+                    else
                     {
-                        // Known problem with mono and ISerializable
-                        // TODO: should manualy fix the ISerializable?
-                        throw;
+                        data = jcontainer.ToObject(dataType);
                     }
                 }
 
