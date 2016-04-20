@@ -50,7 +50,7 @@
                 executioner.Execute();
             }
 
-            Assert.AreEqual(HostedContextForTest.ServerProviderType, typeof(TcpServer).FullName);
+            Assert.AreEqual(HostedContextForTest.ServerProviderType, typeof(AsyncSocketListener).FullName);
         }
 
         [TestMethod]

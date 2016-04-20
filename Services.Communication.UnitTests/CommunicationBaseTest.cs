@@ -7,6 +7,7 @@
     using System.Net.Sockets;
     using System.Text;
     using System.Threading;
+    using System.Threading.Tasks;
     using Chains.Play;
     using Chains.Play.Web;
     using Chains.UnitTests.Classes;
@@ -14,43 +15,36 @@
     using Services.Communication.Protocol;
     using Services.Communication.Tcp.Servers;
     using Services.Communication.UnitTests.Classes;
-    using SuperSocket.SocketBase.Config;
     using ProtocolType = System.Net.Sockets.ProtocolType;
 
     [TestClass]
     public class CommunicationBaseTest
     {
+        private const string LocalhostIp = "127.0.0.1";
+
         [TestMethod]
-        public void TcpServer_WhenStartedWithCorrectConfig_ThenServerIsUp()
+        public void AsyncSocketListener_WhenStartedWithCorrectConfig_ThenServerIsUp()
         {
-            var appServer = new TcpServer(new ProtocolServerLogic(typeof(ContextForTest).FullName));
+            var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName));
 
             try
             {
-                var serverConfig = new ServerConfig();
-                serverConfig.Ip = "127.0.0.1";
-                serverConfig.Port = 4000;
-                serverConfig.Name = "myserver";
-
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
-
-                Assert.IsTrue(setupResult);
-                Assert.IsTrue(appServer.Start());
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 4000), 10);
             }
             finally
             {
-                appServer.Stop();
+                asyncSocketListener.StopListening();
             }
         }
 
         [TestMethod]
-        public void TcpServer_WhenSocketObjectIsSent_ThenCallbackIsReceived()
+        public void AsyncSocketListener_WhenSocketObjectIsSent_ThenCallbackIsReceived()
         {
             var hasCalled = false;
-            using (var server = new ServerHost("127.0.0.1", 7123).Do(
+            using (var server = new ServerHost(LocalhostIp, 7123).Do(
                         new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                SendMessage();
+                SendMessage(7123);
                 Thread.Sleep(1000);
                 server.Close();
             }
@@ -59,7 +53,46 @@
         }
 
         [TestMethod]
-        public void TcpServer_WhenMultipleServersAreSetup_ThenStoppingAndRestartingTheServerIsGuaranteed()
+        public void AsyncSocketListener_WhenSocketObjectIsSentInParallel_ThenCallbackIsReceived()
+        {
+            var hasCalled = false;
+            using (var server = new ServerHost(LocalhostIp, 7125).Do(
+                        new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+            {
+                Parallel.For(0, 100, x =>
+                {
+                    SendMessage(7125);
+                });
+                
+                Thread.Sleep(1000);
+                server.Close();
+            }
+
+            Assert.IsTrue(hasCalled);
+        }
+
+        [TestMethod]
+        public void AsyncSocketListener_WhenSocketObjectIsSentAndReceivedInParallel_ThenCallbackIsReceived()
+        {
+            var hasCalled = false;
+            using (var server = new ServerHost(LocalhostIp, 7126).Do(
+                        new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
+            {
+                Parallel.For(0, 100, x =>
+                {
+                    var item = (ReproducibleTestData)SendMessageAndReceive(7126).Data;
+                    Assert.AreEqual("over tcp", item.ChangeToValue);
+                });
+
+                Thread.Sleep(1000);
+                server.Close();
+            }
+
+            Assert.IsTrue(hasCalled);
+        }
+
+        [TestMethod]
+        public void AsyncSocketListener_WhenMultipleServersAreSetup_ThenStoppingAndRestartingTheServerIsGuaranteed()
         {
             var testAction = new ReproducibleTestAction(
                 new ReproducibleTestData
@@ -68,94 +101,52 @@
                 });
             var hasCalled = false;
 
-            using (var appServer = new TcpServer(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
+            using (var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
             {
-                var serverConfig = new ServerConfig();
-                serverConfig.Ip = "127.0.0.1";
-                serverConfig.Port = 7234;
-                serverConfig.Name = "test0F3";
-                serverConfig.KeepAliveTime = 3;
-                serverConfig.MaxConnectionNumber = 10000;
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 10);
 
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
-
-                Assert.IsTrue(setupResult);
-                Assert.IsTrue(appServer.Start());
-
-                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
 
-                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
 
-                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
             }
 
-            using (var appServer = new TcpServer(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
+            using (var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
             {
-                var serverConfig = new ServerConfig();
-                serverConfig.Ip = "127.0.0.1";
-                serverConfig.Port = 7234;
-                serverConfig.Name = "test0F3";
-
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
-
-                Assert.IsTrue(setupResult);
-                Assert.IsTrue(appServer.Start());
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 10);
             }
 
-            using (var appServer = new TcpServer(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
+            using (var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
             {
-                var serverConfig = new ServerConfig();
-                serverConfig.Ip = "127.0.0.1";
-                serverConfig.Port = 7234;
-                serverConfig.Name = "test0F3";
-
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
-
-                Assert.IsTrue(setupResult);
-                Assert.IsTrue(appServer.Start());
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 10);
             }
 
-            using (var appServer = new TcpServer(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
+            using (var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
             {
-                var serverConfig = new ServerConfig();
-                serverConfig.Ip = "127.0.0.1";
-                serverConfig.Port = 7234;
-                serverConfig.Name = "test0F3";
-
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
-
-                Assert.IsTrue(setupResult);
-                Assert.IsTrue(appServer.Start());
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 10);
             }
 
-            using (var appServer = new TcpServer(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
+            using (var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
             {
-                var serverConfig = new ServerConfig();
-                serverConfig.Ip = "127.0.0.1";
-                serverConfig.Port = 7234;
-                serverConfig.Name = "test0F3";
-
-                var setupResult = appServer.Setup(new RootConfig(), serverConfig);
-
-                Assert.IsTrue(setupResult);
-                Assert.IsTrue(appServer.Start());
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 10);
             }
 
             var servertryFinally =
-                new ServerHost("127.0.0.1", 7234).Do(
+                new ServerHost(LocalhostIp, 7234).Do(
                     new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true));
             try
             {
-                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
@@ -166,11 +157,11 @@
             }
 
             servertryFinally =
-                new ServerHost("127.0.0.1", 7234).Do(
+                new ServerHost(LocalhostIp, 7234).Do(
                     new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true));
             try
             {
-                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
@@ -180,50 +171,50 @@
                 servertryFinally.Close();
             }
 
-            using (var server = new ServerHost("127.0.0.1", 7234).Do(
+            using (var server = new ServerHost(LocalhostIp, 7234).Do(
                             new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
                 server.Close();
             }
 
-            using (var server = new ServerHost("127.0.0.1", 7234).Do(
+            using (var server = new ServerHost(LocalhostIp, 7234).Do(
                             new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
                 server.Close();
             }
 
-            using (var server = new ServerHost("127.0.0.1", 7234).Do(
+            using (var server = new ServerHost(LocalhostIp, 7234).Do(
                             new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
                 server.Close();
             }
 
-            using (var server = new ServerHost("127.0.0.1", 7234).Do(
+            using (var server = new ServerHost(LocalhostIp, 7234).Do(
                             new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
                 server.Close();
             }
 
-            using (var server = new ServerHost("127.0.0.1", 7234).Do(
+            using (var server = new ServerHost(LocalhostIp, 7234).Do(
                             new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (var connection = new Client("127.0.0.1", 7234).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
@@ -232,13 +223,13 @@
         }
 
         [TestMethod]
-        public void TcpServer_WhenSocketObjectIsExchanged_ThenHasTheSameText()
+        public void AsyncSocketListener_WhenSocketObjectIsExchanged_ThenHasTheSameText()
         {
             var hasCalled = false;
-            using (new ServerHost("127.0.0.1", 7124).Do(
+            using (new ServerHost(LocalhostIp, 7124).Do(
                         new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                var item = (ReproducibleTestData)SendMessageAndReceive().Data;
+                var item = (ReproducibleTestData)SendMessageAndReceive(7124).Data;
                 Thread.Sleep(1000);
                 Assert.AreEqual("over tcp", item.ChangeToValue);
             }
@@ -247,21 +238,22 @@
         }
 
         [TestMethod]
-        public void TcpServer_WhenSocketObjectIsExchangedWithUnsupportedCommand_ThenItReturnsUnknownRequest()
+        public void AsyncSocketListener_WhenSocketObjectIsExchangedWithUnsupportedCommand_ThenItReturnsUnknownRequest()
         {
             var hasCalled = false;
-            using (new ServerHost("127.0.0.1", 7124).Do(
+            using (new ServerHost(LocalhostIp, 7124).Do(
                         new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
                 var returnLine = SendUnsupportedMessageAndReceive();
-                Assert.AreEqual("Unknown request: WrongTcpCommand", returnLine);
+                var deserializedMessage = DeserializableSpecification<ExecutableActionSpecification>.DeserializeFromJson(returnLine).Data;
+                Assert.IsInstanceOfType(deserializedMessage, typeof(InvalidOperationException));
             }
 
             Assert.IsFalse(hasCalled);
         }
 
         [TestMethod]
-        public void TcpServer_WhenClientSends_ThenHasTheSameText()
+        public void AsyncSocketListener_WhenClientSends_ThenHasTheSameText()
         {
             var testAction = new ReproducibleTestAction(
                 new ReproducibleTestData
@@ -270,10 +262,10 @@
                 });
 
             var hasCalled = false;
-            using (new ServerHost("127.0.0.1", 3997).Do(
+            using (new ServerHost(LocalhostIp, 3997).Do(
                         new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (var connection = new Client("127.0.0.1", 3997).Do(new OpenConnection()))
+                using (var connection = new Client(LocalhostIp, 3997).Do(new OpenConnection()))
                 {
                     connection.Do(testAction);
                 }
@@ -283,7 +275,7 @@
         }
 
         [TestMethod]
-        public void TcpServer_WhenClientSendsUsingHttp_ThenHasTheSameText()
+        public void AsyncSocketListener_WhenClientSendsUsingHttp_ThenHasTheSameText()
         {
             var testAction = new ReproducibleTestAction(
                 new ReproducibleTestData
@@ -311,7 +303,7 @@
         }
 
         [TestMethod]
-        public void TcpServer_WhenClientSendsButNoReceiveUsingHttp_ThenHasNoContent()
+        public void AsyncSocketListener_WhenClientSendsButNoReceiveUsingHttp_ThenHasNoContent()
         {
             var testAction = new ReproducibleTestAction(
                 new ReproducibleTestData
@@ -337,7 +329,7 @@
         }
 
         [TestMethod]
-        public void TcpServer_WhenClientSendsUsingHttp_ThenMultipleServersCanBeHosted()
+        public void AsyncSocketListener_WhenClientSendsUsingHttp_ThenMultipleServersCanBeHosted()
         {
             var testAction = new ReproducibleTestAction(
                 new ReproducibleTestData
@@ -379,7 +371,7 @@
         }
 
         [TestMethod]
-        public void TcpServer_WhenClientSendsOneThousandItems_ThenHasTheSameText()
+        public void AsyncSocketListener_WhenClientSendsOneThousandItems_ThenHasTheSameText()
         {
             var testAction = new ReproducibleTestAction(
                 new ReproducibleTestData
@@ -394,10 +386,10 @@
             }
 
             var hasCalled = false;
-            using (new ServerHost("127.0.0.1", 15010).Do(
+            using (new ServerHost(LocalhostIp, 15010).Do(
                         new StartListen(typeof(ContextForTest).FullName, onAfterExecute: x => hasCalled = true)))
             {
-                using (new Client("127.0.0.1", 15010).Do(new OpenConnection()).Do(items))
+                using (new Client(LocalhostIp, 15010).Do(new OpenConnection()).Do(items))
                 {
                 }
             }
@@ -407,7 +399,7 @@
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void TcpServer_WhenClientSendsNotSupportedAction_ThenItDoesNotExecute()
+        public void AsyncSocketListener_WhenClientSendsNotSupportedAction_ThenItDoesNotExecute()
         {
             var testAction = new ReproducibleTestAction2(
                 new ReproducibleTestData
@@ -415,16 +407,16 @@
                     ChangeToValue = "over tcp"
                 });
 
-            using (new ServerHost("127.0.0.1", 15002).Do(new StartListen(typeof(ContextForTest).FullName)))
+            using (new ServerHost(LocalhostIp, 15002).Do(new StartListen(typeof(ContextForTest).FullName)))
             {
-                using (new Client("127.0.0.1", 15002).Do(new OpenConnection()).Do(testAction))
+                using (new Client(LocalhostIp, 15002).Do(new OpenConnection()).Do(testAction))
                 {
                 }
             }
         }
 
         [TestMethod]
-        public void TcpServer_WhenServerCreatesAnError_ThenTheErrorIsCorrectlyPropagated()
+        public void AsyncSocketListener_WhenServerCreatesAnError_ThenTheErrorIsCorrectlyPropagated()
         {
             var testAction = new ReproducibleTestActionWithError(
                 new ReproducibleTestData
@@ -434,9 +426,9 @@
 
             try
             {
-                using (new ServerHost("127.0.0.1", 15002).Do(new StartListen(typeof(ContextForTest2).FullName)))
+                using (new ServerHost(LocalhostIp, 15002).Do(new StartListen(typeof(ContextForTest2).FullName)))
                 {
-                    using (new Client("127.0.0.1", 15002).Do(new OpenConnection()).Do(testAction))
+                    using (new Client(LocalhostIp, 15002).Do(new OpenConnection()).Do(testAction))
                     {
                     }
                 }
@@ -448,7 +440,7 @@
             }
         }
 
-        private void SendMessage()
+        private void SendMessage(int port)
         {
             var testAction = new ReproducibleTestAction(
                 new ReproducibleTestData
@@ -459,7 +451,7 @@
             var commandText =
                 $"TcpCommand {SerializableSpecification.SerializeManyToJson(new[] { testAction.GetInstanceSpec() })}{Environment.NewLine}";
 
-            using (var socket = CreateClient(7123))
+            using (var socket = CreateClient(port))
             {
                 using (var socketStream = new NetworkStream(socket))
                 {
@@ -475,7 +467,7 @@
             }
         }
 
-        private ExecutableActionSpecification SendMessageAndReceive()
+        private ExecutableActionSpecification SendMessageAndReceive(int port)
         {
             var testAction = new ReproducibleTestAction(
                 new ReproducibleTestData
@@ -483,7 +475,7 @@
                     ChangeToValue = "over tcp"
                 });
 
-            using (var socket = CreateClient(7124))
+            using (var socket = CreateClient(port))
             {
                 using (var socketStream = new NetworkStream(socket))
                 {
@@ -551,7 +543,7 @@
 
         private Socket CreateClient(int port)
         {
-            var serverAddress = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+            var serverAddress = new IPEndPoint(IPAddress.Parse(LocalhostIp), port);
             var socket = new Socket(serverAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             socket.Connect(serverAddress);
