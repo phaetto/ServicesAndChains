@@ -8,8 +8,6 @@
     {
         private readonly AsyncSocketListener asyncSocketListener;
 
-        private ServerHost ServerHost { get; set; }
-
         public TcpServerProtocolStack(ProtocolServerLogic protocolServerLogic)
         {
             ProtocolServerLogic = protocolServerLogic;

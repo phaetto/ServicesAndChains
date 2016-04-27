@@ -36,6 +36,9 @@
                 clientSocket.Close();
                 clientSocket.Dispose();
             }
+            catch (SocketException)
+            {
+            }
             finally
             {
                 clientSocket = null;

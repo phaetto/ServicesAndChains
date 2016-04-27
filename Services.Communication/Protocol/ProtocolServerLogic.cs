@@ -101,10 +101,7 @@ namespace Services.Communication.Protocol
                         dataToReturn = ApplyDataOnExecutionChain(chainInstance, actionSpecifications);
                     }
 
-                    if (onAfterExecute != null)
-                    {
-                        onAfterExecute(chainInstance.CurrentContext);
-                    }
+                    onAfterExecute?.Invoke(chainInstance.CurrentContext);
                 }
                 catch (Exception ex)
                 {
