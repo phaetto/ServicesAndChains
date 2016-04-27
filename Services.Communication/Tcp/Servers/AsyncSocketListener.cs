@@ -182,7 +182,11 @@ namespace Services.Communication.Tcp.Servers
                 }
                 else
                 {
-                    state.Listener.BeginReceive(state.Buffer, 0, state.BufferSize, SocketFlags.None, ReceiveCallbackV1, state);
+                    if (receivedBytes > 0)
+                    {
+                        state.Listener.BeginReceive(state.Buffer, 0, state.BufferSize, SocketFlags.None,
+                            ReceiveCallbackV1, state);
+                    }
                 }
             }
             catch (SocketException)
