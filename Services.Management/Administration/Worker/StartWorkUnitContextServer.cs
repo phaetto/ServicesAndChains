@@ -10,7 +10,7 @@ namespace Services.Management.Administration.Worker
         {
             if (!string.IsNullOrEmpty(context.WorkerData.ContextServerHost) && context.WorkerData.ContextServerPort > 0)
             {
-                var httpPath = context.WorkerData.ContextHttpData != null ? context.WorkerData.ContextHttpData.Path : null;
+                var httpPath = context.WorkerData.ContextHttpData?.Path;
                 var protocolType = context.WorkerData.ContextHttpData != null ? ProtocolType.Http : ProtocolType.Tcp;
                 var threads = context.WorkerData.ContextServerThreads > 1 ? context.WorkerData.ContextServerThreads : 1;
 

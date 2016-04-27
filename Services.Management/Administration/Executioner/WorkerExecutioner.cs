@@ -95,18 +95,18 @@ namespace Services.Management.Administration.Executioner
                     {
                         // Needs to be attached to the object to finalize it before running any actions
                         workUnitContext = new WorkUnitContext(WorkerData, Session, ApiKey, processExit);
-
+                        
                         workUnitContext
                             .Do(new PrepareAssembliesInWorkUnit())
                             .Do(new StartWorkUnitContextServer())
                             .Do(new ConnectWorkUnitToAdmin());
-
+                        
                         WrappedContext = CreateHostedContext(workUnitContext);
-
+                        
                         workUnitContext.ContextServer?.Do(new DelaySetHostedObject(WrappedContext));
-
+                        
                         workUnitContext.Do(new ConnectHostedObject(WrappedContext)).Do(new StartWorkUnit());
-
+                        
                         break;
                     }
                     case ExecutionMode.PrepareWorker:

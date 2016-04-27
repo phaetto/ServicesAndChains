@@ -2,7 +2,4 @@
 <files>
   <file name="Ionic.Zip.dll" />
   <file name="Services.Management.dll" />
-  <file name="SuperSocket.Common.dll" />
-  <file name="SuperSocket.SocketBase.dll" />
-  <file name="SuperSocket.SocketEngine.dll" />
 </files>

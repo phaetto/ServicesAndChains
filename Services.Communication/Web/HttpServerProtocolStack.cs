@@ -7,13 +7,11 @@
 
     public class HttpServerProtocolStack : IServerProtocolStack
     {
-        private readonly ProtocolServerLogic protocolServerLogic;
-
         private HttpServer httpServer;
 
         public HttpServerProtocolStack(ProtocolServerLogic protocolServerLogic)
         {
-            this.protocolServerLogic = protocolServerLogic;
+            this.ProtocolServerLogic = protocolServerLogic;
         }
 
         public void OpenServerConnection(ServerHost context)
@@ -24,7 +22,7 @@
             }
 
             httpServer = context.Do(new StartHttpServer(null, context.ServerThreads));
-            httpServer.Modules.Add(new HttpServerRequestHandler(httpServer, protocolServerLogic));
+            httpServer.Modules.Add(new HttpServerRequestHandler(httpServer, ProtocolServerLogic));
         }
 
         public void CloseServerConnection()
@@ -34,6 +32,6 @@
 
         public object ServerProvider => httpServer;
 
-        public ProtocolServerLogic ProtocolServerLogic => protocolServerLogic;
+        public ProtocolServerLogic ProtocolServerLogic { get; }
     }
 }

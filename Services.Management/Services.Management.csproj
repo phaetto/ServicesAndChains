@@ -56,10 +56,6 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\Dependencies\DotNetZip.Recompiled\Ionic.Zip.dll</HintPath>
     </Reference>
-    <Reference Include="SuperSocket.SocketEngine, Version=1.6.3.0, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SuperSocket.1.6.3\lib\net40\SuperSocket.SocketEngine.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>

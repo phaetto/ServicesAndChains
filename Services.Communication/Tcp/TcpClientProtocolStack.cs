@@ -19,6 +19,7 @@
                 : context.Hostname;
 
             clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            clientSocket.NoDelay = true;
             clientSocket.Connect(hostname, context.Port);
         }
 
@@ -31,8 +32,12 @@
 
             try
             {
+                clientSocket.Shutdown(SocketShutdown.Both);
                 clientSocket.Close();
                 clientSocket.Dispose();
+            }
+            catch (SocketException)
+            {
             }
             finally
             {
@@ -69,7 +74,7 @@
                 socketStream.ReadTimeout = 60 * 1000;
                 socketStream.WriteTimeout = 60 * 1000;
 
-                using (var writer = new StreamWriter(socketStream, Encoding.ASCII))
+                using (var writer = new StreamWriter(socketStream, Encoding.UTF8))
                 {
                     writer.Write($"{command} {data}\r\n");
                     writer.Flush();

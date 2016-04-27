@@ -26,7 +26,6 @@
     <tags>Distributed Scalability Queues Tcp Http</tags>
     <dependencies>
       <dependency id="Chains" version="{Version}" />
-      <dependency id="log4net" version="2.0.0" />
     </dependencies>
   </metadata>
 </package>
