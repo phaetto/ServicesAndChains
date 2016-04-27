@@ -29,7 +29,7 @@
 
             try
             {
-                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 4000), 10);
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 5), 10);
             }
             finally
             {
@@ -103,7 +103,7 @@
 
             using (var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
             {
-                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 10);
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 5);
 
                 using (var connection = new Client(LocalhostIp, 7234).Do(new OpenConnection()))
                 {
@@ -123,22 +123,22 @@
 
             using (var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
             {
-                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 10);
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 5);
             }
 
             using (var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
             {
-                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 10);
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 5);
             }
 
             using (var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
             {
-                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 10);
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 5);
             }
 
             using (var asyncSocketListener = new AsyncSocketListener(new ProtocolServerLogic(typeof(ContextForTest).FullName)))
             {
-                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 10);
+                asyncSocketListener.StartListening(new ServerHost(LocalhostIp, 7234), 5);
             }
 
             var servertryFinally =

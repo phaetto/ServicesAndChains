@@ -16,7 +16,7 @@
 
         public void OpenServerConnection(ServerHost context)
         {
-            asyncSocketListener.StartListening(context, 50);
+            asyncSocketListener.StartListening(context, 5);
         }
 
         public void CloseServerConnection()
