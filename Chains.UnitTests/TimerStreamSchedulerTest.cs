@@ -31,6 +31,25 @@
         }
 
         [TestMethod]
+        public void timerStreamScheduler_WhenRequestingAsInterface_ThenOneEventIsReturned()
+        {
+            var contextForTest = new ContextForTest();
+
+            using (var timerStreamScheduler = new TimerStreamScheduler())
+            {
+                Assert.IsTrue(timerStreamScheduler.IsIdle);
+
+                timerStreamScheduler.ScheduleActionCall(new ActionForTest("timer hit"), 100, TimerScheduledCallType.Once);
+
+                var infiniteStream = contextForTest.Do(timerStreamScheduler.AsStream<IChainableAction<ContextForTest, ContextForTest>>()).GetEnumerator();
+
+                Assert.IsTrue(infiniteStream.MoveNext());
+
+                Assert.AreEqual("timer hit", contextForTest.ContextVariable);
+            }
+        }
+
+        [TestMethod]
         public void timerStreamScheduler_WhenCancelling_ThenShouldReturnGracefully()
         {
             var contextForTest = new ContextForTest();
