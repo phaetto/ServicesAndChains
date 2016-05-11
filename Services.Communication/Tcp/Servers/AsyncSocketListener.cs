@@ -189,6 +189,10 @@ namespace Services.Communication.Tcp.Servers
                     }
                 }
             }
+            catch (NullReferenceException)
+            {
+                Close(state);
+            }
             catch (SocketException)
             {
                 Close(state);
