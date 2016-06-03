@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Threading;
 
-    public abstract class Publisher : IDisposable
+    public class Publisher : IDisposable
     {
         private readonly List<PublisherSubscription> subscriptions = new List<PublisherSubscription>();
 
