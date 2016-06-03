@@ -85,6 +85,7 @@
     <Compile Include="Protocol\ProtocolType.cs" />
     <Compile Include="Protocol\IClientProtocolStack.cs" />
     <Compile Include="Tcp\Servers\AsyncSocketListener.cs" />
+    <Compile Include="Tcp\Servers\ProtocolFeature.cs" />
     <Compile Include="Tcp\Servers\StateObject.cs" />
     <Compile Include="Tcp\TcpClientProtocolStack.cs" />
     <Compile Include="Tcp\TcpServerProtocolStack.cs" />

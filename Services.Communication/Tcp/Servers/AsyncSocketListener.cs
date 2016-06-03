@@ -109,23 +109,86 @@ namespace Services.Communication.Tcp.Servers
                 if (headerString.StartsWith(StateObject.V1Header))
                 {
                     // Text format, we do not know the size, no encryption, no gzip
+                    state.ProtocolVersionSelected = 1;
                     state.StringBuilder.Append(headerString);
                     state.Buffer = new byte[state.BufferSize];
                     state.Listener.BeginReceive(state.Buffer, 0, state.BufferSize, SocketFlags.None, ReceiveCallbackV1, state);
                 }
                 else if (headerString.StartsWith(StateObject.V2Header))
                 {
-                    // Find buffer size
-                    // Check protocol encryption/gzip support
-                    // Request the next batch of bytes
+                    state.ProtocolVersionSelected = 2;
 
-                    //state.Buffer = new byte[state.BufferSize];
-                    //state.Listener.BeginReceive(state.Buffer, 0, state.BufferSize, SocketFlags.None, ReceiveCallbackV2, state);
+                    // Extract features
+                    headerString = headerString.Substring(StateObject.V2Header.Length);
+
+                    // Next 8 bytes is size
+                    state.BufferSize = 8;
+                    state.Buffer = new byte[state.BufferSize];
+                    state.Listener.BeginReceive(state.Buffer, 0, state.BufferSize, SocketFlags.None, ReceiveV2MessageSize, state);
+                }
+                else if (headerString.StartsWith(StateObject.V2SupportRequestHeader))
+                {
+                    state.ProtocolVersionSelected = 2;
+                    Send(state, "ok");
                 }
                 else
                 {
                     Send(state, ProtocolServerLogic.Serialize(new InvalidOperationException("Header is not supported")));
                 }
+            }
+            catch (SocketException)
+            {
+                Close(state);
+            }
+        }
+
+        public void ReceiveV2MessageSize(IAsyncResult result)
+        {
+            var state = (StateObject)result.AsyncState;
+
+            try
+            {
+                var receivedBytes = state.Listener.EndReceive(result);
+
+                if (receivedBytes != 8)
+                {
+                    Send(state, ProtocolServerLogic.Serialize(new InvalidOperationException("V2 protocol error: 8 bytes expected with message size")));
+                    return;
+                }
+
+                state.ActualMessageSize = BitConverter.ToInt64(state.Buffer, state.BufferSize);
+
+                // Next 8 bytes is binary size
+                state.BufferSize = 8;
+                state.Buffer = new byte[state.BufferSize];
+                state.Listener.BeginReceive(state.Buffer, 0, state.BufferSize, SocketFlags.None, ReceiveV2BinaryMessageSize, state);
+            }
+            catch (SocketException)
+            {
+                Close(state);
+            }
+        }
+
+        public void ReceiveV2BinaryMessageSize(IAsyncResult result)
+        {
+            var state = (StateObject)result.AsyncState;
+
+            try
+            {
+                var receivedBytes = state.Listener.EndReceive(result);
+
+                if (receivedBytes != 8)
+                {
+                    Send(state, ProtocolServerLogic.Serialize(new InvalidOperationException("V2 protocol error: 8 bytes expected with binary message size")));
+                    return;
+                }
+
+                state.BinaryMessageSize = BitConverter.ToInt64(state.Buffer, state.BufferSize);
+
+                // Next bytes is the actual message
+                state.BufferSize = StateObject.BodyDefaultBufferSize;
+                state.Buffer = new byte[state.BufferSize];
+                state.Listener.BeginReceive(state.Buffer, 0, state.BufferSize, SocketFlags.None, ReceiveCallbackV2, state);
             }
             catch (SocketException)
             {
@@ -145,7 +208,6 @@ namespace Services.Communication.Tcp.Servers
 
                 if (receivedString.Contains(CommandSeparator))
                 {
-                    // TODO: Needs to have a command-like behavior by tracking and parsing commands (we will need encryption/gzip stream wrappers)
                     var commandTextArray = state.StringBuilder.ToString().Split(CommandSeparatorChar);
 
                     var commandText = commandTextArray[0];
@@ -211,30 +273,52 @@ namespace Services.Communication.Tcp.Servers
 
                 if (receivedString.Contains(CommandSeparator))
                 {
-                    // TODO: Needs to have a command-like behavior by tracking and parsing commands (we will need encryption/gzip stream wrappers)
-                    var commandText = state.StringBuilder.ToString();
+                    var commandTextArray = state.StringBuilder.ToString().Split(CommandSeparatorChar);
+
+                    var commandText = commandTextArray[0];
                     commandText = commandText.Substring(commandText.IndexOf('['));
 
                     if (string.IsNullOrWhiteSpace(commandText))
                     {
                         Send(state, ProtocolServerLogic.Serialize(new InvalidOperationException("The command body was empty.")));
-
-                        return;
-                    }
-
-                    var response = ProtocolServerLogic.ReadFromStreamAndPlay(commandText);
-
-                    if (!string.IsNullOrWhiteSpace(response))
-                    {
-                        Send(state, response);
                     }
                     else
                     {
-                        Send(state, ProtocolServerLogic.Serialize(new InvalidOperationException("The server could not return an answer.")));
+                        var response = ProtocolServerLogic.ReadFromStreamAndPlay(commandText);
+
+                        if (!string.IsNullOrWhiteSpace(response))
+                        {
+                            Send(state, response);
+                        }
+                        else
+                        {
+                            Send(state, ProtocolServerLogic.Serialize(new InvalidOperationException("The server could not return an answer.")));
+                        }
                     }
 
-                    state.StringBuilder = new StringBuilder();
+                    if (commandTextArray.Length > 1 && !string.IsNullOrEmpty(commandTextArray[commandTextArray.Length - 1]))
+                    {
+                        state.StringBuilder = new StringBuilder(commandTextArray[commandTextArray.Length - 1]);
+                    }
+                    else
+                    {
+                        state.StringBuilder = new StringBuilder();
+                    }
+
+                    state.Listener.BeginReceive(state.Buffer, 0, state.BufferSize, SocketFlags.None, ReceiveCallbackV1, state);
                 }
+                else
+                {
+                    if (receivedBytes > 0)
+                    {
+                        state.Listener.BeginReceive(state.Buffer, 0, state.BufferSize, SocketFlags.None,
+                            ReceiveCallbackV1, state);
+                    }
+                }
+            }
+            catch (NullReferenceException)
+            {
+                Close(state);
             }
             catch (SocketException)
             {

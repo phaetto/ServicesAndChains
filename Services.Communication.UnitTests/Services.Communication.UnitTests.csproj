@@ -81,6 +81,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Classes\ReproducibleTestActionWithError.cs" />
+    <Compile Include="CommunicationV2BaseTest.cs" />
     <Compile Include="CommunicationBaseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
