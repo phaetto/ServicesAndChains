@@ -526,7 +526,7 @@
                                     testAction.GetInstanceSpec()
                                 }));
 
-                        writer.Write(string.Format("\r\n"));
+                        writer.Write("\r\n");
                         writer.Flush();
 
                         using (var reader = new StreamReader(socketStream, Encoding.ASCII))
